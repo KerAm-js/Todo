@@ -13,7 +13,7 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
+    <NavigationContainer style={styles.container}>
       <Tab.Navigator 
         initialRouteName="Home" 
         tabBar={props => <TabBar {...props} />}
@@ -30,24 +30,26 @@ export default function App() {
           name="Tasks" 
           component={TasksScreen} 
           options={{
-            title: "",
+            title: "Задачи",
             tabBarLabel: "Tasks",
             headerTransparent: true,
-            headerBackground: () => (
-              <Header />
-            )
+            headerTitleStyle: {
+              color: '#fff',
+              fontSize: 30
+            }
           }}
         />
         <Tab.Screen 
           name="Profile" 
           component={ProfileScreen} 
           options={{
-            title: "",
+            title: "Профиль",
             tabBarLabel: "Profile",
             headerTransparent: true,
-            headerBackground: () => (
-              <Header />
-            )
+            headerTitleStyle: {
+              color: '#fff',
+              fontSize: 30
+            }
           }}
         />
       </Tab.Navigator>
@@ -59,11 +61,4 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  headerTitle: {
-    color: '#fff',
-    fontSize: 40,
-  },
-  content: {
-    flex: 1,
-  }
 });

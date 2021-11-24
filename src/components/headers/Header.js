@@ -1,9 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { shadowStyles } from "../../../constants";
 
 const Header = () => {
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, ...shadowStyles}}>
       <Text style={styles.title}>
         Todo
       </Text>
@@ -22,13 +23,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#293559',
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20,
-    shadowColor: '#000',
-    shadowOpacity: .5,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowRadius: 10,
   },
   title: {
     color: '#fff',

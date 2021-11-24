@@ -1,11 +1,12 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+import GradientLayout from '../layouts/GradientLayout';
 
 const ProfileScreen = () => {
   return (
-    <View>
+    <GradientLayout>
       <Text>Profile</Text>
-    </View>
+    </GradientLayout>
   )
 }
 

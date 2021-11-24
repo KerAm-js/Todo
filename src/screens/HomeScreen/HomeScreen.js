@@ -3,6 +3,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import HomeMain from "./HomeMain";
 import HomeSection from "./HomeSection";
 import HomeSlideHeader from "../../components/headers/HomeSlideHeader";
+import { StyleSheet } from "react-native";
+import Statistics from "../../components/Statistics";
 
 const Stack = createStackNavigator();
 
@@ -14,6 +16,7 @@ const slides = [
       marginLeft: 30
     },
     title: 'Ваша статистика',
+    content: <Statistics />
   },
   {
     name: 'TimeManagement',
@@ -33,14 +36,14 @@ const slides = [
 
 const HomeScreen = () => {
   return (
-    <Stack.Navigator initialRouteName="Main">
+    <Stack.Navigator initialRouteName="Main" style={styles.container}>
       <Stack.Screen 
         name="HomeMain" 
         options={{
           title: "Todo",
           headerTitleStyle: {
             color: '#fff',
-            fontSize: 35
+            fontSize: 30
           },
           headerTransparent: true,
         }}
@@ -48,8 +51,9 @@ const HomeScreen = () => {
         {props => <HomeMain {...props} slides={slides} />}
       </Stack.Screen>
       {
-        slides.map(({image, title, name}, index) => (
+        slides.map(({image, title, name, content}, index) => (
           <Stack.Screen 
+            key={index}
             name={name}
             options={{
               title: "",
@@ -62,6 +66,7 @@ const HomeScreen = () => {
                 {...props} 
                 image={image} 
                 title={title}
+                content={content}
               />
             }
           </Stack.Screen>
@@ -73,3 +78,7 @@ const HomeScreen = () => {
 
 export default HomeScreen;
 
+const styles = StyleSheet.create({
+  container: {
+  },
+})

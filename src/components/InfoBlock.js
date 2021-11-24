@@ -1,8 +1,8 @@
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
-import colors from '../../color';
+import { colors, shadowStyles } from "../../constants";
 
-const HomeInfo = ({title, subtitle, value, meaning}) => {
+const InfoBlock = ({title, subtitle, value, meaning}) => {
 
   let circleColor = '#fff';
   switch (meaning) {
@@ -10,7 +10,7 @@ const HomeInfo = ({title, subtitle, value, meaning}) => {
       circleColor = colors.DANGER;
   }
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, ...shadowStyles}}>
 
       <View style={styles.text}>
         <Text style={styles.title}>
@@ -24,43 +24,42 @@ const HomeInfo = ({title, subtitle, value, meaning}) => {
       </View>
 
       <View style={{...styles.circle, borderColor: circleColor}}>
-        <Text style={styles.value}>
-          {value}
-        </Text>
+        {
+          value.length > 1
+            ? <Text style={styles.value}>
+                {value}
+              </Text>
+            : <Text style={styles.valueSizeBig}>
+                {value}
+              </Text>
+        }
       </View>
 
     </View>
   )
 }
 
-export default HomeInfo;
+export default InfoBlock;
 
 const styles = StyleSheet.create({
   container: {
-    height: 80,
+    height: 90,
     flexDirection: "row",
     paddingHorizontal: 15,
-    paddingVertical: 13,
-    backgroundColor: '#49567B',
+    paddingVertical: 15,
+    backgroundColor: colors.ACCENT,
     alignItems: "center",
     borderRadius: 20,
     marginBottom: 20,
-    shadowColor: '#000',
-    shadowOpacity: .5, 
-    shadowRadius: 10,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
   },
   text: {
     flex: 1,
     justifyContent: "space-between",
   },
   circle: {
-    width: 50,
-    height: 50,
-    borderRadius: 50/2,
+    width: 60,
+    height: 60,
+    borderRadius: 60/2,
     borderWidth: 1,
     justifyContent: "center",
     alignItems: "center",
@@ -76,7 +75,11 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   value: {
+    fontSize: 16,
+    color: '#fff',
+  },
+  valueSizeBig: {
     fontSize: 20,
     color: '#fff',
-  },  
+  }
 })  

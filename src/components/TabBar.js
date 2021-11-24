@@ -1,11 +1,14 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { colors, shadowStyles } from '../../constants';
+import GradientLayout from '../layouts/GradientLayout';
 
 const TabBar = ({ state, descriptors, navigation }) => {
 
   return ( 
-    <View style={styles.container}>
-      <View style={styles.tabBar}>
+    <GradientLayout style={styles.container}>
+      <View style={{...styles.tabBar, ...shadowStyles}}>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
           const isFocused = state.index === index;
@@ -86,7 +89,8 @@ const TabBar = ({ state, descriptors, navigation }) => {
           );
         })}
       </View> 
-    </View>
+    </GradientLayout>
+    
   );
 };
 
@@ -100,25 +104,19 @@ const styles = StyleSheet.create({
   container: {
     position: 'absolute',
     width: '100%',
+    justifyContent: 'center',
     alignItems: 'center',
-    bottom: 10,
-    height: 100,
+    bottom: 0,
+    height: 120,
   },
   tabBar: { 
     flexDirection: 'row', 
     height: 80, 
     width: 360,
-    backgroundColor: '#293559', 
+    backgroundColor: colors.ACCENT, 
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 30,
     borderRadius: 20,
-    shadowColor: '#000',
-    shadowOpacity: .5, 
-    shadowRadius: 10,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
   }
 })

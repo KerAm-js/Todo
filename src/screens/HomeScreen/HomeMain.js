@@ -1,6 +1,6 @@
 import React from "react";
 import { View, ScrollView, Image, StyleSheet, TouchableWithoutFeedback, ImageBackground } from "react-native";
-import HomeInfo from "../../components/HomeInfo";
+import InfoBlock from "../../components/InfoBlock";
 import HomeSlider from "../../components/HomeSlider";
 import GradientLayout from "../../layouts/GradientLayout";
 
@@ -25,7 +25,7 @@ const HomeMain = props => {
         <View style={styles.content}>
           {
             infoBlocks.map((block, index) => (
-              <HomeInfo key={index} {...block} />
+              <InfoBlock key={index} {...block} />
             ))
           }
         </View>

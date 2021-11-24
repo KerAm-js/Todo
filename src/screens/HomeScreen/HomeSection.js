@@ -2,11 +2,12 @@ import React from "react";
 import { ImageBackground, StyleSheet, Text, View } from "react-native";
 import { BlurView } from "expo-blur";
 import GradientLayout from "../../layouts/GradientLayout";
+import { colors, shadowStyles } from "../../../constants";
 
-const HomeSection = ({image, title}) => {
+const HomeSection = ({image, title, content}) => {
   return (
     <GradientLayout>
-      <View style={styles.container}>
+      <View style={{...styles.container, ...shadowStyles}}>
         <ImageBackground
           source={image}
           resizeMode="cover"
@@ -23,6 +24,9 @@ const HomeSection = ({image, title}) => {
             </BlurView> 
           </View>
         </ImageBackground>
+        {
+          content
+        }
       </View>
     </GradientLayout>
   )
@@ -32,13 +36,6 @@ export default HomeSection;
 
 const styles = StyleSheet.create({
   container: {
-    shadowColor: '#000',
-    shadowOpacity: .5,
-    shadowRadius: 10,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
   },
   imageContainer: {
     width: '100%',

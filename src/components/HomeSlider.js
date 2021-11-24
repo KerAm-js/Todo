@@ -1,6 +1,7 @@
 import React from "react";
 import { View, ScrollView, StyleSheet, TouchableWithoutFeedback, ImageBackground, Text } from "react-native";
 import { BlurView } from "expo-blur";
+import { colors, shadowStyles } from "../../constants";
 
 const HomeSlider = ({navigation, slides}) => {
   return (
@@ -16,7 +17,7 @@ const HomeSlider = ({navigation, slides}) => {
                 key={index}
                 onPress={() => navigation.navigate(name)}
               >
-                <View style={styles.imageLayout}>
+                <View style={{...styles.imageLayout, ...shadowStyles}}>
                   <ImageBackground 
                     resizeMode="cover"
                     style={{...styles.imageContainer, ...slideStyle}}
@@ -50,13 +51,6 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   imageLayout: { 
-    shadowColor: '#000',
-    shadowOpacity: .5,
-    shadowRadius: 10,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
   },
   imageContainer: {
     width: 300,

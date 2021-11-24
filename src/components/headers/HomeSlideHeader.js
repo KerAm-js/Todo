@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     height: 40,
   },
   title: {
-    fontSize: 35,
+    fontSize: 30,
     fontWeight: '500',
     color: '#fff'
   }
