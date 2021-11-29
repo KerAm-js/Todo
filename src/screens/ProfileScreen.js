@@ -5,7 +5,6 @@ import GradientLayout from '../layouts/GradientLayout';
 const ProfileScreen = () => {
   return (
     <GradientLayout>
-      <Text>Profile</Text>
     </GradientLayout>
   )
 }

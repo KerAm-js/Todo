@@ -3,6 +3,9 @@ export const colors = {
   ACCENT0_8: 'rgba(41, 53, 89, 0.8);',
   SECOND: '#3D4C79',
   DANGER: '#EB445A',
+  LIGHTBLUE: '#EAF1FF',
+  BLUE: '#3DADFF',
+  SUCCESS: '#2DD36F',
 }
 
 export const shadowStyles = {

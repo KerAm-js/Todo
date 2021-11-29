@@ -1,27 +1,21 @@
 import React from "react";
 import { Button, Modal, StyleSheet, View } from "react-native";
-import GradientLayout from "../layouts/GradientLayout";
 
-const TaskModal = ({visible, closeModal}) => {
+const ModalLayout = ({visible, closeModal, children}) => {
   return (
     <Modal
       animationType="fade"
       transparent={true}
       visible={visible}
     >
-      <GradientLayout>
-        <View style={styles.container}>
-          <Button 
-            title="close" 
-            onPress={closeModal}
-          />
-        </View>
-      </GradientLayout>
+      <View style={styles.container}>
+        {children}
+      </View>
     </Modal>
   )
 }
 
-export default TaskModal;
+export default ModalLayout;
 
 const styles = StyleSheet.create({
   container: {
@@ -30,5 +24,6 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: "center",
     alignItems: "center",
+    paddingHorizontal: 15,
   },
 })

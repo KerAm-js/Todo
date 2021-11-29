@@ -3,12 +3,22 @@ import { StyleSheet, Text, View, Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { colors, shadowStyles } from "../../constants";
 
-const TaskBlock = ({text, description, time, isCompleted, meaning}) => {
+const TaskBlock = ({
+  text, 
+  description, 
+  time, 
+  isCompleted, 
+  isDeadline, 
+  deleteTask, 
+  toggleTaskCompleting,
+}) => {
 
   let circleColor = '#fff';
-  switch (meaning) {
-    case 'danger':
-      circleColor = colors.DANGER;
+
+  if (isCompleted) {
+    circleColor = colors.SUCCESS;
+  } else if(isDeadline) {
+    circleColor = colors.DANGER;
   }
 
   const [isOpen, setIsOpen] = useState(false);
@@ -26,26 +36,51 @@ const TaskBlock = ({text, description, time, isCompleted, meaning}) => {
         <View style={styles.headingRow}>
           <Text style={styles.text}>{text}</Text>
           <View style={{...styles.circle, borderColor: circleColor}}>
-            <Text style={styles.time}>{time}</Text>
+            {
+              isCompleted
+              ? <Image 
+                  style={{width: 25, height: 25,}}
+                  source={require('../images/checked.png')}
+                />
+              : <Text style={styles.time}>{time}</Text>
+            }
           </View>
         </View>
         <View style={styles.descriptionRow}>
           <Text style={styles.description}>{description}</Text>
         </View>
-        <View style={styles.icons}>
-          
-          <Image 
-            style={styles.icon}
-            source={require('../images/checked.png')}
-          />
-          <Image 
-            style={styles.icon}
-            source={require('../images/edit.png')}
-          />
-          <Image 
-            style={styles.icon}
-            source={require('../images/delete.png')}
-          />
+        <View style={styles.buttonsRow}>
+          <TouchableOpacity 
+            style={styles.button}
+            onPress={toggleTaskCompleting}
+          >
+            {
+              isCompleted
+              ? <Image 
+                  style={styles.icon}
+                  source={require('../images/checked.png')}
+                />
+              : <Image 
+                  style={styles.icon}
+                  source={require('../images/check.png')}
+                />
+            }
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Image 
+              style={styles.icon}
+              source={require('../images/edit.png')}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.button}
+            onPress={deleteTask}
+          >
+            <Image 
+              style={styles.icon}
+              source={require('../images/delete.png')}
+            />
+          </TouchableOpacity>
         </View>
       </TouchableOpacity>
     </View>
@@ -83,14 +118,22 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
   },
-  icons:{
-    marginTop: 15,
+  buttonsRow: {
+    marginTop: 25,
     flexDirection: "row",
   },
-  icon: {
+  button: {
     width: 40,
     height: 40,
+    borderRadius: 20,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginRight: 20,
+  },
+  icon: {
+    width: 20,
+    height: 20,
   },
   circle: {
     alignSelf: "flex-start",
