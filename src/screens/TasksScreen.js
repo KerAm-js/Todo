@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import AddTaskButton from "../components/AddTaskButton";
 import TaskBlock from "../components/TaskBLock";
+import TaskModal from "../components/TaskModal";
 import GradientLayout from "../layouts/GradientLayout";
 
 const tasks = [
@@ -26,17 +28,25 @@ const tasks = [
 ]
 
 const TasksScreen = () => {
+
+  const [modalVisible, setModalVisible] = useState(false);
+
   return (
     <GradientLayout style={styles.container}>
       <ScrollView style={styles.scrollContainer}>
-      {
-        tasks.map((task, index) => (
-          <TaskBlock 
-            {...task} 
-            key={index}
-          />
-        ))
-      }
+        <AddTaskButton showModal={() => setModalVisible(true)}/>
+        <TaskModal 
+          visible={modalVisible} 
+          closeModal={() => setModalVisible(false)}
+        />
+        {
+          tasks.map((task, index) => (
+            <TaskBlock 
+              {...task} 
+              key={index}
+            />
+          ))
+        }
       </ScrollView>
     </GradientLayout>
   )
