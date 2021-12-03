@@ -1,12 +1,20 @@
-import React, { useState } from "react";
-import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import { colors } from "../../constants";
+import DTPicker from "../TimePicker";
 
-const TaskForm = ({type, closeModal, addTask}) => {
+const TaskForm = ({task, type, closeModal, addTask, editTask}) => {
 
-  const [text, setText] = useState('');
-  const [time, setTime] = useState('');
-  const [description, setDescription] = useState('');
+  const [text, setText] = type === 'add' 
+    ? useState('') 
+    : useState(task.text);
+  const [description, setDescription] = type === 'add' 
+    ? useState('')
+    : useState(task.description);
+  const [date, setDate] = type === 'add' 
+    ? useState(new Date()) 
+    : useState(task.date);
+  const [disabled, setDisabled] = useState(true);
 
   const title = type === 'add' 
     ? <Text style={styles.title}>Новая задача</Text> 
@@ -14,18 +22,29 @@ const TaskForm = ({type, closeModal, addTask}) => {
 
   const setDefaults = () => {
     setText('');
-    setTime('');
     setDescription('');
   }
 
   const onAdd = () => {
-    const result = addTask(text, time, description);
-    if (result) {
-      closeModal();
-      setDefaults();
-    }
+    addTask(text, date, description);
+    closeModal();
+    setDefaults();
   }
-  
+
+  const onEdit = () => {
+    editTask(text, date, description);
+    closeModal();
+    setDefaults();
+  }
+
+  useEffect(() => {
+    if (text.trim() && date) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
+  })
+
   const button = (
     <> 
       {
@@ -34,16 +53,18 @@ const TaskForm = ({type, closeModal, addTask}) => {
               color={colors.BLUE} 
               title="Добавить"
               onPress={onAdd}
+              disabled={disabled}
             />
           : <Button 
               color={colors.BLUE} 
               title="Редактировать"
-              onPress={() => console.log('task edited')}
+              onPress={onEdit}
+              disabled={disabled}
             />
-     }
+      }
     </>
   )
-  
+
   return (
     <View style={styles.container}>
       {title}
@@ -54,17 +75,15 @@ const TaskForm = ({type, closeModal, addTask}) => {
         placeholder="Название задачи"
       />
       <TextInput 
-        style={styles.input}
-        value={time}
-        onChangeText={text => setTime(text)}
-        placeholder="Срок выполнения"
-      />
-      <TextInput 
         style={{...styles.input, ...styles.textArea}}
         value={description}
         onChangeText={text => setDescription(text)}
         multiline={true}
         placeholder="Описание задачи"
+      />
+      <DTPicker 
+        date={date}
+        setDate={setDate}
       />
       <View style={styles.buttons}>
         {button}

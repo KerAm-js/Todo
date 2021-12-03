@@ -1,27 +1,86 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { colors, shadowStyles } from "../../constants";
 
 const TaskBlock = ({
+  id,
   text, 
   description, 
-  time, 
+  date, 
   isCompleted, 
   isDeadline, 
   deleteTask, 
   toggleTaskCompleting,
+  setIsDeadline,
+  showEditModal,
+  setEditTaskId,
 }) => {
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [timeLeft, setTimeLeft] = useState();
+
+  let interval = useRef();
+
+  const startTimer = () => {
+
+    interval.current = setInterval(() => {
+      const currentDate = new Date();
+      const distance = date - currentDate;
+
+      let daysString;
+      let hoursString;
+      let minutesString;
+      let secondsString;
+      let timeLeftString;
+
+      if (distance < 0) {
+        clearInterval(interval);
+        setTimeLeft('over')
+      } else {
+        const daysLeft = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hoursLeft = Math.floor(distance % (1000 * 60 * 60 * 24) / (1000 * 60 * 60));
+        const minutesLeft = Math.floor(distance % (1000 * 60 * 60) / (1000 * 60));
+        const secondsLeft = Math.floor(distance % (1000 * 60) / 1000);
+        
+        if (daysLeft === 0 && hoursLeft === 0 && minutesLeft < 30 && isDeadline === false) {
+          setIsDeadline(true);
+        }
+        // console.log(`${daysLeft}:${hoursLeft}:${minutesLeft}:${secondsLeft}`);
+
+        daysString = daysLeft >= 10 ? `${daysLeft}` : `0${daysLeft}`;
+        hoursString = hoursLeft >= 10 ? `${hoursLeft}` : `0${hoursLeft}`;
+        minutesString = minutesLeft >= 10 ? `${minutesLeft}` : `0${minutesLeft}`;
+        secondsString = secondsLeft >= 10 ? `${secondsLeft}` : `0${secondsLeft}`;
+
+        if (daysLeft > 0) {
+          timeLeftString = `${daysString} дн`
+        } else if (daysLeft === 0 && hoursLeft > 0) {
+          timeLeftString = `${hoursString}:${minutesString}`;
+        } else if (hoursLeft === 0 && minutesLeft > 0 ) {
+          timeLeftString = `${minutesString}:${secondsString}`;
+        } else if (minutesLeft === 0 && secondsLeft > 0) {
+          timeLeftString = `${minutesString}:${secondsString}`;
+        } 
+        setTimeLeft(timeLeftString);
+        console.log(timeLeftString);
+      }
+    }, 1000);
+
+  }
+
+  useEffect(() => {
+    startTimer();
+    return () => clearInterval(interval.current);
+  })
 
   let circleColor = '#fff';
 
   if (isCompleted) {
     circleColor = colors.SUCCESS;
-  } else if(isDeadline) {
+  } else if (isDeadline || timeLeft === 'over') {
     circleColor = colors.DANGER;
   }
-
-  const [isOpen, setIsOpen] = useState(false);
 
   let containerHeight = {
     height: isOpen ? 'auto' : 90,
@@ -39,10 +98,15 @@ const TaskBlock = ({
             {
               isCompleted
               ? <Image 
-                  style={{width: 25, height: 25,}}
+                  style={{width: 20, height: 20,}}
                   source={require('../images/checked.png')}
                 />
-              : <Text style={styles.time}>{time}</Text>
+              : timeLeft === 'over' 
+                ? <Image 
+                    style={{width: 20, height: 20,}}
+                    source={require('../images/over.png')}
+                  />
+                : <Text style={styles.time}>{timeLeft}</Text>
             }
           </View>
         </View>
@@ -66,7 +130,12 @@ const TaskBlock = ({
                 />
             }
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button}
+            onPress={() => {
+              setEditTaskId(id);
+              showEditModal(true);
+            }}
+          >
             <Image 
               style={styles.icon}
               source={require('../images/edit.png')}
@@ -74,7 +143,10 @@ const TaskBlock = ({
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.button}
-            onPress={deleteTask}
+            onPress={() => {
+              clearInterval(interval.current);
+              deleteTask();
+            }}
           >
             <Image 
               style={styles.icon}
@@ -84,9 +156,8 @@ const TaskBlock = ({
         </View>
       </TouchableOpacity>
     </View>
-    
   )
-}
+}          
 
 export default TaskBlock;
 
