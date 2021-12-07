@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, } from 'react-native';
-import HomeScreen from './src/screens/HomeScreen/HomeScreen';
-import ProfileScreen from './src/screens/ProfileScreen';
+import HomeScreen from './src/screens/Home/HomeScreen';
+import ProfileScreen from './src/screens/Profile/ProfileScreen';
+import TasksScreen from './src/screens/Tasks/TasksScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import TasksScreen from './src/screens/TasksScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import TabBar from './src/components/TabBar';
 

@@ -1,14 +1,11 @@
-import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { colors, shadowStyles } from '../../constants';
-import GradientLayout from '../layouts/GradientLayout';
+import { View, Image, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { colors } from './constants/colors';
 
 const TabBar = ({ state, descriptors, navigation }) => {
 
   return ( 
-    <GradientLayout style={styles.container}>
-      <View style={{...styles.tabBar, ...shadowStyles}}>
+      <View style={{...styles.tabBar}}>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
           const isFocused = state.index === index;
@@ -89,8 +86,6 @@ const TabBar = ({ state, descriptors, navigation }) => {
           );
         })}
       </View> 
-    </GradientLayout>
-    
   );
 };
 
@@ -98,25 +93,16 @@ export default TabBar;
 
 const styles = StyleSheet.create({
   image: {
-    width: 40,
-    height: 40,
-  },
-  container: {
-    position: 'absolute',
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    bottom: 0,
-    height: 120,
+    marginTop: 20,
+    width: 35,
+    height: 35,
   },
   tabBar: { 
     flexDirection: 'row', 
-    height: 80, 
-    width: 360,
     backgroundColor: colors.ACCENT, 
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 30,
-    borderRadius: 20,
+    paddingHorizontal: 40,
+    borderRadius: Platform.OS === 'ios' ? 25 : 0,
+    height: Platform.OS === 'ios' ? 90 : 80, 
   }
 })
