@@ -56,17 +56,6 @@ const HomeScreen = () => {
       <Stack.Group screenOptions={{
         presentation: "card",
         headerShown: false,
-        // headerBackImage: () => (
-        //   <Image 
-        //     source={require('../../images/back.png')} 
-        //     style={styles.backImage}
-        //   />
-        // ),
-        // headerBackTitleVisible: false,
-        // headerTransparent: true,
-        // headerTitleStyle: {
-        //   fontSize: 25,
-        // },
       }}>
         {
           slides.map(({name, component, title, headingImage }, index) => (

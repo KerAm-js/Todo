@@ -1,5 +1,5 @@
 import React from "react";
-import { View, ScrollView, StyleSheet, TouchableWithoutFeedback, Image, Text, Platform } from "react-native";
+import { View, ScrollView, StyleSheet, TouchableWithoutFeedback, Image, Text, Platform, TouchableOpacity } from "react-native";
 import { BlurView } from "expo-blur";
 import { colors } from "../constants/colors";
 import { shadow } from "../constants/shadows";
@@ -76,6 +76,8 @@ const styles = StyleSheet.create({
     marginRight: 20,
     borderRadius: 20,
     backgroundColor: '#fff',
+    borderColor: colors.BORDER_COLOR_ANDROID,
+    borderWidth: Platform.OS === 'ios' ? 0 : 1,
   },
   headingContainer: {
     backgroundColor: 'rgba(41, 53, 89, 0.5)',

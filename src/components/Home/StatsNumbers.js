@@ -12,7 +12,7 @@ const StatsNumbers = () => {
         <View style={styles.blueBlock}>
           <View style={styles.blueBlockBackground}>
             <Text style={styles.valueBigSize}>238</Text>
-            <Text style={styles.title}>{`количество\n выполненных\n задач`}</Text>
+            <Text style={styles.title}>{`задач\n выполнено за\n всё время`}</Text>
           </View>
         </View>
 

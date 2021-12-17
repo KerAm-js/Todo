@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     borderRadius: Platform.OS === 'ios' ? 20 : 10,
     borderWidth: Platform.OS === 'ios' ? 0 : 1,
-    borderColor: '#eee',
+    borderColor: colors.BORDER_COLOR_ANDROID,
   },
   circle: {
     width: 60,

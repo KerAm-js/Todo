@@ -28,13 +28,9 @@ export default function App() {
           name="Tasks" 
           component={TasksScreen} 
           options={{
-            title: "Задачи",
+            title: "",
+            headerShown: false,
             tabBarLabel: "Tasks",
-            headerTransparent: true,
-            headerTitleStyle: {
-              color: '#fff',
-              fontSize: 30
-            }
           }}
         />
         <Tab.Screen 

@@ -33,8 +33,6 @@ const styles = StyleSheet.create({
   block: {
     backgroundColor: colors.LIGHTBLUE,
     borderRadius: Platform.OS === 'ios' ? 20 : 10,
-    borderWidth: Platform.OS === 'ios' ? 0 : 1,
-    borderColor: '#eee',
     padding: 20,
     minHeight: 80,
     flexDirection: 'row',

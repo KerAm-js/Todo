@@ -38,8 +38,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     borderRadius: Platform.OS === 'ios' ? 20 : 10,
-    borderWidth: Platform.OS === 'ios' ? 0 : 1,
-    borderColor: '#eee',
   },
   title: {
     fontSize: 28,

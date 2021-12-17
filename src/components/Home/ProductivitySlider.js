@@ -60,6 +60,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.LIGHTBLUE,
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
   },  
 })

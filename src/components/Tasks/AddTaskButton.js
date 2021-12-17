@@ -1,13 +1,15 @@
 import React from "react";
-import { StyleSheet, Text } from "react-native";
+import { Image, StyleSheet, Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { SvgPlus } from "../../icons/icons";
+import { colors } from "../constants/colors";
 
 const AddTaskButton = ({showModal}) => (
   <TouchableOpacity
     onPress={showModal}
     style={styles.container}
   >
-    <Text style={styles.icon}>+</Text>
+    <SvgPlus />
   </TouchableOpacity>
 )
 
@@ -17,7 +19,7 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: 60,
-    borderColor: '#fff',
+    borderColor: colors.BLUE,
     borderWidth: 1,
     borderRadius: 20,
     justifyContent: "center",
@@ -27,7 +29,7 @@ const styles = StyleSheet.create({
   icon: {
     fontSize: 50,
     lineHeight: 50,
-    color: '#fff',
+    color: colors.ACCENT,
     fontWeight: '200',
   },
 })

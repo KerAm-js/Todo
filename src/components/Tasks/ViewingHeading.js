@@ -1,8 +1,9 @@
 import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View, Text } from "react-native";
+import { color } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 import { colors } from "../constants/colors";
 
-const SlideHeading = ({image, title, navigation}) => {
+const ViewingHeading = ({navigation, title}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -10,38 +11,25 @@ const SlideHeading = ({image, title, navigation}) => {
         onPress={() => navigation.goBack()}
       >
         <Image 
-          source={require('../../images/back.png')} 
           style={styles.backImage}
+          source={require('../../images/back.png')}
         />
       </TouchableOpacity>
-      <Image 
-        style={styles.image}
-        source={image}
-      />
       <Text style={styles.title}>{title}</Text>
     </View>
   )
 }
 
-export default SlideHeading;
+export default ViewingHeading;
 
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    backgroundColor: colors.ACCENT,
     height: '100%',
     width: '100%',
-    alignItems: "center",
-    paddingTop: 60,
-  },
-  image: {
-    width: 70,
-    height: 70,
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 25,
-    color: '#fff'
+    backgroundColor: colors.ACCENT,
+    paddingTop: 55,
+    alignItems: "center"
   },
   backImage: {
     width: 20,
@@ -53,5 +41,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 55,
     left: 10,
+  },
+  title: {
+    fontSize: 25,
+    color: '#fff',
   },
 })

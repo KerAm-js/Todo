@@ -12,7 +12,7 @@ const technics = [
   {
     name: '"90 на 30"',
     active: false,
-    content: 'Суть очень проста: 90 минут вы работаете, а 30 минут - отдыхаете. Техника подойдёт, если вы занимаетесь монотонной работой. А если у вас много разных задач, можно разбить их на подзадачи и определить время для них. Например, с 8:00 до 9:30 вы выполняете одну из подзадач, а с 9:30 жо 10:00 - у вас отдых.'
+    content: 'Суть такая: 90 минут вы работаете, а 30 минут - отдыхаете. Техника подойдёт, если вы занимаетесь монотонной работой. А если у вас много разных задач, можно разбить их на подзадачи и определить время для них. Например, с 8:00 до 9:30 вы выполняете одну из подзадач, а с 9:30 жо 10:00 - у вас отдых.'
   },
   {
     name: '"25 на 5"',
@@ -38,7 +38,7 @@ const TimeManagement = ({navigation, title, image}) => {
         style={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.title}>{`Техники урпавления\n временем`}</Text>
+        {/* <Text style={styles.title}>{`Техники урпавления\n временем`}</Text> */}
         <TMtechnics technics={technics} />
         {
           technics.map(({active, content}, index) => {
@@ -74,9 +74,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   description: {
+    paddingTop: 10,
     paddingHorizontal: 20,
-    fontSize: 20,
-    lineHeight: 27,
+    fontSize: 18,
+    lineHeight: 26,
   },
 })
 

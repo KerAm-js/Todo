@@ -22,7 +22,6 @@ const Main = props => {
           <HomeTasksCount />
           <HomeCurrentTask />
           <HomeResults />
-          <FooterSpace />
         </View>
       </ScrollView>
     </View>
@@ -37,6 +36,7 @@ const styles = StyleSheet.create({
   },
   content: {
     backgroundColor: '#fff',
+    paddingBottom: 280,
   },
   scroll: {
     paddingTop: Platform.OS === 'ios' ? 230 : 200,

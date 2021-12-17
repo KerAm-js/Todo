@@ -50,7 +50,6 @@ export default TMtechnics;
 const styles = StyleSheet.create({
   container: {
     minHeight: 85,
-    marginBottom: 10,
   },
   scroll: {
     paddingVertical: 20,
@@ -70,6 +69,6 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   technicName: {
-    fontSize: 20,
+    fontSize: 18,
   },
 })

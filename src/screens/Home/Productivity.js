@@ -51,10 +51,10 @@ const Productivity = ({navigation, image, title}) => {
         navigation={navigation}
       />
       <ScrollView
-        style={styles.content}
+        style={styles.scroll}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.title}>{`Как повысить\n свою продуктивность?`}</Text>
+        {/* <Text style={styles.title}>{`Как повысить\n свою продуктивность?`}</Text> */}
         <ProductivitySlider
           slides={slides}
         />
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     paddingTop: 210,
     flex: 1,
   },
-  content: {
+  scroll: {
     flex: 1,
     paddingTop: 20,
     borderTopRightRadius: 25,
@@ -89,12 +89,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   title: {
-    fontSize: 20,
+    fontSize: 22,
     textAlign: "center",
+    fontWeight: "500",
   },
   description: {
+    paddingTop: 10,
     paddingHorizontal: 20,
-    fontSize: 20,
-    lineHeight: 27,
+    fontSize: 18,
+    lineHeight: 26,
   },
 })
