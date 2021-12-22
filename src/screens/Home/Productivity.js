@@ -1,52 +1,50 @@
-import React from "react";
+import React, {useState} from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ProductivitySlider from "../../components/Home/ProductivitySlider";
 import SlideHeading from '../../components/Home/SlideHeading';
 
 
 const slides = [
   {
-    id: 1,
-    active: true,
+    id: 0,
     content: 'Если задача займёт у вас меньше 10 минут, выполняйте её в первую очередь. Лучше побыстрее выполнить мелкие задачи и сфокусироваться на более сложных задачах. Более того, большое количество дел может создавать иллюзию большого объёма работы, а это, в свою очередь, вызывает демотивацию.'
   },
   {
-    id: 2,
-    active: false,
+    id: 1,
     content: 'После мелких задач, выполнять стоит самые сложные, так как к концу дня вы можете устать. Также из-за выполненных мелких и средних задач вам может показаться, что день был продуктивным. Таким образом, вы, скорее всего, отложите сложную задачу на следующий день, и она ещё долго будет висеть в списке ваших задач.'
   },
   {
-    id: 3,
-    active: false,
+    id: 2,
     content: 'Если вы чувствуете, что вам лень приступать к работе, можно попробовать обмануть свой мозг: скажите себе, что поработаете всего 10-15 минут. Высока вероятность, что вы вовлечётесь в работу и чувство лени исчезнет.'
   },
   {
-    id: 4,
-    active: false,
+    id: 3,
     content: 'Если у вас много однообразных, монотонных и "скучных" задач, и если подобная работа вас утомляет, попробуйте чередовать их. Например, вы можете поработать над одной задачей 30-40 минут (это оптимальное время для сфокусированной работы над одной задачей), а потом сразу приступить к другой. Данное приложение идеально подходит для этого, так как к каждой задаче вы можете прикрепить временной интервал.'
   },
   {
-    id: 5,
-    active: false,
+    id: 4,
     content: 'Обращайте внимание на "результаты". Приложение проводит анализ ваших ежедневных задач и показывает результаты их выполнения в домашнем разделе. Сделайте выводы. Какие задачи вы успели выполнить, а какие нет? Что могло помешать вам? Удовлетворены ли вы результатом? Также обращайте внимание на особенности невыполненных задач: возможно вам помешала сложность задачи, объём работы или вам просто неинтересно заниматься этим.'
   },
   {
-    id: 6,
-    active: false,
+    id: 5,
     content: 'Не пренебрегайте временными интервалами. Как было сказано ранее, приложение позволяет добавить время выполнения к задаче. Это поможет вам правильно распланировать день и развить самодисциплину.'
   },
   {
-    id: 7,
-    active: false,
+    id: 6,
     content: 'Ставьте телефон в режим "не беспокоить". Как бы банально это не звучало, но телефон может надолго отвлечь вас от работы. Если у вас бывают важные звонки, потратье минуту на то, чтобы отключить хотя бы уведомления в соцсетях и мессенджерах. Можно даже отложить телефон подальше от глаз. Он вам нужен лишь для того, чтобы узнать, какая сейчас задача по графику в Daily Planner. Помните, ваш залог успеха - держать фокус на текущей задаче и ни на что не отвлекаться. Желаю успешной работы!'
   },
 ]
 
 const Productivity = ({navigation, image, title}) => {
+
+  const [activeSlide, setActiveSlide] = useState(0);
+  const containerPaddinTop = useSafeAreaInsets().top + 180;
+
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, paddingTop: containerPaddinTop}}>
       <SlideHeading
-        title={title}
+        title={`Как повысить\nпродуктивность?`}
         image={image}
         navigation={navigation}
       />
@@ -54,13 +52,14 @@ const Productivity = ({navigation, image, title}) => {
         style={styles.scroll}
         showsVerticalScrollIndicator={false}
       >
-        {/* <Text style={styles.title}>{`Как повысить\n свою продуктивность?`}</Text> */}
         <ProductivitySlider
           slides={slides}
+          activeSlide={activeSlide}
+          setActiveSlide={setActiveSlide}
         />
         {
-          slides.map(({active, content}, index) => {
-            if (active) {
+          slides.map(({content, id}, index) => {
+            if (id === activeSlide) {
               return (
                 <Text style={styles.description} key={index}>
                   {content}
@@ -78,20 +77,14 @@ export default Productivity;
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 210,
     flex: 1,
   },
   scroll: {
     flex: 1,
-    paddingTop: 20,
+    paddingTop: 30,
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
     backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 22,
-    textAlign: "center",
-    fontWeight: "500",
   },
   description: {
     paddingTop: 10,

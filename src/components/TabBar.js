@@ -1,11 +1,12 @@
 import React from 'react';
 import { View, Image, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from './constants/colors';
 
 const TabBar = ({ state, descriptors, navigation }) => {
-
+  const tabBarPaddingBottom = useSafeAreaInsets().bottom || 20;
   return ( 
-      <View style={{...styles.tabBar}}>
+      <View style={{...styles.tabBar, paddingBottom: tabBarPaddingBottom}}>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
           const isFocused = state.index === index;
@@ -93,16 +94,18 @@ export default TabBar;
 
 const styles = StyleSheet.create({
   image: {
-    marginTop: 20,
-    width: 35,
-    height: 35,
+    width: 30,
+    height: 30,
   },
   tabBar: { 
+    paddingTop: 15,
+    position: 'relative',
+    zIndex: 100,
     flexDirection: 'row', 
     backgroundColor: colors.ACCENT, 
     justifyContent: 'space-between',
     paddingHorizontal: 40,
-    borderRadius: Platform.OS === 'ios' ? 25 : 0,
-    height: Platform.OS === 'ios' ? 90 : 80, 
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
   }
 })

@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { colors } from "../constants/colors";
 import { shadow } from "../constants/shadows";
 
-const ProductivitySlider = ({slides}) => {
+const ProductivitySlider = ({slides, activeSlide, setActiveSlide}) => {
   return (
     <ScrollView
       style={styles.container}
@@ -11,14 +11,14 @@ const ProductivitySlider = ({slides}) => {
       showsHorizontalScrollIndicator={false}
     >
       {
-        slides.map(({id, active}, index) => {
+        slides.map(({id}, index) => {
           let style;
           
-          if (active) {
+          if (activeSlide === id) {
             style = {
               ...styles.button,
               ...styles.buttonActive,
-              ...shadow,
+
               marginLeft: index === 0 ? 20 : 0,
             }
           } else {
@@ -29,8 +29,12 @@ const ProductivitySlider = ({slides}) => {
           }
 
           return (
-            <TouchableOpacity style={{...style}} key={index}>
-              <Text style={styles.title}>{id}</Text>
+            <TouchableOpacity 
+              style={{...style}} 
+              key={index}
+              onPress={() => setActiveSlide(id)}
+            >
+              <Text style={styles.title}>{id + 1}</Text>
             </TouchableOpacity>
           )})
       }
@@ -42,7 +46,7 @@ export default ProductivitySlider;
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 20,
+    paddingBottom: 10,
   },
   button: {
     justifyContent: "center",

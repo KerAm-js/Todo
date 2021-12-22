@@ -3,21 +3,30 @@ import { Platform, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { shadow } from "../constants/shadows";
 import { colors } from "../constants/colors";
+import Task from "../Tasks/Task";
 
-const HomeCurrentTask = () => {
+const HomeCurrentTask = ({currentTasks, completeTask, showTaskDetails, navigation}) => {
+  const title = currentTasks.length === 1 ? 'Текущая задача' : 'Текущие задачи';
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Текущая задача</Text>
-      <View style={{...styles.block, ...shadow}}>
-        <View style={styles.textContent}>
-          <Text style={styles.taskName}>Task name</Text>
-          <Text style={styles.taskTime}>8:00 - 9:00</Text>
-        </View>
-        <TouchableOpacity
-          style={styles.button}
-        >
-        </TouchableOpacity>
-      </View>
+      <Text style={styles.title}>{title}</Text>
+      {
+        currentTasks.length !== 0
+          ? currentTasks.map((task, index) => {
+              return (
+                <Task 
+                  key={index}
+                  task={task} 
+                  showTaskDetails={() => null}
+                  completeTask={() => completeTask(task.id)}
+                  showTaskDetails={() => showTaskDetails(task.id, navigation)}
+                />
+              )
+            })
+          : <View style={{...styles.block, ...shadow}}>
+              <Text style={styles.noTasks}>Нет задач, назначенных на текущее время</Text>
+            </View>
+      }
     </View>
   )
 }
@@ -27,21 +36,22 @@ export default HomeCurrentTask;
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 50,
+    paddingBottom: 35,
   },
   block: {
-    backgroundColor: colors.LIGHTBLUE,
-    borderRadius: Platform.OS === 'ios' ? 20 : 10,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: colors.BORDER_COLOR_ANDROID,
     padding: 20,
-    minHeight: 80,
+    minHeight: 70,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: "center",
   },
   title: {
-    fontSize: 28,
-    lineHeight: 28,
+    fontSize: 22,
+    lineHeight: 22,
     fontWeight: '500',
     marginBottom: 20,
   },
@@ -52,20 +62,24 @@ const styles = StyleSheet.create({
   button: {
     justifyContent: "center",
     alignItems: "center",
-    width: 40,
-    height: 40,
+    width: 34,
+    height: 34,
     backgroundColor: "#fff",
-    borderRadius: 20,
+    borderRadius: 17,
     borderWidth: 1,
     borderColor: colors.BLUE,
   },
   taskName: {
-    fontSize: 20,
+    fontSize: 18,
     lineHeight: 24,
-    marginBottom: 10,
   },
   taskTime: {
     fontSize: 16,
     lineHeight: 20,
+    marginTop: 10,
+  },
+  noTasks: {
+    fontSize: 18,
+    lineHeight: 24,
   },
 });

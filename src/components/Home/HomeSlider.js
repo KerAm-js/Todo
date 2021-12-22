@@ -54,8 +54,8 @@ const styles = StyleSheet.create({
   },
   scroll: {
     paddingTop: 10,
-    paddingBottom: 20,
-    marginTop: Platform.OS === 'ios' ? -40 : 20,
+    paddingBottom: 45,
+    marginTop: Platform.OS === 'ios' ? -40 : 10,
   },
   image :{
     marginTop: 20,

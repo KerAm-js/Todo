@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
-import {View, Text, Platform, StyleSheet, TouchableOpacity, DatePickerIOS} from 'react-native';
+import {View, Text, Platform, StyleSheet, TouchableOpacity} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { colors } from './constants/colors';
 
-const TimePicker = ({type, time, setTime}) => {
+const TimePicker = ({type, time, setTime, minimumDate}) => {
 
   const [show, setShow] = useState();
 
@@ -13,7 +13,7 @@ const TimePicker = ({type, time, setTime}) => {
     setShow(Platform === 'ios');
   };
 
-  const title = type === 'start' ? 'Время старта' :  'Время финиша';
+  const title = type === 'start' ? 'Начало:' :  'Конец:';
 
   if (Platform.OS === 'ios') {
     return (
@@ -24,6 +24,7 @@ const TimePicker = ({type, time, setTime}) => {
         mode="time"
         is24Hour={true}
         display="default"
+        minimumDate={minimumDate}
         locale="en_GB"
         onChange={onChange}
         style={styles.picker}
@@ -67,19 +68,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderColor: colors.BLUE,
-    paddingTop: 15,
-    paddingBottom: 10,
-    paddingHorizontal: 15,
+    marginBottom: 10,
   },
   picker: {
     width: 100,
   },
   title: {
-    color: '#bbb',
     fontSize: 18,
-    alignSelf: 'flex-end',
   },
   buttonAndroid: {
     backgroundColor: colors.LIGHTBLUE,

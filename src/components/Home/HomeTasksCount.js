@@ -6,16 +6,28 @@ import { colors } from "../constants/colors";
 import { SvgPlus } from "../../icons/icons";
 
 
-const HomeTasksCount = () => {
+const HomeTasksCount = ({count, navigation}) => {
+
+  let tasksCountString = 'задач';;
+
+  if (count === 0) {
+    null
+  } else if (count === 1) {
+    tasksCountString = 'задача';
+  } else if (count <= 4) {
+    tasksCountString = 'задачи';
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Запланировано</Text>
       <View style={{...styles.block, ...shadow}}>
-        <Text style={styles.text}>10 задач</Text>
+        <Text style={styles.text}>{`${count} ${tasksCountString}`}</Text>
         <TouchableOpacity
           style={styles.button}
+          onPress={() => navigation.navigate("Tasks")}
         >
-          <SvgPlus />
+          <SvgPlus style={{transform: [{scale: 0.8}]}}/>
         </TouchableOpacity>
       </View>
     </View>
@@ -27,36 +39,37 @@ export default HomeTasksCount;
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 30,
+    paddingBottom: 35,
   },
   block: {
-    backgroundColor: colors.LIGHTBLUE,
+    backgroundColor: "#fff",
     padding: 20,
     minHeight: 80,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    borderRadius: Platform.OS === 'ios' ? 20 : 10,
+    borderRadius: 20,
+    borderWidth: Platform.OS === 'ios' ? 0 : 1,
+    borderColor: colors.BORDER_COLOR_ANDROID,
   },
   title: {
-    fontSize: 28,
-    lineHeight: 28,
+    fontSize: 22,
+    lineHeight: 22,
     fontWeight: '500',
     marginBottom: 20,
   },
   button: {
     justifyContent: "center",
     alignItems: "center",
-    width: 40,
-    height: 40,
+    width: 34,
+    height: 34,
     backgroundColor: "#fff",
-    borderRadius: 20,
+    borderRadius: 17,
     borderWidth: 1,
     borderColor: colors.BLUE,
   },
   text: {
-    fontSize: 20,
+    fontSize: 18,
     lineHeight: 24,
     marginBottom: 10,
   },

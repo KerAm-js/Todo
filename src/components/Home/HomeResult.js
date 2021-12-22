@@ -51,15 +51,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   title: {
-    fontSize: 28,
-    lineHeight: 28,
+    fontSize: 22,
+    lineHeight: 22,
     fontWeight: '500',
-    marginBottom: 20,
+    marginBottom: 5,
     marginLeft: 20,
   },
   scroll: {
-    paddingTop: 10,
-    paddingBottom: 20,
+    paddingTop: 15,
+    paddingBottom: 35,
   },
   card: {
     paddingVertical: 20,
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     height: 140,
     width: 140,
     marginLeft: 20,
-    borderRadius: Platform.OS === 'ios' ? 20 : 10,
+    borderRadius: 20,
     borderWidth: Platform.OS === 'ios' ? 0 : 1,
     borderColor: colors.BORDER_COLOR_ANDROID,
   },
@@ -86,6 +86,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   cardTitle: {
-    fontSize: 20,
+    fontSize: 18,
   },
 });

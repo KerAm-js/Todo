@@ -1,14 +1,12 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import Main from "./Main";
-import { StyleSheet, Image } from "react-native";
-import { colors } from "../../components/constants/colors";
 import Statistics from "./Statistics";
 import Productivity from "./Productivity";
 import TimeManagement from "./TimeManagement";
 
-const Stack = createStackNavigator();
 
+const Stack = createStackNavigator();
 const slides = [
   {
     name: 'Statistics',
@@ -34,24 +32,26 @@ const slides = [
   },
 ];
 
-const HomeScreen = () => {
+const HomeScreen = ({tasks, currentTasks, completeTask, showTaskDetails}) => {
   return (
-    <Stack.Navigator initialRouteName="Main" style={styles.container}>
+    <Stack.Navigator 
+      initialRouteName="Main"
+    >
       <Stack.Screen 
         name="HomeMain" 
         options={{
-          title: "Daily Planner",
-          headerBackgroundContainerStyle: {
-            backgroundColor: colors.ACCENT,
-          },
-          headerTitleStyle: {
-            color: '#fff',
-            fontSize: 30
-          },
-          headerTransparent: true,
+          title: "",
+          headerShown: false
         }}
       >
-        {props => <Main {...props} slides={slides} />}
+        {props => <Main 
+          {...props} 
+          slides={slides} 
+          tasks={tasks} 
+          currentTasks={currentTasks}
+          completeTask={completeTask} 
+          showTaskDetails={showTaskDetails}
+        />}
       </Stack.Screen>
       <Stack.Group screenOptions={{
         presentation: "card",
@@ -76,13 +76,3 @@ const HomeScreen = () => {
 };
 
 export default HomeScreen;
-
-const styles = StyleSheet.create({
-  container: {
-  },
-  backImage: {
-    marginLeft: 10,
-    width: 25,
-    height: 25,
-  }
-})

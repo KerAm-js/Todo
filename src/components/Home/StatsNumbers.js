@@ -50,7 +50,6 @@ export default StatsNumbers;
 const styles = StyleSheet.create({
   stats: {
     flexDirection: "row",
-    paddingVertical: 40,
     paddingHorizontal: 10,
   },
   column: {

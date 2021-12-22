@@ -1,55 +1,95 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Platform } from "react-native";
+import { StyleSheet, Text, View, TextInput, ScrollView, Alert } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import MyButton from "../buttons/MyButton";
+import CheckInput from "../CheckInput";
 import { colors } from "../constants/colors";
 import TimePicker from "../TimePicker";
 
-const NewTaskForm = ({type}) => {
+const NewTaskForm = ({type, close, addTask, tasks}) => {
 
   const [taskName, setTaskName] = useState();
   const [description, setDescription] = useState();
   const [startTime, setStartTime] = useState(new Date());
-  const [finishTime, setFinishTime] = useState(startTime);
+  const [finishTime, setFinishTime] = useState(new Date());
+  const [isTimeAdded, setIsTimeAdded] = useState(false);
+  const containerPaddingBottom = useSafeAreaInsets().bottom + 20 || 50;
 
   let title = type === 'add' ? 'Новая задача' : 'Редактирование';
   let btnText = type === 'add' ? 'Добавить' : 'Сохранить';
 
   return (
-    <View style={styles.container}>
+    <ScrollView 
+      style={{...styles.container}}
+      showsVerticalScrollIndicator={false}
+    >
       <Text style={styles.title}>{title}</Text>
-      <TextInput 
-        style={styles.input}
-        value={taskName}
-        onChangeText={text => setTaskName(text)}
-        placeholder="Название задачи"
+      <View style={styles.form}>
+        <TextInput 
+          style={styles.input}
+          value={taskName}
+          onChangeText={text => setTaskName(text)}
+          placeholder="Задача"
+        />
+        <TextInput 
+          style={{ ...styles.input, ...styles.textArea}}
+          value={description}
+          onChangeText={text => setDescription(text)}
+          multiline={true}
+          placeholder="Описание"
+        />
+        <CheckInput 
+          title="Установить время"
+          state={isTimeAdded} 
+          setState={setIsTimeAdded} 
+        />
+        {
+          isTimeAdded 
+          ? <>
+              <TimePicker 
+                type="start"
+                time={startTime}
+                setTime={setStartTime}
+                minimumDate={new Date()}
+              />
+              <TimePicker 
+                type=""
+                time={finishTime}
+                setTime={setFinishTime}
+                minimumDate={startTime}
+              />
+            </>
+          : null
+        }
+      </View>
+      <MyButton 
+        title={btnText}
+        type="submit"
+        onPress={() => {
+          if (taskName) {
+            addTask({
+              id: tasks.length,
+              title: taskName.trim(),
+              description,
+              startTime: isTimeAdded ? startTime : null,
+              finishTime: isTimeAdded ? finishTime : null,
+              isCompleted: false,
+              isExpired: false, 
+            });
+            close();
+          } else {
+            Alert.alert('Пожалуйста, заполните поле "Задача"')
+          }
+        }}
       />
-      <TimePicker 
-        type="start"
-        time={startTime}
-        setTime={setStartTime}
+      <MyButton 
+        title="Отмена"
+        type="danger"
+        onPress={close}
       />
-      <TimePicker 
-        type=""
-        time={finishTime}
-        setTime={setFinishTime}
-      />
-      <TextInput 
-        style={{ ...styles.input, ...styles.textArea}}
-        value={description}
-        onChangeText={text => setDescription(text)}
-        multiline={true}
-        placeholder="Описание задачи"
-      />
-      <TouchableOpacity style={{...styles.button, ...styles.addButton}}>
-        <Text style={styles.btnText}>
-          {btnText}
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={{...styles.button, ...styles.closeButton}}>
-        <Text style={styles.btnText}>
-          Отмена
-        </Text>
-      </TouchableOpacity>
-    </View>
+      <View style={{height: containerPaddingBottom}}>
+      </View>
+    </ScrollView>
   )
 }
 
@@ -57,18 +97,23 @@ export default NewTaskForm;
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: 50,
+    paddingTop: 30,
+    height: '100%',
   },
   title: {
-    fontSize: 25,
+    lineHeight: 22,
+    fontSize: 22,
     fontWeight: "600",
     marginBottom: 30,
     textAlign: "center",
   },
+  form: {
+    paddingBottom: 30,
+  },
   input: {
     borderBottomWidth: 1,
     borderColor: colors.BLUE,
-    paddingVertical: 10,
+    paddingVertical: 5,
     paddingHorizontal: 15,
     fontSize: 18,
   },
@@ -80,23 +125,16 @@ const styles = StyleSheet.create({
     minHeight: 120,
     marginVertical: 20,
   },
-  button: {
-    minHeight: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 15,
-    borderWidth: 1,
-    marginBottom: 10,
-  },  
-  addButton: {
-    borderColor: colors.BLUE,
-    backgroundColor: colors.LIGHTBLUE,
+  timeBlock: {
+
   },
-  closeButton: {
-    borderColor: colors.DANGER,
-    backgroundColor: colors.LIGHTDANGER,
+  timeBlockTitle: {
+
   },
-  buttonText: {
-    fontSize: 18,
+  addTimeButton: {
+
   },
+  addTimeImage: {
+
+  }
 })

@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",   
-    marginBottom: 20,
+    marginBottom: 15,
   },
   icon: {
     fontSize: 50,

@@ -11,6 +11,7 @@ export const SvgPlus = props => (
     strokeWidth={2}
     strokeLinecap="round"
     strokeLinejoin="round"
+    style={{...props.style}}
     fill="none"
     color="#000"
     {...props}

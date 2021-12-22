@@ -1,19 +1,24 @@
 import React from "react";
-import { View, Text, StyleSheet, Platform } from "react-native";
+import { View, Text, StyleSheet, Platform, ScrollView } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import SlideHeading from "../../components/Home/SlideHeading";
 import StatsNumbers from "../../components/Home/StatsNumbers";
 
 const Statistics = ({image, title, navigation}) => {
+  const contentPaddingTop = useSafeAreaInsets().top + 150;
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, paddingTop: contentPaddingTop}}>
       <SlideHeading 
-        title={title}
+        title={`Ваша статистика`}
         image={image}
         navigation={navigation}
       />
-      <View style={styles.content}>
+      <ScrollView 
+        style={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
         <StatsNumbers />
-      </View>
+      </ScrollView>
     </View>
   )
 }
@@ -22,11 +27,11 @@ export default Statistics;
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 210,
     backgroundColor: '#fff',
     flex: 1,
   },
   content: {
+    paddingTop: 25,
     backgroundColor: '#fff',
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,

@@ -1,26 +1,45 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Platform, StyleSheet, Text, View } from "react-native";
+import { colors } from "../constants/colors";
+import { shadow } from "../constants/shadows";
 
 const HomeToday = () => {
 
   const weekDays = [
     undefined,
-    "понедельник",
-    "вторник",
-    "среда",
-    "четверг",
-    "пятница",
-    "суббота",
-    "воскресенье",
+    "Понедельник",
+    "Вторник",
+    "Среда",
+    "Четверг",
+    "Пятница",
+    "Суббота",
+    "Воскресенье",
+  ]
+
+  const months = [
+    "января",
+    "февраля",
+    "марта",
+    "апреля",
+    "май",
+    "июня",
+    "июля",
+    "августа",
+    "сентября",
+    "октября",
+    "ноября",
+    "декабря",
   ]
 
   const date = new Date();
-  const dayString = `${date.getDate()} ${weekDays[date.getDay()]}`;
+  const dateString = `${weekDays[date.getDay()]}, ${date.getDate()} ${months[date.getMonth()]}`;
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Сегодня</Text>
-      <Text style={styles.subtitle}>{dayString}</Text>
+      <View style={{...styles.block, ...shadow}}>
+        <Text style={styles.subtitle}>{dateString}</Text>
+      </View>
     </View>
   )
 }
@@ -31,17 +50,27 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     paddingHorizontal: 20,
-    marginBottom: 30,
+    paddingBottom: 35,
   },
   title: {
-    fontSize: 28,
-    lineHeight: 30,
+    fontSize: 25,
+    lineHeight: 25,
     fontWeight: '600',
-    marginTop: 30,
     marginBottom: 20,
   },
   subtitle: {
-    fontSize: 20,
-    lineHeight: 20,
+    fontSize: 18,
+    lineHeight: 18,
   },
+  block: {
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    borderColor: colors.BORDER_COLOR_ANDROID,
+    borderWidth: Platform.OS === 'ios' ? 0 : 1,
+    padding: 20,
+    minHeight: 70,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: "center",
+  }
 })

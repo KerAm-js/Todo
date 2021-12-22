@@ -1,85 +1,83 @@
 import React, { useState } from "react";
-import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import AddTaskButton from "../../components/Tasks/AddTaskButton";
-import TaskBlock from "../../components/Tasks/TaskBLock";
 import ModalLayout from "../../layouts/ModalLayout";
-import TaskForm from "../../components/Tasks/TaskForm";
-import FooterSpace from "../../components/FooterSpace";
-import TasksHeader from "../../components/Tasks/TasksHeader";
+import MainNavBar from "../../components/Tasks/MainNavBar";
 import Task from "../../components/Tasks/Task";
 import NewTaskForm from "../../components/Tasks/NewTaskForm";
+import TabScreenHeader from "../../components/headers/TabScreenHeader";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 
-const Main = () => {
+const Main = ({
+  tasks,  
+  addTask, 
+  completeTask, 
+  showTaskDetails,
+  navigation,
+  route
+}) => {
+  const [addTaskModalVisible, setAddTaskModalVisible] = useState(false);
+  const [activeContent, setActiveContent] = useState('Все задачи');
 
-  const [tasks, setTasks] = useState([]);
-  const [editTaskId, setEditTaskId] = useState();
-  const [addModalVisible, setAddModalVisible] = useState(false);
-  const [editModalVisible, setEditModalVisible] = useState(false);
-
-  const editTask = (text, date, description) => {
-    const currentTask = tasks.find(task => task.id === editTaskId);
-    const tasksCopy = [...tasks];
-    const task = tasksCopy.find(task => task.id === editTaskId);
-    console.log(editTaskId);
-    if (
-      currentTask.text === text && 
-      currentTask.date === date && 
-      currentTask.description === description
-    ) {
-      null
-    } else {
-      task.text = text;
-      task.date = date;
-      task.description = description;
-    } 
-    setTasks(tasksCopy);
-    setEditTaskId(null);
-  }; 
-
-  const addTask = (text, date, description) => {
-    setTasks([
-      {
-        id: `${tasks.length}.${new Date().toLocaleString()}`,
-        listNumber: tasks.length,
-        text,
-        date,
-        description,
-        isCompleted: false,
-        isDeadline: false,
-      },
-      ...tasks
-    ])
+  let showedTasks = [...tasks];
+  
+  if (activeContent === 'Выполнено') {
+    showedTasks = tasks.filter(task => task.isCompleted);
+  } else if (activeContent === 'Просрочено') {
+    showedTasks = tasks.filter(task => task.isExpired && !task.isCompleted);
   }
 
-  const deleteTask = id => {
-    setTasks(previous => previous.filter(task => task.id !== id ))
-  }
-
-  const toggleTaskCompleting = (id, isCompleted) => {
-    const tasksCopy = [...tasks];
-    const task = tasksCopy.find(task => task.id === id)
-    task.isCompleted = !isCompleted;
-    setTasks(tasksCopy);
-  }
-
-  const setIsDeadline = (id, isDeadline) => {
-    const tasksCopy = [...tasks];
-    const task = tasksCopy.find(task => task.id === id)
-    task.isDeadline = isDeadline;
-    setTasks(tasksCopy);
-  }
+  const containerPaddingTop = useSafeAreaInsets().top + 55 + 131 || 20 + 55 + 131;
 
   return (
-    <View style={styles.container}>
-      <TasksHeader />
+    <View style={{...styles.container, paddingTop: containerPaddingTop}}>
+      {
+        addTaskModalVisible 
+        ? <View style={{...styles.backdrop}}></View>
+        : null
+      }
+      <TabScreenHeader title="Задачи" />
+      <MainNavBar 
+        activeContent={activeContent} 
+        setActiveContent={setActiveContent} 
+        navigation={navigation}
+        route={route}
+      />
       <ScrollView 
         style={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        <AddTaskButton />
-        <Task name={'задача'} />
-        {/* <NewTaskForm type={"add"} /> */}
+        {
+          activeContent === 'Все задачи'
+          ? <AddTaskButton showModal={() => setAddTaskModalVisible(true)}/>
+          : null
+        }
+        {
+          showedTasks.map((task, index) => {
+
+            return (
+              <Task 
+                key={index}
+                task={task} 
+                showTaskDetails={() => showTaskDetails(task.id, navigation)}
+                completeTask={() => completeTask(task.id)}
+              />
+            )
+          }) 
+        }
+        <ModalLayout
+          visible={addTaskModalVisible}
+          close={() => setAddTaskModalVisible(false)}
+          style={{paddingTop: containerPaddingTop}}
+        >
+          <NewTaskForm 
+            type={"add"} 
+            close={() => setAddTaskModalVisible(false)} 
+            tasks={tasks}
+            addTask={addTask}
+          />
+        </ModalLayout>
       </ScrollView>
     </View>
   )
@@ -89,14 +87,20 @@ export default Main;
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 220,
     backgroundColor: '#fff',
     flex: 1,
   },
   content: {
-    paddingTop: 20,
+    paddingTop: 25,
     paddingHorizontal: 20,
     borderRadius: 25,
     backgroundColor: '#fff',
   },
+  backdrop: {
+    position: "absolute",
+    zIndex: 200,
+    backgroundColor: 'rgba(0, 0, 0, .4)',
+    height: '100%',
+    width: '100%',
+  }
 })

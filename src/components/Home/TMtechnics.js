@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from "react-nati
 import { colors } from "../constants/colors";
 import { shadow } from "../constants/shadows";
 
-const TMtechnics = ({technics}) => {
+const TMtechnics = ({technics, activeSlide, setActiveSlide}) => {
   return (
     <View style={styles.container}>
       <ScrollView 
@@ -12,15 +12,14 @@ const TMtechnics = ({technics}) => {
         showsHorizontalScrollIndicator={false}
       >
         {
-          technics.map(({name, active}, index) => {
+          technics.map(({id, name}, index) => {
             
             let style;
 
-            if (active) {
+            if (activeSlide === id) {
               style = {
                 ...styles.button,
                 ...styles.buttonActive,
-                ...shadow,
                 marginLeft: index === 0 ? 20 : 0,
               }
             } else {
@@ -34,6 +33,7 @@ const TMtechnics = ({technics}) => {
               <TouchableOpacity 
                 style={style} 
                 key={index}
+                onPress={() => setActiveSlide(id)}
               >
                 <Text style={styles.technicName}>{name}</Text>
               </TouchableOpacity>
@@ -49,10 +49,10 @@ export default TMtechnics;
 
 const styles = StyleSheet.create({
   container: {
-    minHeight: 85,
+    minHeight: 35,
   },
   scroll: {
-    paddingVertical: 20,
+    paddingBottom: 10,
   },
   button: {
     marginRight: 20,
