@@ -2,7 +2,7 @@ import React from "react";
 import { View, ScrollView, StyleSheet, TouchableWithoutFeedback, Image, Text, Platform, TouchableOpacity } from "react-native";
 import { BlurView } from "expo-blur";
 import { colors } from "../constants/colors";
-import { shadow } from "../constants/shadows";
+import { shadow, cardShadow } from "../constants/shadows";
 
 
 const HomeSlider = ({navigation, slides}) => {
@@ -22,7 +22,7 @@ const HomeSlider = ({navigation, slides}) => {
                 () => navigation.navigate(name)
               }
             >
-              <View style={{...shadow}}>
+              <View style={{...cardShadow}}>
                 <View style={{ ...styles.slideContent, marginLeft: index === 0 ? 20 : 0,}}>
                   {/* <BlurView 
                     intensity={100}

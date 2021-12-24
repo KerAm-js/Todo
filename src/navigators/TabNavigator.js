@@ -12,7 +12,6 @@ const Tab = createBottomTabNavigator();
 
 export default function TabNavigator({
   currentTasks,
-  setCurrentTasks,
   tasks,
   setTasks,
   viewedTask,
@@ -20,7 +19,7 @@ export default function TabNavigator({
   addTask,
   removeTask,
   completeTask,
-  findCurrentTasks,
+  expiredTasks,
   showTaskDetails,
 }) {
   
@@ -43,6 +42,7 @@ export default function TabNavigator({
             currentTasks={currentTasks}
             completeTask={completeTask}
             showTaskDetails={showTaskDetails}
+            expiredTasks={expiredTasks}
           />
         }
       </Tab.Screen>

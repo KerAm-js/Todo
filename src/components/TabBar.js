@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, Image, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from './constants/colors';
 
 const TabBar = ({ state, descriptors, navigation }) => {
   const tabBarPaddingBottom = useSafeAreaInsets().bottom || 20;
   return ( 
+    <View style={styles.container}>
       <View style={{...styles.tabBar, paddingBottom: tabBarPaddingBottom}}>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
@@ -87,12 +88,17 @@ const TabBar = ({ state, descriptors, navigation }) => {
           );
         })}
       </View> 
+    </View>
+      
   );
 };
 
 export default TabBar;
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#fff',
+  },
   image: {
     width: 30,
     height: 30,
@@ -107,5 +113,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
+    overflow: 'hidden',
   }
 })

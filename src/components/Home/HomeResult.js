@@ -14,7 +14,7 @@ const HomeResults = () => {
         showsHorizontalScrollIndicator={false}
         snapToEnd={false}
       > 
-        <View style={{...styles.card, ...shadow}}>
+        <View style={{...styles.card, ...shadow, marginLeft: 20,}}>
           <View style={styles.circle}>
             <Text style={styles.cardValue}>70%</Text>
           </View>
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     height: 140,
     width: 140,
-    marginLeft: 20,
+    marginLeft: 15,
     borderRadius: 20,
     borderWidth: Platform.OS === 'ios' ? 0 : 1,
     borderColor: colors.BORDER_COLOR_ANDROID,

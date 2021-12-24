@@ -8,7 +8,8 @@ import { SvgPlus } from "../../icons/icons";
 
 const HomeTasksCount = ({count, navigation}) => {
 
-  let tasksCountString = 'задач';;
+  let tasksCountString = 'задач';
+  let title = 'Запланировано';
 
   if (count === 0) {
     null
@@ -20,7 +21,7 @@ const HomeTasksCount = ({count, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Запланировано</Text>
+      <Text style={styles.title}>{title}</Text>
       <View style={{...styles.block, ...shadow}}>
         <Text style={styles.text}>{`${count} ${tasksCountString}`}</Text>
         <TouchableOpacity

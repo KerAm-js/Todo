@@ -32,7 +32,7 @@ const slides = [
   },
 ];
 
-const HomeScreen = ({tasks, currentTasks, completeTask, showTaskDetails}) => {
+const HomeScreen = ({tasks, currentTasks, completeTask, showTaskDetails, expiredTasks}) => {
   return (
     <Stack.Navigator 
       initialRouteName="Main"
@@ -51,6 +51,7 @@ const HomeScreen = ({tasks, currentTasks, completeTask, showTaskDetails}) => {
           currentTasks={currentTasks}
           completeTask={completeTask} 
           showTaskDetails={showTaskDetails}
+          expiredTasks={expiredTasks}
         />}
       </Stack.Screen>
       <Stack.Group screenOptions={{

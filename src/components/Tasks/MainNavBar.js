@@ -42,13 +42,13 @@ const MainNavBar = ({activeContent, setActiveContent, navigation, route}) => {
           navigators.map((nav, index) => {
             const textActiveStyle = nav.pageName === route.name ? {...styles.navTextActive} : null;
             return (
-              <Pressable 
+              <TouchableOpacity 
                 key={index}
                 style={styles.navButton}
                 onPress={() => navigation.navigate(nav.pageName)}
               >
                 <Text style={{...styles.navText, ...textActiveStyle}}>{nav.title}</Text>
-              </Pressable>
+              </TouchableOpacity>
             )
           })
         }
@@ -64,7 +64,7 @@ const MainNavBar = ({activeContent, setActiveContent, navigation, route}) => {
             let buttonStyle = {
               ...styles.contentButton,
               marginLeft: index === 0 ? 20 : 0,
-              marginRight: index === arr.length - 1 ? 20 : 15
+              marginRight: index === arr.length - 1 ? 20 : 10
             }
 
             let titleStyle = {
@@ -76,7 +76,7 @@ const MainNavBar = ({activeContent, setActiveContent, navigation, route}) => {
                 ...styles.contentButton,
                 ...styles.contentButtonActive,
                 marginLeft: index === 0 ? 20 : 0,
-                marginRight: index === arr.length - 1 ? 20 : 15
+                marginRight: index === arr.length - 1 ? 20 : 10
               };
               titleStyle = {
                 ...styles.title,

@@ -9,8 +9,10 @@ const Stack = createStackNavigator();
 export default function RootNavigator() {
 
   const [currentTasks, setCurrentTasks] = useState([]);
+  const [expiredTasks, setExpiredTasks] = useState([]);
+  const [viewedTask, setViewedTask] = useState();
   const [tasks, setTasks] = useState([{
-    id: 0,
+    id: `0_${new Date()}`,
     title: "Задача 1",
     description: null,
     startTime: null,
@@ -18,23 +20,15 @@ export default function RootNavigator() {
     isCompleted: false,
     isExpired: false, 
   }]);
-  const [viewedTask, setViewedTask] = useState(null);
 
   const addTask = task => {
     setTasks(prev => [...prev, task]);
-    if (task.startTime && task.finishTime) {
-      setTimeout(() => {
-        setTasks(prev => {
-          const tasksCopy = [...prev];
-          tasksCopy[task.id].isExpired = true
-          return tasksCopy;
-        });
-      }, task.finishTime - new Date());
-    }
+    taskTimout(task.id, task.startTime, task.finishTime);
   }
 
   const removeTask = id => {
     setTasks(tasks.filter(task => task.id !== id));
+    setExpiredTasks(expiredTasks.filter(task => task.id !== id));
     setViewedTask(null);
   }
 
@@ -46,32 +40,62 @@ export default function RootNavigator() {
     setTasks(tasksCopy);
   }
 
+  const findExpiredTasks = () => {
+    if (tasks.length > 0) {
+      let result = [];
+      const currentTime = new Date();
+      tasks.forEach(task => {
+        if (task?.finishTime && task?.finishTime <= currentTime && !task?.isCompleted) {
+          result.push(task);
+        }
+      })
+      setExpiredTasks(result);
+    }
+  }
 
   const findCurrentTasks = () => {
     if (tasks.length > 0) {
       let result = [];
       const currentTime = new Date();
       tasks.forEach(task => {
-        if (task?.startTime <= currentTime && task?.finishTime >= currentTime) {
+        if (task?.startTime <= currentTime && task?.finishTime > currentTime && !task?.isExpired) {
           result.push(task);
         }
       })
       if (result.length === 0) {
-        const currentTask = tasks.find(task => !task.isCompleted)
+        const currentTask = tasks.find(task => !task.isCompleted && !task.isExpired)
         currentTask ? result.push(currentTask) : null
       }
-      console.log(result);
       setCurrentTasks(result);
     }
   }
 
+  const editTask = (id, taskData) => {
+    setTasks(tasks.map(task => task.id === id ? {id, ...taskData} : task));
+    taskTimout(id, taskData.startTime, taskData.finishTime);
+    setViewedTask({id, ...taskData});
+  }
+
+  const taskTimout = (id, start, end) => {
+    if (start && end && new Date() < end) {
+      setTimeout(() => {
+        setTasks(prev => {
+          const tasksCopy = [...prev];
+          tasksCopy[id].isExpired = true
+          return tasksCopy;
+        });
+      }, end - new Date());
+    }
+  }
+
   const showTaskDetails = (id, navigation) => {
-    setViewedTask(tasks.find(task => task.id === id))
-    navigation.navigate("Viewing")
+    setViewedTask(tasks.find(task => task.id === id));
+    navigation.navigate("Viewing");
   }
 
   useEffect(() => {
     findCurrentTasks();
+    findExpiredTasks();
   }, [tasks]);
 
   return (
@@ -88,6 +112,7 @@ export default function RootNavigator() {
                 {...props}
                 currentTasks={currentTasks}
                 setCurrentTasks={setCurrentTasks}
+                expiredTasks={expiredTasks}
                 tasks={tasks}
                 setTasks={setTasks}
                 viewedTask={viewedTask}
@@ -95,7 +120,6 @@ export default function RootNavigator() {
                 addTask={addTask}
                 removeTask={removeTask}
                 completeTask={completeTask}
-                findCurrentTasks={findCurrentTasks}
                 showTaskDetails={showTaskDetails}
               />
             }
@@ -109,6 +133,7 @@ export default function RootNavigator() {
                 task={viewedTask} 
                 completeTask={() => completeTask(viewedTask.id)}
                 removeTask={() => removeTask(viewedTask.id)}
+                editTask={taskData => editTask(viewedTask.id, taskData)}
               />
             }
           </Stack.Screen>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { View, ScrollView, StyleSheet, StatusBar, Platform } from "react-native";
 import HomeSlider from "../../components/Home/HomeSlider";
 import HomeToday from "../../components/Home/HomeToday";
@@ -8,9 +8,10 @@ import HomeGreeting from "../../components/Home/HomeGreeting";
 import HomeTasksCount from "../../components/Home/HomeTasksCount";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import TabScreenHeader from "../../components/headers/TabScreenHeader";
+import HomeExpiredTasks from "../../components/Home/HomeExpiredTasks";
 
 
-const Main = ({navigation, slides, tasks, currentTasks, completeTask, showTaskDetails}) => {
+const Main = ({navigation, slides, tasks, currentTasks, completeTask, showTaskDetails, expiredTasks}) => {
   const scrollPaddingTop = Platform.OS === 'ios' ? useSafeAreaInsets().top + 160 : useSafeAreaInsets().top + 120;
   return (
     <View style={styles.container}>
@@ -28,6 +29,12 @@ const Main = ({navigation, slides, tasks, currentTasks, completeTask, showTaskDe
           <HomeToday />
           <HomeTasksCount 
             count={tasks.length} 
+            navigation={navigation}
+          />
+          <HomeExpiredTasks 
+            expiredTasks={expiredTasks} 
+            completeTask={completeTask} 
+            showTaskDetails={showTaskDetails}
             navigation={navigation}
           />
           <HomeCurrentTask 

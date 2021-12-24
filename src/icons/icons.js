@@ -1,5 +1,6 @@
 import React from "react";
 import { Svg, Path } from "react-native-svg";
+import { colors } from "../components/constants/colors";
 
 export const SvgPlus = props => (
   <Svg
@@ -13,7 +14,7 @@ export const SvgPlus = props => (
     strokeLinejoin="round"
     style={{...props.style}}
     fill="none"
-    color="#000"
+    color={colors.BLUE}
     {...props}
   >
     <Path d="M20 12H4m8-8v16" />

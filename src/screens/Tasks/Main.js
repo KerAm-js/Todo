@@ -4,7 +4,7 @@ import AddTaskButton from "../../components/Tasks/AddTaskButton";
 import ModalLayout from "../../layouts/ModalLayout";
 import MainNavBar from "../../components/Tasks/MainNavBar";
 import Task from "../../components/Tasks/Task";
-import NewTaskForm from "../../components/Tasks/NewTaskForm";
+import TaskForm from "../../components/Tasks/TaskForm";
 import TabScreenHeader from "../../components/headers/TabScreenHeader";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -71,7 +71,7 @@ const Main = ({
           close={() => setAddTaskModalVisible(false)}
           style={{paddingTop: containerPaddingTop}}
         >
-          <NewTaskForm 
+          <TaskForm 
             type={"add"} 
             close={() => setAddTaskModalVisible(false)} 
             tasks={tasks}

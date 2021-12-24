@@ -15,14 +15,16 @@ const CheckInput = ({state, setState, title}) => {
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
       <TouchableOpacity 
-        style={{...styles.button, borderColor}}
+        style={styles.button}
         onPress={() => setState(!state)}
       >
-        {
-          state 
-          ? <View style={styles.circle}></View>
-          : null
-        }
+        <View style={{...styles.border, borderColor}}>
+          {
+            state 
+            ? <View style={styles.circle}></View>
+            : null
+          }
+        </View>
       </TouchableOpacity>
     </View>
   )
@@ -43,9 +45,15 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   button: {
+    width: 30,
+    height: 30,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  border: {
     width: 20,
     height: 20,
-    borderRadius: 10,
+    borderRadius: 15,
     borderWidth: 1,
     justifyContent: "center",
     alignItems: "center",
@@ -56,5 +64,4 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: colors.SUCCESS,
   },
-  
 })

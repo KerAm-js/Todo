@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   },
   buttonActive: {
     backgroundColor: colors.LIGHTBLUE,
-    borderWidth: 0,
+    borderColor: colors.LIGHTBLUE
   },
   technicName: {
     fontSize: 18,

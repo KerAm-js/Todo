@@ -5,14 +5,14 @@ import { shadow } from "../constants/shadows";
 import { colors } from "../constants/colors";
 import Task from "../Tasks/Task";
 
-const HomeCurrentTask = ({currentTasks, completeTask, showTaskDetails, navigation}) => {
-  const title = currentTasks.length === 1 ? 'Текущая задача' : 'Текущие задачи';
+const HomeExpiredTasks = ({expiredTasks, completeTask, showTaskDetails, navigation}) => {
+  const title = 'Просрочено';
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
       {
-        currentTasks.length !== 0
-          ? currentTasks.map((task, index) => {
+        expiredTasks.length !== 0
+          ? expiredTasks.map((task, index) => {
               return (
                 <Task 
                   key={index}
@@ -24,14 +24,14 @@ const HomeCurrentTask = ({currentTasks, completeTask, showTaskDetails, navigatio
               )
             })
           : <View style={{...styles.block, ...shadow}}>
-              <Text style={styles.noTasks}>Нет задач, назначенных на текущее время</Text>
+              <Text style={styles.noTasks}>Нет просроченных задач</Text>
             </View>
       }
     </View>
   )
 }
 
-export default HomeCurrentTask;
+export default HomeExpiredTasks;
 
 const styles = StyleSheet.create({
   container: {

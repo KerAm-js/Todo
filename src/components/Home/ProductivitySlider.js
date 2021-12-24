@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   buttonActive: {
-    borderWidth: 0,
+    borderColor: colors.LIGHTBLUE,
     backgroundColor: colors.LIGHTBLUE,
   },
   title: {

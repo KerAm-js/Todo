@@ -6,14 +6,48 @@ import CheckInput from "../CheckInput";
 import { colors } from "../constants/colors";
 import TimePicker from "../TimePicker";
 
-const NewTaskForm = ({type, close, addTask, tasks}) => {
-
-  const [taskName, setTaskName] = useState();
-  const [description, setDescription] = useState();
-  const [startTime, setStartTime] = useState(new Date());
-  const [finishTime, setFinishTime] = useState(new Date());
-  const [isTimeAdded, setIsTimeAdded] = useState(false);
+const TaskForm = ({type, close, addTask, editTask, tasks, task}) => {
+  
+  const [taskName, setTaskName] = useState(type === 'add' ? null : task.title);
+  const [description, setDescription] = useState(type === 'add' ? null : task.description);
+  const [startTime, setStartTime] = useState(task?.startTime || new Date());
+  const [finishTime, setFinishTime] = useState(task?.finishTime || new Date());
+  const [isTimeAdded, setIsTimeAdded] = useState(type === 'add' ? false : task.startTime && task.finishTime);
   const containerPaddingBottom = useSafeAreaInsets().bottom + 20 || 50;
+
+  const onAddHandler = () => {
+    if (taskName?.trim()) {
+      addTask({
+        id: `${tasks.length}_${new Date()}`,
+        title: taskName.trim(),
+        description,
+        startTime: isTimeAdded ? startTime : null,
+        finishTime: isTimeAdded ? finishTime : null,
+        isCompleted: false,
+        isExpired: isTimeAdded && new Date() < finishTime ? false : true, 
+      });
+      close();
+    } else {
+      Alert.alert('Пожалуйста, заполните поле "Задача"')
+    }
+  }
+
+  const onEditHandler = () => {
+    if (taskName?.trim()) {
+      editTask({
+        title: taskName.trim(),
+        description,
+        startTime: isTimeAdded ? startTime : null,
+        finishTime: isTimeAdded ? finishTime : null,
+        isCompleted: false,
+        isExpired: isTimeAdded && new Date() < finishTime ? false : true,
+      })
+      close();
+      // navigation.navigate("Tasks");
+    } else {
+      Alert.alert('Пожалуйста, заполните поле "Задача"')
+    }
+  }
 
   let title = type === 'add' ? 'Новая задача' : 'Редактирование';
   let btnText = type === 'add' ? 'Добавить' : 'Сохранить';
@@ -50,7 +84,7 @@ const NewTaskForm = ({type, close, addTask, tasks}) => {
                 type="start"
                 time={startTime}
                 setTime={setStartTime}
-                minimumDate={new Date()}
+                minimumDate={startTime}
               />
               <TimePicker 
                 type=""
@@ -65,22 +99,7 @@ const NewTaskForm = ({type, close, addTask, tasks}) => {
       <MyButton 
         title={btnText}
         type="submit"
-        onPress={() => {
-          if (taskName) {
-            addTask({
-              id: tasks.length,
-              title: taskName.trim(),
-              description,
-              startTime: isTimeAdded ? startTime : null,
-              finishTime: isTimeAdded ? finishTime : null,
-              isCompleted: false,
-              isExpired: false, 
-            });
-            close();
-          } else {
-            Alert.alert('Пожалуйста, заполните поле "Задача"')
-          }
-        }}
+        onPress={type === 'add' ? onAddHandler : onEditHandler}
       />
       <MyButton 
         title="Отмена"
@@ -93,7 +112,7 @@ const NewTaskForm = ({type, close, addTask, tasks}) => {
   )
 }
 
-export default NewTaskForm;
+export default TaskForm;
 
 const styles = StyleSheet.create({
   container: {
