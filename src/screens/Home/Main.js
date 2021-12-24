@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { View, ScrollView, StyleSheet, StatusBar, Platform } from "react-native";
 import HomeSlider from "../../components/Home/HomeSlider";
 import HomeToday from "../../components/Home/HomeToday";
@@ -9,10 +9,18 @@ import HomeTasksCount from "../../components/Home/HomeTasksCount";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import TabScreenHeader from "../../components/headers/TabScreenHeader";
 import HomeExpiredTasks from "../../components/Home/HomeExpiredTasks";
+import { TasksContext } from "../../context/tasks/TasksContext";
 
 
-const Main = ({navigation, slides, tasks, currentTasks, completeTask, showTaskDetails, expiredTasks}) => {
+const Main = ({slides, navigation}) => {
   const scrollPaddingTop = Platform.OS === 'ios' ? useSafeAreaInsets().top + 160 : useSafeAreaInsets().top + 120;
+  const logic = useContext(TasksContext);
+
+  useEffect(() => {
+    logic.findExpiredTasks();
+    logic.findCurrentTasks();
+  }, [logic.state.tasks])
+
   return (
     <View style={styles.container}>
       <StatusBar 
@@ -25,22 +33,25 @@ const Main = ({navigation, slides, tasks, currentTasks, completeTask, showTaskDe
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.content}>
-          <HomeSlider {...{navigation, slides}} />
+          <HomeSlider 
+            navigation={navigation} 
+            slides={slides}
+          />
           <HomeToday />
           <HomeTasksCount 
-            count={tasks.length} 
+            count={logic.state.tasks.length} 
             navigation={navigation}
           />
           <HomeExpiredTasks 
-            expiredTasks={expiredTasks} 
-            completeTask={completeTask} 
-            showTaskDetails={showTaskDetails}
+            expiredTasks={logic.state.expiredTasks} 
+            completeTask={logic.completeTask} 
+            showTaskDetails={logic.showTaskDetails}
             navigation={navigation}
           />
           <HomeCurrentTask 
-            currentTasks={currentTasks} 
-            completeTask={completeTask} 
-            showTaskDetails={showTaskDetails}
+            currentTasks={logic.state.currentTasks} 
+            completeTask={logic.completeTask} 
+            showTaskDetails={logic.showTaskDetails}
             navigation={navigation}
           />
           <HomeResults />

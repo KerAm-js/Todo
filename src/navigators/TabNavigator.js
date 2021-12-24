@@ -10,19 +10,8 @@ import TabBar from '../components/TabBar';
 
 const Tab = createBottomTabNavigator();
 
-export default function TabNavigator({
-  currentTasks,
-  tasks,
-  setTasks,
-  viewedTask,
-  setViewedTask,
-  addTask,
-  removeTask,
-  completeTask,
-  expiredTasks,
-  showTaskDetails,
-}) {
-  
+export default function TabNavigator() {
+
   return (
     <Tab.Navigator 
       initialRouteName="Home" 
@@ -38,11 +27,6 @@ export default function TabNavigator({
         {
           props => <HomeScreen 
             {...props} 
-            tasks={tasks} 
-            currentTasks={currentTasks}
-            completeTask={completeTask}
-            showTaskDetails={showTaskDetails}
-            expiredTasks={expiredTasks}
           />
         }
       </Tab.Screen>
@@ -57,14 +41,6 @@ export default function TabNavigator({
         {
           props => <TasksScreen 
             {...props} 
-            tasks={tasks} 
-            setTasks={setTasks}
-            viewedTask={viewedTask}
-            setViewedTask={setViewedTask}
-            addTask={addTask}
-            removeTask={removeTask}
-            completeTask={completeTask}
-            showTaskDetails={showTaskDetails}
           />
         }
       </Tab.Screen>
@@ -85,9 +61,3 @@ export default function TabNavigator({
     </Tab.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import AddTaskButton from "../../components/Tasks/AddTaskButton";
 import ModalLayout from "../../layouts/ModalLayout";
@@ -7,25 +7,23 @@ import Task from "../../components/Tasks/Task";
 import TaskForm from "../../components/Tasks/TaskForm";
 import TabScreenHeader from "../../components/headers/TabScreenHeader";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { TasksContext } from "../../context/tasks/TasksContext";
 
 
 const Main = ({
-  tasks,  
-  addTask, 
-  completeTask, 
-  showTaskDetails,
   navigation,
   route
 }) => {
+  const logic = useContext(TasksContext);
   const [addTaskModalVisible, setAddTaskModalVisible] = useState(false);
   const [activeContent, setActiveContent] = useState('Все задачи');
 
-  let showedTasks = [...tasks];
+  let showedTasks = [...logic.state.tasks];
   
   if (activeContent === 'Выполнено') {
-    showedTasks = tasks.filter(task => task.isCompleted);
+    showedTasks = logic.state.tasks.filter(task => task.isCompleted);
   } else if (activeContent === 'Просрочено') {
-    showedTasks = tasks.filter(task => task.isExpired && !task.isCompleted);
+    showedTasks = logic.state.tasks.filter(task => task.isExpired && !task.isCompleted);
   }
 
   const containerPaddingTop = useSafeAreaInsets().top + 55 + 131 || 20 + 55 + 131;
@@ -55,13 +53,12 @@ const Main = ({
         }
         {
           showedTasks.map((task, index) => {
-
             return (
               <Task 
                 key={index}
                 task={task} 
-                showTaskDetails={() => showTaskDetails(task.id, navigation)}
-                completeTask={() => completeTask(task.id)}
+                showTaskDetails={() => logic.showTaskDetails(task.id, navigation)}
+                completeTask={() => logic.completeTask(task.id)}
               />
             )
           }) 
@@ -74,8 +71,8 @@ const Main = ({
           <TaskForm 
             type={"add"} 
             close={() => setAddTaskModalVisible(false)} 
-            tasks={tasks}
-            addTask={addTask}
+            tasks={logic.state.tasks}
+            addTask={logic.addTask}
           />
         </ModalLayout>
       </ScrollView>

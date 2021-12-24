@@ -24,7 +24,7 @@ const TaskForm = ({type, close, addTask, editTask, tasks, task}) => {
         startTime: isTimeAdded ? startTime : null,
         finishTime: isTimeAdded ? finishTime : null,
         isCompleted: false,
-        isExpired: isTimeAdded && new Date() < finishTime ? false : true, 
+        isExpired: isTimeAdded ? (new Date() < finishTime ? false : true) : false, 
       });
       close();
     } else {
@@ -40,7 +40,7 @@ const TaskForm = ({type, close, addTask, editTask, tasks, task}) => {
         startTime: isTimeAdded ? startTime : null,
         finishTime: isTimeAdded ? finishTime : null,
         isCompleted: false,
-        isExpired: isTimeAdded && new Date() < finishTime ? false : true,
+        isExpired: isTimeAdded ? (new Date() < finishTime ? false : true) : false, 
       })
       close();
       // navigation.navigate("Tasks");
@@ -144,16 +144,4 @@ const styles = StyleSheet.create({
     minHeight: 120,
     marginVertical: 20,
   },
-  timeBlock: {
-
-  },
-  timeBlockTitle: {
-
-  },
-  addTimeButton: {
-
-  },
-  addTimeImage: {
-
-  }
 })

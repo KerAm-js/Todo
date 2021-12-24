@@ -7,13 +7,13 @@ const TaskData = ({task, completeTask}) => {
   let borderColor = colors.BLUE;
   let image = null;
 
-  if (task.isCompleted) {
+  if (task?.isCompleted) {
     image = <Image 
       source={require('../../images/success.png')} 
       style={styles.successImage}
     />;
     borderColor = colors.SUCCESS
-  } else if (task.isExpired) {
+  } else if (task?.isExpired) {
     image = <Image 
       source={require('../../images/danger.png')} 
       style={styles.image}
@@ -24,12 +24,12 @@ const TaskData = ({task, completeTask}) => {
   let startTimeString = 'Не указано';
   let finishTimeString = 'Не указано';
 
-  if (task.startTime) {
+  if (task?.startTime) {
     const startHours = task.startTime.getHours() >= 10 ? `${task.startTime.getHours()}` : `0${task.startTime.getHours()}`;
     const startMinutes = task.startTime.getMinutes() >= 10 ? `${task.startTime.getMinutes()}` : `0${task.startTime.getMinutes()}`;
     startTimeString = `${startHours}:${startMinutes}`;
   }
-  if (task.finishTime) {
+  if (task?.finishTime) {
     const finishHours = task.finishTime.getHours() >= 10 ? `${task.finishTime.getHours()}` : `0${task.finishTime.getHours()}`;
     const finishMinutes = task.finishTime.getMinutes() >= 10 ? `${task.finishTime.getMinutes()}` : `0${task.finishTime.getMinutes()}`;
     finishTimeString = `${finishHours}:${finishMinutes}`;
@@ -38,7 +38,7 @@ const TaskData = ({task, completeTask}) => {
   return (
     <View style={styles.container}>
       <View style={styles.heading}>
-        <Text style={styles.title}>{task.title}</Text>
+        <Text style={styles.title}>{task?.title}</Text>
         <TouchableOpacity 
           style={{...styles.button, borderColor}}
           onPress={completeTask}
@@ -49,8 +49,8 @@ const TaskData = ({task, completeTask}) => {
         </TouchableOpacity>
       </View>
       {
-        task.description
-        ? <Text style={styles.description}>{task.description}</Text>
+        task?.description
+        ? <Text style={styles.description}>{task?.description}</Text>
         : null
       }
       <View style={styles.timeBlock}>

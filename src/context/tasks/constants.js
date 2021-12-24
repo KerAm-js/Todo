@@ -1,0 +1,8 @@
+export const ADD_TASK = "ADD-TASK";
+export const REMOVE_TASK = "REMOVE-TASK";
+export const EDIT_TASK = "EDIT-TASK";
+export const COMPLETE_TASK = "COMPLETE-TASK"; 
+export const FIND_EXPIRED_TASKS = "FIND-EXPIRED-TASKS";
+export const FIND_CURRENT_TASKS = "FIND-CURRENT-TASKS";
+export const SET_TASK_TIMEOUT = "SET-TASK-TIMEOUT";
+export const SHOW_TASK_DETAILS = "SHOW-TASK-DETAILS";

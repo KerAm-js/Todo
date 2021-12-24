@@ -1,16 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { StyleSheet, View } from "react-native";
-import TaskViewing from "../TaskViewing";
 import Main from "./Main";
 import Targets from "./Targets";
 import Notes from "./Notes";
+import { TasksContext } from "../../context/tasks/TasksContext";
 
 
 const Stack = createStackNavigator();
 
-const TasksScreen = ({tasks, setTasks, viewedTask, setViewedTask, addTask, removeTask, completeTask, showTaskDetails }) => {
-  
+const TasksScreen = () => {
   return (
     <Stack.Navigator 
       initialRouteName="Main"
@@ -27,13 +25,6 @@ const TasksScreen = ({tasks, setTasks, viewedTask, setViewedTask, addTask, remov
             props => (
               <Main 
                 {...props} 
-                tasks={tasks} 
-                setTasks={setTasks}
-                viewedTask={viewedTask} 
-                setViewedTask={setViewedTask} 
-                addTask={addTask}
-                completeTask={completeTask}
-                showTaskDetails={showTaskDetails}
               />
             )
           }

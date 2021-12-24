@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, StyleSheet, Alert } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import MyButton from "../components/buttons/MyButton";
@@ -7,11 +7,13 @@ import ViewingHeading from "../components/Tasks/ScreenHeader";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ModalLayout from "../layouts/ModalLayout";
 import TaskForm from "../components/Tasks/TaskForm";
+import { TasksContext } from "../context/tasks/TasksContext";
 
-const TaskViewing = ({navigation, task, completeTask, removeTask, editTask}) => {
+const TaskViewing = ({navigation}) => {
 
   const containerPaddingTop = useSafeAreaInsets().top + 45;
   const [editModalVisible, setEditModalVisible] = useState(false);
+  const logic = useContext(TasksContext);
   
   const closeModal = () => setEditModalVisible(false);
   const taskRemoving = () => {
@@ -28,7 +30,7 @@ const TaskViewing = ({navigation, task, completeTask, removeTask, editTask}) => 
           text: "Удалить",
           onPress: () => {
             navigation.goBack();
-            removeTask();
+            logic.removeTask(logic.state.viewedTask.id);
           },
           style: "destructive"
         },
@@ -52,8 +54,8 @@ const TaskViewing = ({navigation, task, completeTask, removeTask, editTask}) => 
         showsVerticalScrollIndicator={false}
       >
         <TaskData 
-          task={task}
-          completeTask={completeTask}
+          task={logic.state.viewedTask}
+          completeTask={() => logic.completeTask(logic.state.viewedTask.id)}
         />
         <MyButton 
           type="submit"
@@ -72,9 +74,9 @@ const TaskViewing = ({navigation, task, completeTask, removeTask, editTask}) => 
         >
           <TaskForm 
             type="edit"
-            task={task}
+            task={logic.state.viewedTask}
             close={closeModal}
-            editTask={editTask}
+            editTask={taskData => logic.editTask(logic.state.viewedTask.id, taskData)}
             navigation={navigation}
           />
         </ModalLayout>
