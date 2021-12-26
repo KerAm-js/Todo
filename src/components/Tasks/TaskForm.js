@@ -24,7 +24,8 @@ const TaskForm = ({type, close, addTask, editTask, tasks, task}) => {
         startTime: isTimeAdded ? startTime : null,
         finishTime: isTimeAdded ? finishTime : null,
         isCompleted: false,
-        isExpired: isTimeAdded ? (new Date() < finishTime ? false : true) : false, 
+        isExpired: isTimeAdded ? (new Date() < finishTime ? false : true) : false,
+        isDayExpired: false, 
       });
       close();
     } else {
@@ -41,9 +42,9 @@ const TaskForm = ({type, close, addTask, editTask, tasks, task}) => {
         finishTime: isTimeAdded ? finishTime : null,
         isCompleted: false,
         isExpired: isTimeAdded ? (new Date() < finishTime ? false : true) : false, 
+        isDayExpired: task.isDayExpired,
       })
       close();
-      // navigation.navigate("Tasks");
     } else {
       Alert.alert('Пожалуйста, заполните поле "Задача"')
     }

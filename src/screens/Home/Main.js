@@ -15,10 +15,11 @@ import { TasksContext } from "../../context/tasks/TasksContext";
 const Main = ({slides, navigation}) => {
   const scrollPaddingTop = Platform.OS === 'ios' ? useSafeAreaInsets().top + 160 : useSafeAreaInsets().top + 120;
   const logic = useContext(TasksContext);
-
+  console.log(logic.state.result);
   useEffect(() => {
     logic.findExpiredTasks();
     logic.findCurrentTasks();
+    logic.updateResult();
   }, [logic.state.tasks])
 
   return (
@@ -54,7 +55,7 @@ const Main = ({slides, navigation}) => {
             showTaskDetails={logic.showTaskDetails}
             navigation={navigation}
           />
-          <HomeResults />
+          <HomeResults result={logic.state.result} />
         </View>
       </ScrollView>
     </View>

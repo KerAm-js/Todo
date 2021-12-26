@@ -7,6 +7,7 @@ import {
   FIND_CURRENT_TASKS,
   SHOW_TASK_DETAILS,
   SET_TASK_TIMEOUT, 
+  UPDATE_RESULT,
 } from "./constants";
 
 export const tasksReducer = (state, action) => {
@@ -110,6 +111,21 @@ export const tasksReducer = (state, action) => {
         viewedTask: state.tasks.find(task => task.id === action.id),
       }
     };
+    case UPDATE_RESULT: {
+      const completedTasks = state.tasks.reduce((prev, task) => task.isCompleted ? prev + 1 : prev, 0);
+      const expiredTasks = state.tasks.reduce((prev, task) => task.isExpired ? prev + 1 : prev, 0);
+      const progress = Math.round((completedTasks / state.tasks.length) * 100);
+      const tasksLeft = state.tasks.length - completedTasks;
+      return {
+        ...state,
+        result: {
+          progress,
+          completedTasks,
+          expiredTasks,
+          tasksLeft,
+        }
+      }
+    }
     default: {
       return state;
     }

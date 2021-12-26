@@ -1,28 +1,38 @@
 import React, { useReducer } from "react";
-import { ADD_TASK, COMPLETE_TASK, EDIT_TASK, FIND_CURRENT_TASKS, FIND_EXPIRED_TASKS, REMOVE_TASK, SET_TASK_TIMEOUT, SHOW_TASK_DETAILS } from "./constants";
+import { ADD_TASK, COMPLETE_TASK, EDIT_TASK, FIND_CURRENT_TASKS, FIND_EXPIRED_TASKS, REMOVE_TASK, SET_TASK_TIMEOUT, SHOW_TASK_DETAILS, UPDATE_RESULT } from "./constants";
 import { TasksContext } from "./TasksContext";
 import { tasksReducer } from "./TasksReducer";
 
 const TasksState = ({children}) => {
   const initialState = {
-    tasks: [{
-      id: `0_${new Date()}`,
-      title: "Задача 1",
-      description: null,
-      startTime: null,
-      finishTime: null,
-      isCompleted: false,
-      isExpired: false, 
-    }],
+    tasks: [
+      {
+        id: `0_${new Date()}`,
+        title: "Задача 1",
+        description: null,
+        startTime: null,
+        finishTime: null,
+        isCompleted: false,
+        isExpired: false, 
+        isDayExpired: false,
+      }
+    ],
     expiredTasks: [],
     currentTasks: [],
     viewedTask: null,
+    result: {
+      progress: null,
+      completedTasks: null,
+      expiredTasks: null,
+      tasksLeft: null,
+    }
   }
 
   const [state, dispatch] = useReducer(tasksReducer, initialState);
 
   const findExpiredTasks = () => dispatch({type: FIND_EXPIRED_TASKS});
   const findCurrentTasks = () => dispatch({type: FIND_CURRENT_TASKS});
+  const updateResult = () => dispatch({type: UPDATE_RESULT});          
 
   const showTaskDetails = (id, navigation) => {
     dispatch({type: SHOW_TASK_DETAILS, id});
@@ -60,6 +70,7 @@ const TasksState = ({children}) => {
       findCurrentTasks,
       setTaskTimout,
       showTaskDetails,
+      updateResult
     }}>
       {children}
     </TasksContext.Provider>

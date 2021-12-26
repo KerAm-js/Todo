@@ -1,10 +1,31 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 import { shadow } from "../constants/shadows";
 import { colors } from "../constants/colors";
 
-const HomeResults = () => {
+
+const HomeResults = ({result}) => {
+
+  const cards = [
+    {
+      title: "Прогресс",
+      value: result.progress,
+    },
+    {
+      title: "Просрочено",
+      value: result.expiredTasks,
+    },
+    {
+      title: "Выполнено",
+      value: result.completedTasks,
+    },
+    {
+      title: "Осталось",
+      value: result.tasksLeft,
+    },
+  ]
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Результаты</Text>
@@ -14,30 +35,44 @@ const HomeResults = () => {
         showsHorizontalScrollIndicator={false}
         snapToEnd={false}
       > 
-        <View style={{...styles.card, ...shadow, marginLeft: 20,}}>
-          <View style={styles.circle}>
-            <Text style={styles.cardValue}>70%</Text>
-          </View>
-          <Text style={styles.cardTitle}>Прогресс</Text>
-        </View>
-        <View style={{...styles.card, ...shadow}}>
-          <View style={styles.circle}>
-            <Text style={styles.cardValue}>3</Text>
-          </View>
-          <Text style={styles.cardTitle}>Просрочено</Text>
-        </View>
-        <View style={{...styles.card, ...shadow}}>
-          <View style={styles.circle}>
-            <Text style={styles.cardValue}>5</Text>
-          </View>
-          <Text style={styles.cardTitle}>Выполнено</Text>
-        </View>
-        <View style={{...styles.card, ...shadow, marginRight: 20,}}>
-          <View style={styles.circle}>
-            <Text style={styles.cardValue}>2</Text>
-          </View>
-          <Text style={styles.cardTitle}>Осталось</Text>
-        </View>
+        {
+          cards.map(({title, value}, index) => {
+            
+            let borderColor = colors.BLUE;
+            let fontSize = 18;
+
+            if (title === 'Прогресс') {
+              if (value < 50 ) {
+                borderColor = colors.DANGER;
+              } else if (value >= 70) {
+                borderColor = colors.SUCCESS;
+              }
+              fontSize = 16;
+            } else if (title === 'Просрочено' && value > 0) {
+              borderColor = colors.DANGER;
+            } else if (title === 'Выполнено' && value > 0) {
+              borderColor = colors.SUCCESS;
+            }
+            
+            return (
+              <View 
+                key={index}
+                style={{
+                  ...styles.card, 
+                  ...shadow, 
+                  marginLeft: index === 0 ? 20 : 15,
+                  marginRight: index === cards.length - 1 ? 20 : 0,
+                }}
+              >
+                <View style={{...styles.circle, borderColor}}>
+                  <Text style={{...styles.cardValue, fontSize}}>{title === 'Прогресс' ? `${value}%` : value}</Text>
+                </View>
+                <Text style={styles.cardTitle}>{title}</Text>
+              </View>
+            )
+            
+          })
+        }
       </ScrollView>
     </View>
     
@@ -68,7 +103,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     height: 140,
     width: 140,
-    marginLeft: 15,
     borderRadius: 20,
     borderWidth: Platform.OS === 'ios' ? 0 : 1,
     borderColor: colors.BORDER_COLOR_ANDROID,
@@ -78,12 +112,10 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 30,
     borderWidth: 1,
-    borderColor: colors.BLUE,
     justifyContent: "center",
     alignItems: "center",
   },
   cardValue: {
-    fontSize: 20,
   },
   cardTitle: {
     fontSize: 18,
