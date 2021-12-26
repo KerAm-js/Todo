@@ -80,6 +80,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
               testID={options.tabBarTestID}
               onPress={onPress}
               onLongPress={onLongPress}
+              style={styles.tabButton}
             >
               {
                 image
@@ -103,6 +104,11 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
   },
+  tabButton: {
+    width: 70,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   tabBar: { 
     paddingTop: 15,
     position: 'relative',
@@ -110,7 +116,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     backgroundColor: colors.ACCENT, 
     justifyContent: 'space-between',
-    paddingHorizontal: 40,
+    paddingHorizontal: 20,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     overflow: 'hidden',

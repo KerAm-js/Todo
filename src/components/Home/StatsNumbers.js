@@ -4,21 +4,21 @@ import { colors } from "../constants/colors";
 import { shadow } from "../constants/shadows";
 
 
-const StatsNumbers = () => {
+const StatsNumbers = ({stats}) => {
   return (
     <View style={styles.stats}>
       <View style={styles.column}>
 
         <View style={styles.blueBlock}>
           <View style={styles.blueBlockBackground}>
-            <Text style={styles.valueBigSize}>238</Text>
+            <Text style={styles.valueBigSize}>{stats.completedTasksCount}</Text>
             <Text style={styles.title}>{`задач\n выполнено за\n всё время`}</Text>
           </View>
         </View>
 
         <View style={styles.whiteBlock}>
           <View style={styles.circle}>
-            <Text style={styles.value}>81%</Text>
+            <Text style={styles.value}>{`${stats.completedTasksPart}%`}</Text>
           </View>
           <Text style={styles.title}>{`задач\n выполнено`}</Text>
         </View>
@@ -28,14 +28,14 @@ const StatsNumbers = () => {
 
         <View style={styles.whiteBlock}>
           <View style={styles.circle}>
-            <Text style={styles.value}>35%</Text>
+            <Text style={styles.value}>{stats.completedInTime}</Text>
           </View>
           <Text style={styles.title}>{`выполнено\n в срок`}</Text>
         </View>
 
         <View style={styles.blueBlock}>
           <View style={styles.blueBlockBackground}>
-            <Text style={styles.valueBigSize}>5</Text>
+            <Text style={styles.valueBigSize}>{stats.dailyTaskCreatingAverage}</Text>
             <Text style={styles.title}>{`задач\n в среднем\n создаётся в день`}</Text>
           </View>
         </View>

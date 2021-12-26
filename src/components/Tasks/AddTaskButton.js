@@ -1,35 +1,42 @@
 import React from "react";
-import { Image, StyleSheet, Text } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { SvgPlus } from "../../icons/icons";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { colors } from "../constants/colors";
 
-const AddTaskButton = ({showModal}) => (
-  <TouchableOpacity
-    onPress={showModal}
-    style={styles.container}
-  >
-    <SvgPlus />
-  </TouchableOpacity>
-)
+const AddTaskButton = ({showModal}) => {
+  return (
+    <View style={{...styles.container, bottom: 20, }}>
+      <TouchableOpacity
+        onPress={showModal}
+        style={styles.button}
+      >
+        <Image 
+          source={require('../../images/plusWhite.png')}
+          style={styles.icon}
+        />
+      </TouchableOpacity>
+    </View>
+  )
+}
 
 export default AddTaskButton;
 
 const styles = StyleSheet.create({
   container: {
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
     width: '100%',
-    height: 60,
-    borderColor: colors.BLUE,
-    borderWidth: 1,
+  },
+  button: {
+    width: 40,
+    height: 40,
+    backgroundColor: colors.ACCENT,
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",   
-    marginBottom: 15,
   },
   icon: {
-    fontSize: 50,
-    lineHeight: 50,
-    color: colors.ACCENT,
-    fontWeight: '200',
+    width: 20,
+    height: 20,
   },
 })

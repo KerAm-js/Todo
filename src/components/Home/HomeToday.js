@@ -6,13 +6,13 @@ import { shadow } from "../constants/shadows";
 const HomeToday = () => {
 
   const weekDays = [
-    "Воскресенье",
-    "Понедельник",
-    "Вторник",
-    "Среда",
-    "Четверг",
-    "Пятница",
-    "Суббота",
+    "воскресенье",
+    "понедельник",
+    "вторник",
+    "среда",
+    "четверг",
+    "пятница",
+    "суббота",
   ]
 
   const months = [
@@ -31,7 +31,7 @@ const HomeToday = () => {
   ]
 
   const date = new Date();
-  const dateString = `${weekDays[date.getDay()]}, ${date.getDate()} ${months[date.getMonth()]}`;
+  const dateString = `${date.getDate()} ${months[date.getMonth()]}, ${weekDays[date.getDay()]}`;
 
   return (
     <View style={styles.container}>

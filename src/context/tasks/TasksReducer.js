@@ -6,7 +6,7 @@ import {
   FIND_EXPIRED_TASKS,
   FIND_CURRENT_TASKS,
   SHOW_TASK_DETAILS,
-  SET_TASK_TIMEOUT, 
+  SET_TASK_EXPIRED, 
   UPDATE_RESULT,
   ON_NEW_DAY_HANDLER,
 } from "./constants";
@@ -64,7 +64,7 @@ export const tasksReducer = (state, action) => {
         let result = [];
         const currentTime = new Date();
         state.tasks.forEach(task => {
-          if (task?.finishTime && task?.finishTime <= currentTime && !task?.isCompleted) {
+          if (task?.isExpired || task?.isDayExpired) {
             result.push(task);
           }
         })
@@ -103,14 +103,13 @@ export const tasksReducer = (state, action) => {
         }
       }
     };
-    case SET_TASK_TIMEOUT: {
-      if (action.start && action.end && new Date() < action.end) {
-        setTimeout(() => {
-          const tasksCopy = [...state.tasks];
-          tasksCopy.find(task => task.id === action.id).isExpired = true;
-          return tasksCopy;
-        }, action.end - new Date());
-      }
+    case SET_TASK_EXPIRED: {
+      const tasksCopy = [...state.tasks];
+      tasksCopy.find(task => task.id === action.id).isExpired = true;
+      return {
+        ...state,
+        tasks: tasksCopy,
+      };
     };
     case SHOW_TASK_DETAILS: {
       return {
@@ -143,7 +142,7 @@ export const tasksReducer = (state, action) => {
       const isYearEvaluate = state.currentDate.getFullYear() === action.date.getFullYear();
       const isSecondEvaluate = state.currentDate.getSeconds() + 20 > action.date.getSeconds();
       
-      if (isDayEvaluate && isMonthEvaluate && isYearEvaluate && isSecondEvaluate) {
+      if (isDayEvaluate && isMonthEvaluate && isYearEvaluate) {
         console.log('no update');
       } else {
         console.log('updated');
@@ -153,7 +152,7 @@ export const tasksReducer = (state, action) => {
         const completedTasksCount = state.stats.completedTasksCount + state.result.completedTasks;
         const completedTasksPart = Math.round((completedTasksCount / tasksCount) * 100);
         const completedInTime = state.stats.completedInTime + state.result.completedInTime;
-        const dailyTaskCreatingAverage = Math.round((tasksCount / workingDaysCount) * 100);
+        const dailyTaskCreatingAverage = Math.round((tasksCount / workingDaysCount));
         const stats = {
           tasksCount,
           completedTasksCount,

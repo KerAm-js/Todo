@@ -35,7 +35,7 @@ const Main = ({
         ? <View style={{...styles.backdrop}}></View>
         : null
       }
-      <TabScreenHeader title="Задачи" />
+      <TabScreenHeader title="Работа" />
       <MainNavBar 
         activeContent={activeContent} 
         setActiveContent={setActiveContent} 
@@ -46,11 +46,6 @@ const Main = ({
         style={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        {
-          activeContent === 'Все задачи'
-          ? <AddTaskButton showModal={() => setAddTaskModalVisible(true)}/>
-          : null
-        }
         {
           showedTasks.map((task, index) => {
             return (
@@ -76,6 +71,7 @@ const Main = ({
           />
         </ModalLayout>
       </ScrollView>
+      <AddTaskButton showModal={() => setAddTaskModalVisible(true)}/>
     </View>
   )
 }
@@ -85,7 +81,8 @@ export default Main;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    flex: 1,
+    height: '100%',
+    width: '100%',
   },
   content: {
     paddingTop: 25,

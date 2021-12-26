@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     borderColor: colors.BORDER_COLOR_ANDROID,
     borderWidth: Platform.OS === "ios" || Platform.OS === "macos" ? 0 : 1,
     borderRadius: 20,
-    marginBottom: 15,
+    marginBottom: 10,
   },
   title: {
     fontSize: 18,

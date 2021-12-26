@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { shadow } from "../constants/shadows";
 import { colors } from "../constants/colors";
@@ -28,7 +28,10 @@ const HomeTasksCount = ({count, navigation}) => {
           style={styles.button}
           onPress={() => navigation.navigate("Tasks")}
         >
-          <SvgPlus style={{transform: [{scale: 0.8}]}}/>
+          <Image 
+            source={require('../../images/plus.png')}
+            style={styles.image}
+          />
         </TouchableOpacity>
       </View>
     </View>
@@ -59,6 +62,10 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     marginBottom: 20,
   },
+  image: {
+    width: 16,
+    height: 16,
+  },  
   button: {
     justifyContent: "center",
     alignItems: "center",

@@ -15,10 +15,9 @@ import { TasksContext } from "../../context/tasks/TasksContext";
 const Main = ({slides, navigation}) => {
   const scrollPaddingTop = Platform.OS === 'ios' ? useSafeAreaInsets().top + 160 : useSafeAreaInsets().top + 120;
   const logic = useContext(TasksContext);
-  console.log(logic.state.createdTasksCount);
+
   useEffect(() => {
     logic.onNewDayHandler(new Date());
-    console.log('ok')
   });
 
   useEffect(() => {
@@ -48,12 +47,16 @@ const Main = ({slides, navigation}) => {
             count={logic.state.tasks.length} 
             navigation={navigation}
           />
-          <HomeExpiredTasks 
-            expiredTasks={logic.state.expiredTasks} 
-            completeTask={logic.completeTask} 
-            showTaskDetails={logic.showTaskDetails}
-            navigation={navigation}
-          />
+          {
+            logic.state.expiredTasks?.length > 0
+              ? <HomeExpiredTasks 
+                  expiredTasks={logic.state.expiredTasks} 
+                  completeTask={logic.completeTask} 
+                  showTaskDetails={logic.showTaskDetails}
+                  navigation={navigation}
+                />
+              : null
+          }
           <HomeCurrentTask 
             currentTasks={logic.state.currentTasks} 
             completeTask={logic.completeTask} 

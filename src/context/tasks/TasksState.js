@@ -7,7 +7,7 @@ import {
   FIND_EXPIRED_TASKS, 
   ON_NEW_DAY_HANDLER, 
   REMOVE_TASK, 
-  SET_TASK_TIMEOUT, 
+  SET_TASK_EXPIRED, 
   SHOW_TASK_DETAILS, 
   UPDATE_RESULT 
 } from "./constants";
@@ -34,12 +34,12 @@ const TasksState = ({children}) => {
     currentTasks: [],
     viewedTask: null,
     stats: {
-      tasksCount: null,
-      completedTasksCount: null,
-      completedTasksPart: null,
-      completedInTime: null,
-      dailyTaskCreatingAverage: null,
-      workingDaysCount: null,
+      tasksCount: 0,
+      completedTasksCount: 0,
+      completedTasksPart: 0,
+      completedInTime: 0,
+      dailyTaskCreatingAverage: 0,
+      workingDaysCount: 0,
     },
     result: {
       progress: null,
@@ -68,13 +68,17 @@ const TasksState = ({children}) => {
     dispatch({type: COMPLETE_TASK, id});
   };
   
-  const setTaskTimout = (id, start, end) => {
-    dispatch({type: SET_TASK_TIMEOUT, id, start, end});
+  const setTaskExpired = (id, start, end) => {
+    if (start && end && new Date() < end) {
+      setTimeout(() => {
+        dispatch({type: SET_TASK_EXPIRED, id});;
+      }, end - new Date());
+    }
   };
 
   const addTask = task => {
     dispatch({type: ADD_TASK, task});
-    setTaskTimout(task.id, task.startTime, task.finishTime);
+    setTaskExpired(task.id, task.startTime, task.finishTime);
   };
 
   const removeTask = id => {
@@ -85,6 +89,7 @@ const TasksState = ({children}) => {
 
   const editTask = (id, taskData) => {
     dispatch({type: EDIT_TASK, id, taskData});
+    setTaskExpired(id, taskData.startTime, taskData.finishTime);
   };
 
   return (
@@ -96,7 +101,6 @@ const TasksState = ({children}) => {
       completeTask,
       findExpiredTasks,
       findCurrentTasks,
-      setTaskTimout,
       showTaskDetails,
       updateResult,
       onNewDayHandler,
