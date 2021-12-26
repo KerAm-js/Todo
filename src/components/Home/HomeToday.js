@@ -6,14 +6,13 @@ import { shadow } from "../constants/shadows";
 const HomeToday = () => {
 
   const weekDays = [
-    undefined,
+    "Воскресенье",
     "Понедельник",
     "Вторник",
     "Среда",
     "Четверг",
     "Пятница",
     "Суббота",
-    "Воскресенье",
   ]
 
   const months = [
