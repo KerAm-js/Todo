@@ -13,16 +13,20 @@ const HomeResults = ({result}) => {
       value: result.progress,
     },
     {
-      title: "Просрочено",
-      value: result.expiredTasks,
+      title: "Осталось",
+      value: result.tasksLeft,
     },
     {
       title: "Выполнено",
       value: result.completedTasks,
     },
     {
-      title: "Осталось",
-      value: result.tasksLeft,
+      title: "Во время",
+      value: result.completedInTime
+    },
+    {
+      title: "Просрочено",
+      value: result.expiredTasks,
     },
   ]
 
@@ -50,10 +54,10 @@ const HomeResults = ({result}) => {
               fontSize = 16;
             } else if (title === 'Просрочено' && value > 0) {
               borderColor = colors.DANGER;
-            } else if (title === 'Выполнено' && value > 0) {
+            } else if ((title === 'Выполнено' || title === 'Во время') && value > 0) {
               borderColor = colors.SUCCESS;
             }
-            
+
             return (
               <View 
                 key={index}

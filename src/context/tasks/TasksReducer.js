@@ -8,6 +8,7 @@ import {
   SHOW_TASK_DETAILS,
   SET_TASK_TIMEOUT, 
   UPDATE_RESULT,
+  ON_NEW_DAY_HANDLER,
 } from "./constants";
 
 export const tasksReducer = (state, action) => {
@@ -15,6 +16,7 @@ export const tasksReducer = (state, action) => {
     case ADD_TASK: {
       return {
         ...state,
+        createdTasksCount: state.createdTasksCount + 1,
         tasks: [
           ...state.tasks,
           action.task,
@@ -22,8 +24,13 @@ export const tasksReducer = (state, action) => {
       }
     };
     case REMOVE_TASK: {
+      let createdTasksCount = state.createdTasksCount;
+      if (!state.tasks.find(task => task.id === action.id).isDayExpired) {
+        createdTasksCount -= 1;
+      } 
       return {
         ...state,
+        createdTasksCount,
         tasks: [
           ...state.tasks.filter(task => task.id !== action.id)
         ],
@@ -114,8 +121,10 @@ export const tasksReducer = (state, action) => {
     case UPDATE_RESULT: {
       const completedTasks = state.tasks.reduce((prev, task) => task.isCompleted ? prev + 1 : prev, 0);
       const expiredTasks = state.tasks.reduce((prev, task) => task.isExpired ? prev + 1 : prev, 0);
-      const progress = Math.round((completedTasks / state.tasks.length) * 100);
+      const progress = Math.round((completedTasks / state.tasks.length) * 100) || 0;
       const tasksLeft = state.tasks.length - completedTasks;
+      const completedInTime = state.tasks.reduce((prev, task) => task.isCompleted && !task.isExpired ? prev + 1 : prev, 0);
+      
       return {
         ...state,
         result: {
@@ -123,9 +132,62 @@ export const tasksReducer = (state, action) => {
           completedTasks,
           expiredTasks,
           tasksLeft,
+          completedInTime,
         }
       }
-    }
+    };
+    case ON_NEW_DAY_HANDLER: {
+    
+      const isDayEvaluate = state.currentDate.getDate() === action.date.getDate();
+      const isMonthEvaluate = state.currentDate.getMonth() === action.date.getMonth();
+      const isYearEvaluate = state.currentDate.getFullYear() === action.date.getFullYear();
+      const isSecondEvaluate = state.currentDate.getSeconds() + 20 > action.date.getSeconds();
+      
+      if (isDayEvaluate && isMonthEvaluate && isYearEvaluate && isSecondEvaluate) {
+        console.log('no update');
+      } else {
+        console.log('updated');
+        //stats updating
+        const tasksCount = state.stats.tasksCount + state.createdTasksCount;
+        const workingDaysCount = state.stats.workingDaysCount + 1;
+        const completedTasksCount = state.stats.completedTasksCount + state.result.completedTasks;
+        const completedTasksPart = Math.round((completedTasksCount / tasksCount) * 100);
+        const completedInTime = state.stats.completedInTime + state.result.completedInTime;
+        const dailyTaskCreatingAverage = Math.round((tasksCount / workingDaysCount) * 100);
+        const stats = {
+          tasksCount,
+          completedTasksCount,
+          completedTasksPart,
+          completedInTime,
+          dailyTaskCreatingAverage,
+          workingDaysCount,
+        }
+
+        //completed tasks removing
+        let tasks = state.tasks.filter(task => !task.isCompleted);
+        tasks = tasks.map(task => {
+          return {...task, startTime: null, finishTime: null, isDayExpired: true, isExpired: true}
+        })
+
+        return {
+          ...state,
+          currentDate: new Date(),
+          createdTasksCount: tasks.length,
+          tasks,
+          stats,
+          expiredTasks: [],
+          currentTasks: [],
+          viewedTask: null,
+          result: {
+            progress: 0,
+            completedTasks: 0,
+            expiredTasks: 0,
+            tasksLeft: 0,
+            completedInTime: 0,
+          }
+        }
+      }
+    };
     default: {
       return state;
     }

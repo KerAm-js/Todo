@@ -15,7 +15,12 @@ import { TasksContext } from "../../context/tasks/TasksContext";
 const Main = ({slides, navigation}) => {
   const scrollPaddingTop = Platform.OS === 'ios' ? useSafeAreaInsets().top + 160 : useSafeAreaInsets().top + 120;
   const logic = useContext(TasksContext);
-  console.log(logic.state.result);
+  console.log(logic.state.createdTasksCount);
+  useEffect(() => {
+    logic.onNewDayHandler(new Date());
+    console.log('ok')
+  });
+
   useEffect(() => {
     logic.findExpiredTasks();
     logic.findCurrentTasks();
