@@ -17,9 +17,8 @@ const HomeExpiredTasks = ({expiredTasks, completeTask, showTaskDetails, navigati
                 <Task 
                   key={index}
                   task={task} 
-                  showTaskDetails={() => null}
-                  completeTask={() => completeTask(task.id)}
-                  showTaskDetails={() => showTaskDetails(task.id, navigation)}
+                  complete={() => completeTask(task.id)}
+                  showDetails={() => showTaskDetails(task.id, navigation)}
                 />
               )
             })

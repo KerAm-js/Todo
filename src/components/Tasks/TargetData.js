@@ -39,7 +39,7 @@ const TargetData = ({target, complete}) => {
   let finishTimeString = 'Не указано';
 
   if (target?.finishTime) {
-    finishTimeString = `${target.finishTime.getDate()} ${months[target.finishTime.getMonth()]}`;
+    finishTimeString = `${target.finishTime.getDate()} ${months[target.finishTime.getMonth()]} ${target.finishTime.getFullYear()} года`;
   }
 
   return (

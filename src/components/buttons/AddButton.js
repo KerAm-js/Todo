@@ -2,11 +2,11 @@ import React from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { colors } from "../constants/colors";
 
-const AddTaskButton = ({showModal}) => {
+const AddButton = ({onPress}) => {
   return (
     <View style={{...styles.container}}>
       <TouchableOpacity
-        onPress={showModal}
+        onPress={onPress}
         style={styles.button}
       >
         <Image 
@@ -18,7 +18,7 @@ const AddTaskButton = ({showModal}) => {
   )
 }
 
-export default AddTaskButton;
+export default AddButton;
 
 const styles = StyleSheet.create({
   container: {

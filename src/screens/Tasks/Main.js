@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import AddTaskButton from "../../components/Tasks/AddTaskButton";
 import ModalLayout from "../../layouts/ModalLayout";
 import MainNavBar from "../../components/Tasks/MainNavBar";
 import Task from "../../components/Tasks/Task";
@@ -10,6 +9,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TasksContext } from "../../context/tasks/TasksContext";
 import { TargetsContext } from "../../context/targets/TargetsContext";
 import Target from "../../components/Tasks/Target";
+import AddButton from "../../components/buttons/AddButton";
 
 
 const Main = ({ navigation, route }) => {
@@ -19,7 +19,6 @@ const Main = ({ navigation, route }) => {
 
   const taskContext = useContext(TasksContext);
   const tasks = taskContext.state.tasks;
-  console.log(tasks);
 
   const [addTaskModalVisible, setAddTaskModalVisible] = useState(false);
   const [activeType, setActiveType] = useState("Tasks");
@@ -79,23 +78,21 @@ const Main = ({ navigation, route }) => {
             } 
 
             return (
-              <>
+              <View key={index}>
                 {
                   activeType === 'Tasks' 
                     ? <Task 
-                        key={index}
                         task={item} 
                         showDetails={showDetails}
                         complete={complete}
                       />
                     : <Target 
-                        key={index}
                         target={item} 
                         showDetails={showDetails}
                         complete={complete}
                       />
                 }
-              </>
+              </View>
             )
           }) 
         }
@@ -123,7 +120,7 @@ const Main = ({ navigation, route }) => {
           }
         </ModalLayout>
       </ScrollView>
-      <AddTaskButton showModal={() => setAddTaskModalVisible(true)}/>
+      <AddButton onPress={() => setAddTaskModalVisible(true)}/>
     </View>
   )
 }

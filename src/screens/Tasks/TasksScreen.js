@@ -1,9 +1,7 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import Main from "./Main";
-import Targets from "./Targets";
 import Notes from "./Notes";
-import { TasksContext } from "../../context/tasks/TasksContext";
 
 
 const Stack = createStackNavigator();

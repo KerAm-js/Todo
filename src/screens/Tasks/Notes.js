@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View, ScrollView } from "react-native";
 import ViewingHeading from "../../components/Tasks/ScreenHeader";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Note from "../../components/Tasks/Note";
+import AddButton from "../../components/buttons/AddButton";
+import { useContext } from "react/cjs/react.development";
+import { NotesContext } from "../../context/notes/NotesContext";
+
 
 const Notes = ({navigation}) => {
   const containerPaddingTop = useSafeAreaInsets().top + 50 || 20 + 50;
+  const notesContext = useContext(NotesContext);
+  const notes = notesContext.state.notes;
+
   return (
     <View style={{...styles.container, paddingTop: containerPaddingTop}}>
       <ViewingHeading 
@@ -15,8 +23,18 @@ const Notes = ({navigation}) => {
         style={styles.scroll}
         showsVerticalScrollIndicator={false}
       >
-        
+        {
+          notes.map((note, index) => (
+            <Note 
+              key={index} 
+              text={note.text} 
+              updateNote={text => notesContext.updateNote(note.id, text)}
+              removeNote={() => notesContext.removeNote(note.id)}
+            />
+          ))
+        }
       </ScrollView>
+      <AddButton onPress={notesContext.addNote}/>
     </View>
   )
 }

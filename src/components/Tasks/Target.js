@@ -23,7 +23,7 @@ const Target = ({target, complete, showDetails}) => {
 
   let finishTimeString = 'Не указано';
   if (target?.finishTime) {
-    finishTimeString = `${target?.finishTime.getDate()} ${months[target?.finishTime.getMonth()]}`;
+    finishTimeString = `${target?.finishTime.getDate()} ${months[target?.finishTime.getMonth()]} ${target.finishTime.getFullYear()} г.`;
   }
   let borderColor = colors.BLUE;
   let image = null;
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   },
   time: {
     marginTop: 10,
-    fontSize: 14,
-    lineHeight: 14,
+    fontSize: 12,
+    lineHeight: 12,
   }
 })

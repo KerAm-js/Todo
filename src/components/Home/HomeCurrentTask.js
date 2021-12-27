@@ -17,8 +17,8 @@ const HomeCurrentTask = ({currentTasks, completeTask, showTaskDetails, navigatio
                 <Task 
                   key={index}
                   task={task} 
-                  completeTask={() => completeTask(task.id)}
-                  showTaskDetails={() => showTaskDetails(task.id, navigation)}
+                  complete={() => completeTask(task.id)}
+                  showDetails={() => showTaskDetails(task.id, navigation)}
                 />
               )
             })
