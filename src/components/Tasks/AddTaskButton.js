@@ -4,7 +4,7 @@ import { colors } from "../constants/colors";
 
 const AddTaskButton = ({showModal}) => {
   return (
-    <View style={{...styles.container, bottom: 20, }}>
+    <View style={{...styles.container}}>
       <TouchableOpacity
         onPress={showModal}
         style={styles.button}
@@ -22,6 +22,7 @@ export default AddTaskButton;
 
 const styles = StyleSheet.create({
   container: {
+    bottom: 20,
     position: "absolute",
     justifyContent: "center",
     alignItems: "center",

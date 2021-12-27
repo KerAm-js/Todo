@@ -7,13 +7,14 @@ import ViewingHeading from "../components/Tasks/ScreenHeader";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ModalLayout from "../layouts/ModalLayout";
 import TaskForm from "../components/Tasks/TaskForm";
-import { TasksContext } from "../context/tasks/TasksContext";
+import TargetData from "../components/Tasks/TargetData";
+import { TargetsContext } from "../context/targets/TargetsContext";
 
-const TaskViewing = ({navigation}) => {
+const TargetViewing = ({navigation}) => {
 
   const containerPaddingTop = useSafeAreaInsets().top + 45;
   const [editModalVisible, setEditModalVisible] = useState(false);
-  const logic = useContext(TasksContext);
+  const targetContext = useContext(TargetsContext);
   
   const closeModal = () => setEditModalVisible(false);
   const taskRemoving = () => {
@@ -30,7 +31,7 @@ const TaskViewing = ({navigation}) => {
           text: "Удалить",
           onPress: () => {
             navigation.goBack();
-            logic.removeTask(logic.state.viewedTask.id);
+            targetContext.removeTarget(targetContext.state.viewedTarget.id);
           },
           style: "destructive"
         },
@@ -53,9 +54,9 @@ const TaskViewing = ({navigation}) => {
         style={styles.scroll}
         showsVerticalScrollIndicator={false}
       >
-        <TaskData 
-          task={logic.state.viewedTask}
-          completeTask={() => logic.completeTask(logic.state.viewedTask.id)}
+        <TargetData 
+          target={targetContext.state.viewedTarget}
+          complete={() => targetContext.completeTarget(targetContext.state.viewedTarget.id)}
         />
         <MyButton 
           type="submit"
@@ -73,11 +74,11 @@ const TaskViewing = ({navigation}) => {
           style={{paddingTop: containerPaddingTop}}
         >
           <TaskForm 
-            name="task"
+            name="target"
             type="edit"
-            task={logic.state.viewedTask}
+            target={targetContext.state.viewedTarget}
             close={closeModal}
-            editTask={taskData => logic.editTask(logic.state.viewedTask.id, taskData)}
+            editTarget={targetData => targetContext.editTarget(targetContext.state.viewedTarget.id, targetData)}
             navigation={navigation}
           />
         </ModalLayout>
@@ -86,7 +87,7 @@ const TaskViewing = ({navigation}) => {
   )
 }
 
-export default TaskViewing;
+export default TargetViewing;
 
 const styles = StyleSheet.create({
   container: {

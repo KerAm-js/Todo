@@ -61,7 +61,7 @@ const TasksState = ({children}) => {
 
   const showTaskDetails = (id, navigation) => {
     dispatch({type: SHOW_TASK_DETAILS, id});
-    navigation.navigate("Viewing");
+    navigation.navigate("TaskViewing");
   }; 
 
   const completeTask = id => {

@@ -8,23 +8,43 @@ import TaskForm from "../../components/Tasks/TaskForm";
 import TabScreenHeader from "../../components/headers/TabScreenHeader";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TasksContext } from "../../context/tasks/TasksContext";
+import { TargetsContext } from "../../context/targets/TargetsContext";
+import Target from "../../components/Tasks/Target";
 
 
-const Main = ({
-  navigation,
-  route
-}) => {
-  const logic = useContext(TasksContext);
+const Main = ({ navigation, route }) => {
+
+  const targetContext = useContext(TargetsContext);
+  const targets = targetContext.state.targets;
+
+  const taskContext = useContext(TasksContext);
+  const tasks = taskContext.state.tasks;
+  console.log(tasks);
+
   const [addTaskModalVisible, setAddTaskModalVisible] = useState(false);
+  const [activeType, setActiveType] = useState("Tasks");
   const [activeContent, setActiveContent] = useState('Все задачи');
 
-  let showedTasks = [...logic.state.tasks];
+  let showedContent;
   
-  if (activeContent === 'Выполнено') {
-    showedTasks = logic.state.tasks.filter(task => task.isCompleted);
-  } else if (activeContent === 'Просрочено') {
-    showedTasks = logic.state.tasks.filter(task => task.isExpired && !task.isCompleted);
+  if (activeType === 'Tasks') {
+    if (activeContent === 'Выполнено') {
+      showedContent = tasks.filter(task => task.isCompleted);
+    } else if (activeContent === 'Просрочено') {
+      showedContent = tasks.filter(task => task.isExpired && !task.isCompleted);
+    } else {
+      showedContent = [...tasks]
+    }
+  } else if (activeType === 'Targets') {
+    if (activeContent === 'Выполнено') {
+      showedContent = targets.filter(task => task.isCompleted);
+    } else if (activeContent === 'Просрочено') {
+      showedContent = targets.filter(task => task.isExpired && !task.isCompleted);
+    } else {
+      showedContent = [...targets]
+    }
   }
+  
 
   const containerPaddingTop = useSafeAreaInsets().top + 55 + 131 || 20 + 55 + 131;
 
@@ -37,8 +57,10 @@ const Main = ({
       }
       <TabScreenHeader title="Работа" />
       <MainNavBar 
-        activeContent={activeContent} 
-        setActiveContent={setActiveContent} 
+        activeType={activeType}
+        setActiveType={setActiveType}
+        activeContent={activeContent}
+        setActiveContent={setActiveContent}
         navigation={navigation}
         route={route}
       />
@@ -47,14 +69,33 @@ const Main = ({
         showsVerticalScrollIndicator={false}
       >
         {
-          showedTasks.map((task, index) => {
+          showedContent.map((item, index) => {
+            let showDetails = () => taskContext.showTaskDetails(item.id, navigation);
+            let complete = () => taskContext.completeTask(item.id);
+
+            if (activeType === 'Targets') {
+              showDetails = () => targetContext.showTargetDetails(item.id, navigation);
+              complete = () => targetContext.completeTarget(item.id);
+            } 
+
             return (
-              <Task 
-                key={index}
-                task={task} 
-                showTaskDetails={() => logic.showTaskDetails(task.id, navigation)}
-                completeTask={() => logic.completeTask(task.id)}
-              />
+              <>
+                {
+                  activeType === 'Tasks' 
+                    ? <Task 
+                        key={index}
+                        task={item} 
+                        showDetails={showDetails}
+                        complete={complete}
+                      />
+                    : <Target 
+                        key={index}
+                        target={item} 
+                        showDetails={showDetails}
+                        complete={complete}
+                      />
+                }
+              </>
             )
           }) 
         }
@@ -63,12 +104,23 @@ const Main = ({
           close={() => setAddTaskModalVisible(false)}
           style={{paddingTop: containerPaddingTop}}
         >
-          <TaskForm 
-            type={"add"} 
-            close={() => setAddTaskModalVisible(false)} 
-            tasks={logic.state.tasks}
-            addTask={logic.addTask}
-          />
+          {
+            activeType === 'Tasks' 
+            ? <TaskForm 
+                name="task"
+                type="add" 
+                close={() => setAddTaskModalVisible(false)} 
+                tasks={tasks}
+                addTask={taskContext.addTask}
+              />
+            : <TaskForm 
+                name="target"
+                type="add" 
+                close={() => setAddTaskModalVisible(false)} 
+                targets={targets}
+                addTarget={targetContext.addTarget}
+              />
+          }
         </ModalLayout>
       </ScrollView>
       <AddTaskButton showModal={() => setAddTaskModalVisible(true)}/>

@@ -30,15 +30,6 @@ const TasksScreen = () => {
           }
         </Stack.Screen>
         <Stack.Screen 
-          name="Targets"
-        >
-          {
-            props => (
-              <Targets {...props} />
-            )
-          }
-        </Stack.Screen>
-        <Stack.Screen 
           name="Notes"
         >
           {

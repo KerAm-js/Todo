@@ -2,24 +2,63 @@ import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput, ScrollView, Alert } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import MyButton from "../buttons/MyButton";
-import CheckInput from "../CheckInput";
+import CheckInput from "./CheckInput";
 import { colors } from "../constants/colors";
-import TimePicker from "../TimePicker";
+import TimePicker from "./TimePicker";
 
-const TaskForm = ({type, close, addTask, editTask, tasks, task}) => {
+const TaskForm = ({
+  type, 
+  name, 
+  close, 
+  addTask, 
+  tasks,
+  editTask, 
+  task,
+  addTarget,
+  targets,
+  editTarget,
+  target,
+}) => {
   
-  const [taskName, setTaskName] = useState(type === 'add' ? null : task.title);
-  const [description, setDescription] = useState(type === 'add' ? null : task.description);
+  const [title, setTitle] = useState(
+    type === 'add' 
+    ? null 
+    : name === 'task' 
+      ? task?.title 
+      : target?.title
+  );
+
+  const [description, setDescription] = useState(
+    type === 'add' 
+    ? null 
+    : name === 'task' 
+      ? task?.description 
+      : target?.description);
+
   const [startTime, setStartTime] = useState(task?.startTime || new Date());
-  const [finishTime, setFinishTime] = useState(task?.finishTime || new Date());
-  const [isTimeAdded, setIsTimeAdded] = useState(type === 'add' ? false : task.startTime && task.finishTime);
+
+  const [finishTime, setFinishTime] = useState(
+    name === 'task' 
+    ? task?.finishTime || new Date()
+    : target?.finishTime || new Date()
+  );
+
+  const [isTimeAdded, setIsTimeAdded] = useState(
+    type === 'add' 
+    ? false 
+    : name === 'task' 
+      ? task?.startTime && task?.finishTime 
+      : target?.finishTime);
+
   const containerPaddingBottom = useSafeAreaInsets().bottom + 20 || 50;
 
+  let titleInputPlaceholder = name === "task" ? "Задача" : "Цель";
+
   const onAddHandler = () => {
-    if (taskName?.trim()) {
+    if (title?.trim() && name === 'task') {
       addTask({
-        id: `${tasks.length}_${new Date()}`,
-        title: taskName.trim(),
+        id: `${tasks?.length}_${new Date()}`,
+        title: title.trim(),
         description,
         startTime: isTimeAdded ? startTime : null,
         finishTime: isTimeAdded ? finishTime : null,
@@ -28,15 +67,25 @@ const TaskForm = ({type, close, addTask, editTask, tasks, task}) => {
         isDayExpired: false, 
       });
       close();
+    } else if(title?.trim() && name === 'target') {
+      addTarget({
+        id: `${targets?.length}_${new Date()}`,
+        title: title.trim(),
+        description,
+        finishTime: isTimeAdded ? finishTime : null,
+        isCompleted: false,
+        isExpired: isTimeAdded ? (new Date() < finishTime ? false : true) : false,
+      });
+      close();
     } else {
       Alert.alert('Пожалуйста, заполните поле "Задача"')
     }
   }
 
   const onEditHandler = () => {
-    if (taskName?.trim()) {
+    if (title?.trim() && name === 'task') {
       editTask({
-        title: taskName.trim(),
+        title: title.trim(),
         description,
         startTime: isTimeAdded ? startTime : null,
         finishTime: isTimeAdded ? finishTime : null,
@@ -45,26 +94,38 @@ const TaskForm = ({type, close, addTask, editTask, tasks, task}) => {
         isDayExpired: task.isDayExpired,
       })
       close();
+    } else if (title?.trim() && name === 'target') {
+      editTarget({
+        title: title.trim(),
+        description,
+        finishTime: isTimeAdded ? finishTime : null,
+        isCompleted: false,
+        isExpired: isTimeAdded ? (new Date() < finishTime ? false : true) : false,
+      });
+      close();
     } else {
-      Alert.alert('Пожалуйста, заполните поле "Задача"')
+      Alert.alert(`Пожалуйста, заполните поле "${titleInputPlaceholder}"`)
     }
   }
 
-  let title = type === 'add' ? 'Новая задача' : 'Редактирование';
   let btnText = type === 'add' ? 'Добавить' : 'Сохранить';
+  let formTitle = type === 'add' ? 'Новая задача' : 'Редактирование';
+  if (name === 'target' && type === 'add') {
+    formTitle = 'Новая цель';
+  }
 
   return (
     <ScrollView 
       style={{...styles.container}}
       showsVerticalScrollIndicator={false}
     >
-      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.title}>{formTitle}</Text>
       <View style={styles.form}>
         <TextInput 
           style={styles.input}
-          value={taskName}
-          onChangeText={text => setTaskName(text)}
-          placeholder="Задача"
+          value={title}
+          onChangeText={text => setTitle(text)}
+          placeholder={titleInputPlaceholder}
         />
         <TextInput 
           style={{ ...styles.input, ...styles.textArea}}
@@ -74,27 +135,37 @@ const TaskForm = ({type, close, addTask, editTask, tasks, task}) => {
           placeholder="Описание"
         />
         <CheckInput 
-          title="Установить время"
+          title={name === "task" ? "Установить время" : "Установить дату"}
           state={isTimeAdded} 
           setState={setIsTimeAdded} 
         />
         {
           isTimeAdded 
-          ? <>
-              <TimePicker 
-                type="start"
-                time={startTime}
-                setTime={setStartTime}
-                minimumDate={startTime}
-              />
-              <TimePicker 
-                type=""
-                time={finishTime}
-                setTime={setFinishTime}
-                minimumDate={startTime}
-              />
-            </>
-          : null
+            ? name === 'task' 
+                ? <>
+                    <TimePicker 
+                      type="start"
+                      time={startTime}
+                      setTime={setStartTime}
+                      minimumDate={new Date()}
+                    />
+                    <TimePicker 
+                      type="finish"
+                      time={finishTime}
+                      setTime={setFinishTime}
+                      minimumDate={startTime}
+                    />
+                  </>
+                : <>
+                    <TimePicker 
+                      type="finish"
+                      time={finishTime}
+                      setTime={setFinishTime}
+                      minimumDate={new Date()}
+                      mode={"date"}
+                    />
+                  </>
+            : null
         }
       </View>
       <MyButton 

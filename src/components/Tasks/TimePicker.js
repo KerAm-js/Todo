@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import {View, Text, Platform, StyleSheet, TouchableOpacity} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { colors } from './constants/colors';
+import { colors } from './../constants/colors';
 
-const TimePicker = ({type, time, setTime, minimumDate}) => {
+const TimePicker = ({type, time, setTime, minimumDate, mode}) => {
 
   const [show, setShow] = useState();
 
@@ -18,10 +18,10 @@ const TimePicker = ({type, time, setTime, minimumDate}) => {
   if (Platform.OS === 'ios') {
     return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.title}>{mode ? "Выполнить до" : title}</Text>
       <DateTimePicker
         value={time}
-        mode="time"
+        mode={mode || "time"}
         is24Hour={true}
         display="default"
         minimumDate={minimumDate}
@@ -46,7 +46,7 @@ const TimePicker = ({type, time, setTime, minimumDate}) => {
           show
             ? <DateTimePicker
                 value={time}
-                mode="time"
+                mode={mode || "time"}
                 is24Hour={true}
                 display="default"
                 locale="en_GB"
@@ -54,7 +54,6 @@ const TimePicker = ({type, time, setTime, minimumDate}) => {
               />
             : null
         }
-        
       </View>
     );
   }

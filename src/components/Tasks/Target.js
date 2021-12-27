@@ -3,31 +3,38 @@ import { TouchableOpacity, Text, StyleSheet, View, Image, TouchableWithoutFeedba
 import { colors } from "../constants/colors";
 import { shadow } from "../constants/shadows";
 
-const Task = ({task, showDetails, complete}) => {
-  let startTimeString = 'Не указано';
+
+const Target = ({target, complete, showDetails}) => {
+
+  const months = [
+    "Января",
+    "Февраля",
+    "Марта",
+    "Апреля",
+    "Мая",
+    "Июня",
+    "Июля",
+    "Августа",
+    "Сентября",
+    "Октября",
+    "Ноября",
+    "Декабря",
+  ]
+
   let finishTimeString = 'Не указано';
-
-  if (task.startTime) {
-    const startHours = task.startTime.getHours() >= 10 ? `${task.startTime.getHours()}` : `0${task.startTime.getHours()}`;
-    const startMinutes = task.startTime.getMinutes() >= 10 ? `${task.startTime.getMinutes()}` : `0${task.startTime.getMinutes()}`;
-    startTimeString = `${startHours}:${startMinutes}`;
+  if (target?.finishTime) {
+    finishTimeString = `${target?.finishTime.getDate()} ${months[target?.finishTime.getMonth()]}`;
   }
-  if (task.finishTime) {
-    const finishHours = task.finishTime.getHours() >= 10 ? `${task.finishTime.getHours()}` : `0${task.finishTime.getHours()}`;
-    const finishMinutes = task.finishTime.getMinutes() >= 10 ? `${task.finishTime.getMinutes()}` : `0${task.finishTime.getMinutes()}`;
-    finishTimeString = `${finishHours}:${finishMinutes}`;
-  }
-
   let borderColor = colors.BLUE;
   let image = null;
 
-  if (task.isCompleted) {
+  if (target.isCompleted) {
     image = <Image 
       source={require('../../images/success.png')} 
       style={styles.successImage}
     />;
     borderColor = colors.SUCCESS
-  } else if (task.isExpired) {
+  } else if (target.isExpired) {
     image = <Image 
       source={require('../../images/danger.png')} 
       style={styles.image}
@@ -42,12 +49,12 @@ const Task = ({task, showDetails, complete}) => {
       activeOpacity={0.5}
     >
       {
-        task.startTime && task.finishTime 
+        target.finishTime 
           ? <View style={styles.textContent}>
-              <Text style={styles.title}>{task.title}</Text>
-              <Text style={styles.time}>{`${startTimeString} - ${finishTimeString}`}</Text>
+              <Text style={styles.title}>{target.title}</Text>
+              <Text style={styles.time}>{`${finishTimeString}`}</Text>
             </View>
-          : <Text style={styles.title}>{task.title}</Text>
+          : <Text style={styles.title}>{target.title}</Text>
       }
       
       <TouchableOpacity
@@ -62,7 +69,7 @@ const Task = ({task, showDetails, complete}) => {
   )
 }
 
-export default Task;
+export default Target;
 
 const styles = StyleSheet.create({
   container: {
@@ -79,6 +86,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
+    lineHeight: 18,
   },
   button: {
     width: 34,
@@ -100,7 +108,7 @@ const styles = StyleSheet.create({
   },
   time: {
     marginTop: 10,
-    fontSize: 12,
-    lineHeight: 12,
+    fontSize: 14,
+    lineHeight: 14,
   }
 })

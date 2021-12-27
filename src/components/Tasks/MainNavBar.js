@@ -21,37 +21,54 @@ const contents = [
 const navigators = [
   {
     title: "Задачи на сегодня",
-    pageName: "Main",
+    content: "Tasks",
   },
   {
     title: "Цели",
-    pageName: "Targets",
+    content: "Targets",
   },
-  {
-    title: "Заметки",
-    pageName: "Notes",
-  }
 ]
 
-const MainNavBar = ({activeContent, setActiveContent, navigation, route}) => {
+const MainNavBar = ({
+  activeType, 
+  setActiveType, 
+  activeContent, 
+  setActiveContent, 
+  navigation, 
+  route
+}) => {
   const containerPaddingTop = useSafeAreaInsets().top + 55 || 20 + 55;
   return (
     <View style={{...styles.container, paddingTop: containerPaddingTop}}>
       <View style={styles.navBar}>
-        {
-          navigators.map((nav, index) => {
-            const textActiveStyle = nav.pageName === route.name ? {...styles.navTextActive} : null;
-            return (
-              <TouchableOpacity 
-                key={index}
-                style={styles.navButton}
-                onPress={() => navigation.navigate(nav.pageName)}
-              >
-                <Text style={{...styles.navText, ...textActiveStyle}}>{nav.title}</Text>
-              </TouchableOpacity>
-            )
-          })
-        }
+        <View style={styles.navBarContent}>
+          {
+            navigators.map((nav, index) => {
+              const textActiveStyle = nav.content === activeType ? {...styles.navTextActive} : null;
+              return (
+                <TouchableOpacity 
+                  key={index}
+                  style={styles.navButton}
+                  onPress={() => setActiveType(nav.content)}
+                >
+                  <Text style={{...styles.navText, ...textActiveStyle}}>{nav.title}</Text>
+                </TouchableOpacity>
+              )
+            })
+          }
+        </View>
+        <View>
+          <TouchableOpacity 
+            style={{...styles.navButton, marginRight: 0, flexDirection: "row"}}
+            onPress={() => navigation.navigate("Notes")}
+          >
+            <Text style={{...styles.navText, ...styles.navTextActive, marginRight: 5}}>Заметки</Text>
+            <Image 
+              source={require('../../images/back.png')}
+              style={styles.toImage}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
       <ScrollView 
         style={styles.scroll}
@@ -115,12 +132,17 @@ const styles = StyleSheet.create({
     backgroundColor: colors.ACCENT,
   },
   navBar: {
-    flexDirection: "row",
     paddingHorizontal: 20,
     paddingBottom: 15,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  navBarContent: {
+    flexDirection: "row",
   },
   navButton: {
     marginRight: 15,
+    alignItems: "center",
   },
   navText: {
     fontSize: 16,
@@ -148,6 +170,12 @@ const styles = StyleSheet.create({
   image: {
     width: 25,
     height: 25,
+  },
+  toImage: {
+    width: 10,
+    height: 10,
+    marginBottom: 2,
+    transform: [{rotate: '180deg'}]
   },
   title: {
     fontSize: 15,
