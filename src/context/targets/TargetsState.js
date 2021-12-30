@@ -1,5 +1,5 @@
 import React, { useReducer } from "react";
-import { ADD_TARGET, COMPLETE_TARGET, EDIT_TARGET, REMOVE_TARGET, SET_TARGET_EXPIRED, SHOW_TARGET_DETAILS } from "./constants";
+import { ADD_TARGET, COMPLETE_TARGET, EDIT_TARGET, REMOVE_TARGET, SET_TARGET_EXPIRED, SHOW_TARGET_DETAILS } from "./types";
 import { TargetsContext } from "./TargetsContext";
 import { targetsReducer } from "./TargetsReducer";
 
@@ -23,9 +23,11 @@ const TargetsState = ({children}) => {
 
   const addTarget = target => {
     dispatch({type: ADD_TARGET, target});
+    setTargetExpired(target.id, target.finishTime);
   }
   const editTarget = (id, targetData) => {
     dispatch({type: EDIT_TARGET, id, targetData});
+    setTargetExpired(id, targetData.finishTime);
   } 
 
   const removeTarget = id => {
@@ -42,10 +44,12 @@ const TargetsState = ({children}) => {
   }
 
   const setTargetExpired = (id, end) => {
+    const deadline = new Date(end);
+    deadline.setDate(end.getDate() + 1);
     if (id && end) {
       setTimeout(() => {
         dispatch({type: SET_TARGET_EXPIRED, id});
-      }, end - new Date());
+      }, deadline - new Date());
     }
   }
 

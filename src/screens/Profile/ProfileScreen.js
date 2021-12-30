@@ -5,15 +5,13 @@ import GradientLayout from '../../layouts/GradientLayout';
 import Login from './Login';
 import Main from './Main';
 import Signin from './Signin';
-import { colors } from '../../components/constants/colors';
-import { useState } from 'react/cjs/react.development';
 
 const Stack = createStackNavigator();
 
 const ProfileScreen = () => {
 
   return (
-    <Stack.Navigator initialRouteName="Main">
+    <Stack.Navigator initialRouteName="Login">
       <Stack.Group
         screenOptions={{
           title: "",

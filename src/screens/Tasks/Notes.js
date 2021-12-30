@@ -1,23 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { StyleSheet, View, ScrollView } from "react-native";
-import ViewingHeading from "../../components/Tasks/ScreenHeader";
+import SlideScreenHeader from "../../components/Tasks/SlideScreenHeader";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Note from "../../components/Tasks/Note";
 import AddButton from "../../components/buttons/AddButton";
-import { useContext } from "react/cjs/react.development";
 import { NotesContext } from "../../context/notes/NotesContext";
 
 
 const Notes = ({navigation}) => {
-  const containerPaddingTop = useSafeAreaInsets().top + 50 || 20 + 50;
+  const deviceTopSpace = useSafeAreaInsets().top || 20;
   const notesContext = useContext(NotesContext);
   const notes = notesContext.state.notes;
 
   return (
-    <View style={{...styles.container, paddingTop: containerPaddingTop}}>
-      <ViewingHeading 
+    <View style={{...styles.container, paddingTop: deviceTopSpace + 35}}>
+      <SlideScreenHeader 
         navigation={navigation}
         title="Заметки"
+        paddingTop={deviceTopSpace}
       />
       <ScrollView
         style={styles.scroll}
@@ -43,7 +43,6 @@ export default Notes;
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 110,
     flex: 1,
     backgroundColor: '#fff',
   },

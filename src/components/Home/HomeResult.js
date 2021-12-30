@@ -1,8 +1,9 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { shadow } from "../constants/shadows";
-import { colors } from "../constants/colors";
+import { shadow } from "../../constants/shadows";
+import { colors } from "../../constants/colors";
+import { textStyles } from "../../constants/textStyles";
 
 
 const HomeResults = ({result}) => {
@@ -90,9 +91,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   title: {
-    fontSize: 22,
-    lineHeight: 22,
-    fontWeight: '500',
+    ...textStyles.title,
     marginBottom: 5,
     marginLeft: 20,
   },
@@ -104,12 +103,10 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: '#fff',
     height: 140,
     width: 140,
     borderRadius: 20,
-    borderWidth: Platform.OS === 'ios' ? 0 : 1,
-    borderColor: colors.BORDER_COLOR_ANDROID,
+    backgroundColor: Platform.OS === 'ios' ? "#fff" : colors.LIGHTBLUE,
   },
   circle: {
     width: 60,
@@ -120,8 +117,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   cardValue: {
+    ...textStyles.regular,
   },
   cardTitle: {
-    fontSize: 18,
+    ...textStyles.regular,
   },
 });

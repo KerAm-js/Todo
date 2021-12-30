@@ -1,12 +1,12 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { colors } from "../constants/colors";
+import { colors } from "../../constants/colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { textStyles } from "../../constants/textStyles";
 
-const Heading = ({title}) => {
-  const containerPaddingTop = useSafeAreaInsets().top || 20;
+const Heading = ({title, paddingTop}) => {
   return (
-    <View style={{...styles.container, paddingTop: containerPaddingTop}}>
+    <View style={{...styles.container, paddingTop,}}>
       <Text style={styles.title}>{title}</Text>
     </View>
   )
@@ -23,10 +23,9 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   title: {
+    ...textStyles.big,
     color: '#fff',
-    fontWeight: "600",
     textAlign: 'center',
-    fontSize: 25,
-    lineHeight: 25,
+    marginBottom: 5
   },
 })

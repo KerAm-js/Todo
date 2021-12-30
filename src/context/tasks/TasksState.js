@@ -10,7 +10,7 @@ import {
   SET_TASK_EXPIRED, 
   SHOW_TASK_DETAILS, 
   UPDATE_RESULT 
-} from "./constants";
+} from "./types";
 import { TasksContext } from "./TasksContext";
 import { tasksReducer } from "./TasksReducer";
 
@@ -20,7 +20,7 @@ const TasksState = ({children}) => {
     createdTasksCount: 1,
     tasks: [
       {
-        id: `0_${new Date()}`,
+        id: `0_${new Date().toString()}`,
         title: "Задача 1",
         description: null,
         startTime: null,
@@ -56,7 +56,9 @@ const TasksState = ({children}) => {
   const findCurrentTasks = () => dispatch({type: FIND_CURRENT_TASKS});
   const updateResult = () => dispatch({type: UPDATE_RESULT});
 
-  const onNewDayHandler = date => dispatch({ type: ON_NEW_DAY_HANDLER, date, })
+  const onNewDayHandler = date => {
+    dispatch({ type: ON_NEW_DAY_HANDLER, date, })
+  }
   
 
   const showTaskDetails = (id, navigation) => {

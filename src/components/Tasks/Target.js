@@ -1,7 +1,8 @@
 import React from "react";
 import { TouchableOpacity, Text, StyleSheet, View, Image, TouchableWithoutFeedback, TouchableOpacityBase, Pressable, Platform } from "react-native";
-import { colors } from "../constants/colors";
-import { shadow } from "../constants/shadows";
+import { colors } from "../../constants/colors";
+import { shadow } from "../../constants/shadows";
+import { textStyles } from "../../constants/textStyles";
 
 
 const Target = ({target, complete, showDetails}) => {
@@ -74,7 +75,8 @@ export default Target;
 const styles = StyleSheet.create({
   container: {
     minHeight: 70,
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 15,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -85,8 +87,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   title: {
-    fontSize: 18,
-    lineHeight: 18,
+    ...textStyles.regular
   },
   button: {
     width: 34,
@@ -107,8 +108,7 @@ const styles = StyleSheet.create({
     height: 12,
   },
   time: {
-    marginTop: 10,
-    fontSize: 12,
-    lineHeight: 12,
+    marginTop: 5,
+    ...textStyles.extraSmall
   }
 })

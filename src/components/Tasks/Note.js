@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { Image, Alert, StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
-import { colors } from "../constants/colors";
+import { colors } from "../../constants/colors";
+import { textStyles } from "../../constants/textStyles";
 
 const Note = ({text, updateNote, removeNote,}) => {
 
@@ -24,18 +25,34 @@ const Note = ({text, updateNote, removeNote,}) => {
       ]
     )
   }
-  
+
+  const onTextCleanHandler = () => {
+    if (text === '') {
+      removeNote();
+    } 
+  }
+
+  const inputElement = useRef(null);
+
+  useEffect(() => {
+    inputElement.current.focus();
+  }, [])
+
   return (
     <View style={styles.container}>
       <TextInput 
         style={styles.input}
         value={text}
+        autoFocus={true}
         onChangeText={text => updateNote(text)}
         multiline={true}
-        autoFocus={true}
+        ref={inputElement}
+        onBlur={onTextCleanHandler}
+        placeholder="Введите текст"
       />
       <TouchableOpacity
         onPress={onRemoveNote}
+        style={styles.button}
       >
         <Image 
           style={styles.image}
@@ -60,9 +77,11 @@ const styles = StyleSheet.create({
 
   },
   input: {
-    fontSize: 18,
-    lineHeight: 18,
-    marginTop: 10,
+    ...textStyles.regular,
+    width: '85%',
+    lineHeight: 24,
+  },
+  button: {
   },
   image: {
     width: 25,

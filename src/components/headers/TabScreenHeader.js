@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { colors } from '../constants/colors';
+import { colors } from '../../constants/colors';
+import { textStyles } from '../../constants/textStyles';
 
-const TabScreenHeader = ({title}) => {
-  const containerPaddingTop = useSafeAreaInsets().top || 20;
+const TabScreenHeader = ({title, paddingTop}) => {
+
   return (
-    <View style={{...styles.container, paddingTop: containerPaddingTop}}>
+    <View style={{...styles.container, paddingTop}}>
       <Text style={styles.title}>{title}</Text>
     </View>
   )
@@ -21,14 +21,11 @@ const styles = StyleSheet.create({
     top: 0,
     zIndex: 100,
     backgroundColor: colors.ACCENT,
-    paddingBottom: 5,
+    paddingBottom: 10,
   },
   title: {
-    color: '#fff',
-    fontWeight: "600",
+    ...textStyles.big,
     textAlign: 'center',
-    fontSize: 25,
-    lineHeight: 25,
-    marginVertical: 5,
+    color: '#fff',
   },
 })

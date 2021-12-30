@@ -3,8 +3,9 @@ import { StyleSheet, Text, View, TextInput, ScrollView, Alert } from "react-nati
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import MyButton from "../buttons/MyButton";
 import CheckInput from "./CheckInput";
-import { colors } from "../constants/colors";
 import TimePicker from "./TimePicker";
+import Input from "../Input";
+import { textStyles } from "../../constants/textStyles";
 
 const TaskForm = ({
   type, 
@@ -57,7 +58,7 @@ const TaskForm = ({
   const onAddHandler = () => {
     if (title?.trim() && name === 'task') {
       addTask({
-        id: `${tasks?.length}_${new Date()}`,
+        id: `${tasks?.length}_${new Date().toString()}`,
         title: title.trim(),
         description,
         startTime: isTimeAdded ? startTime : null,
@@ -69,12 +70,12 @@ const TaskForm = ({
       close();
     } else if(title?.trim() && name === 'target') {
       addTarget({
-        id: `${targets?.length}_${new Date()}`,
+        id: `${targets?.length}_${new Date().toString()}`,
         title: title.trim(),
         description,
         finishTime: isTimeAdded ? finishTime : null,
         isCompleted: false,
-        isExpired: isTimeAdded ? (new Date() < finishTime ? false : true) : false,
+        isExpired: false,
       });
       close();
     } else {
@@ -100,7 +101,7 @@ const TaskForm = ({
         description,
         finishTime: isTimeAdded ? finishTime : null,
         isCompleted: false,
-        isExpired: isTimeAdded ? (new Date() < finishTime ? false : true) : false,
+        isExpired: false,
       });
       close();
     } else {
@@ -121,13 +122,13 @@ const TaskForm = ({
     >
       <Text style={styles.title}>{formTitle}</Text>
       <View style={styles.form}>
-        <TextInput 
+        <Input 
           style={styles.input}
           value={title}
           onChangeText={text => setTitle(text)}
           placeholder={titleInputPlaceholder}
         />
-        <TextInput 
+        <Input 
           style={{ ...styles.input, ...styles.textArea}}
           value={description}
           onChangeText={text => setDescription(text)}
@@ -192,9 +193,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   title: {
-    lineHeight: 22,
-    fontSize: 22,
-    fontWeight: "600",
+    ...textStyles.title,
     marginBottom: 30,
     textAlign: "center",
   },
@@ -202,11 +201,6 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
   input: {
-    borderBottomWidth: 1,
-    borderColor: colors.BLUE,
-    paddingVertical: 5,
-    paddingHorizontal: 15,
-    fontSize: 18,
   },
   textArea: {
     alignItems: "flex-start",
@@ -214,6 +208,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingTop: 10,
     minHeight: 120,
-    marginVertical: 20,
+    marginBottom: 20,
   },
 })

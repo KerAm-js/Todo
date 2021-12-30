@@ -1,8 +1,8 @@
 import React from "react";
-import { View, ScrollView, StyleSheet, TouchableWithoutFeedback, Image, Text, Platform, TouchableOpacity } from "react-native";
-import { BlurView } from "expo-blur";
-import { colors } from "../constants/colors";
-import { shadow, cardShadow } from "../constants/shadows";
+import { View, ScrollView, StyleSheet, TouchableWithoutFeedback, Image, Text, Platform } from "react-native";
+import { colors } from "../../constants/colors";
+import { cardShadow } from "../../constants/shadows";
+import { textStyles } from "../../constants/textStyles";
 
 
 const HomeSlider = ({navigation, slides}) => {
@@ -24,17 +24,11 @@ const HomeSlider = ({navigation, slides}) => {
             >
               <View style={{...cardShadow}}>
                 <View style={{ ...styles.slideContent, marginLeft: index === 0 ? 20 : 0,}}>
-                  {/* <BlurView 
-                    intensity={100}
-                    style={{...styles.slideBlur}}
-                  > */}
-                    
-                    <Text style={styles.title}>{title}</Text>
-                    <Image 
-                      source={image}
-                      style={styles.image}
-                    />
-                  {/* </BlurView> */}
+                  <Text style={styles.title}>{title}</Text>
+                  <Image 
+                    source={image}
+                    style={styles.image}
+                  />
                 </View>
               </View>
             </TouchableWithoutFeedback>
@@ -75,9 +69,7 @@ const styles = StyleSheet.create({
     width: 200,
     marginRight: 20,
     borderRadius: 20,
-    backgroundColor: '#fff',
-    borderColor: colors.BORDER_COLOR_ANDROID,
-    borderWidth: Platform.OS === 'ios' ? 0 : 1,
+    backgroundColor: Platform.OS === 'ios' ? "#fff" : colors.LIGHTBLUE,
   },
   headingContainer: {
     backgroundColor: 'rgba(41, 53, 89, 0.5)',
@@ -90,10 +82,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
+    ...textStyles.subtitle,
     marginTop: 30,
     color: colors.ACCENT,
-    fontSize: 20,
-    lineHeight: 20,
-    fontWeight: '500',
   },
 })

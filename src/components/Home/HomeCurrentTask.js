@@ -1,9 +1,10 @@
 import React from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { shadow } from "../constants/shadows";
-import { colors } from "../constants/colors";
+import { shadow } from "../../constants/shadows";
+import { colors } from "../../constants/colors";
 import Task from "../Tasks/Task";
+import { textStyles } from "../../constants/textStyles";
 
 const HomeCurrentTask = ({currentTasks, completeTask, showTaskDetails, navigation}) => {
   const title = currentTasks.length === 1 ? 'Текущая задача' : 'Текущие задачи';
@@ -38,10 +39,8 @@ const styles = StyleSheet.create({
     paddingBottom: 35,
   },
   block: {
-    backgroundColor: "#fff",
+    backgroundColor: Platform.OS === 'ios' ? "#fff" : colors.LIGHTBLUE,
     borderRadius: 20,
-    borderWidth: Platform.OS === 'ios' ? 0 : 1,
-    borderColor: colors.BORDER_COLOR_ANDROID,
     padding: 20,
     minHeight: 70,
     flexDirection: 'row',
@@ -49,9 +48,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontSize: 22,
-    lineHeight: 22,
-    fontWeight: '500',
+    ...textStyles.title,
     marginBottom: 20,
   },
   textContent: {
@@ -68,17 +65,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.BLUE,
   },
-  taskName: {
-    fontSize: 18,
-    lineHeight: 24,
-  },
-  taskTime: {
-    fontSize: 16,
-    lineHeight: 20,
-    marginTop: 10,
-  },
   noTasks: {
-    fontSize: 18,
-    lineHeight: 24,
+    ...textStyles.regular
   },
 });

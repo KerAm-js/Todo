@@ -6,14 +6,15 @@ import StatsNumbers from "../../components/Home/StatsNumbers";
 import { TasksContext } from "../../context/tasks/TasksContext";
 
 const Statistics = ({image, title, navigation}) => {
-  const contentPaddingTop = useSafeAreaInsets().top + 150;
+  const deviceTopSpace = useSafeAreaInsets().top || 20;
   const logic = useContext(TasksContext);
   return (
-    <View style={{...styles.container, paddingTop: contentPaddingTop}}>
+    <View style={{...styles.container, paddingTop: deviceTopSpace + 125}}>
       <SlideHeading 
         title={`Ваша статистика`}
         image={image}
         navigation={navigation}
+        paddingTop={deviceTopSpace}
       />
       <ScrollView 
         style={styles.content}

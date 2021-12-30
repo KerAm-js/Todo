@@ -2,7 +2,7 @@ import {
   ADD_NOTE,
   REMOVE_NOTE,
   UPDATE_NOTE,
-} from "./constants";
+} from "./types";
 
 export const notesReducer = (state, action) => {
   switch (action.type) {

@@ -1,5 +1,5 @@
 import React, { useReducer } from "react";
-import { ADD_NOTE, REMOVE_NOTE, UPDATE_NOTE } from "./constants";
+import { ADD_NOTE, REMOVE_NOTE, UPDATE_NOTE } from "./types";
 import { NotesContext } from "./NotesContext";
 import { notesReducer } from "./NotesReducer";
 

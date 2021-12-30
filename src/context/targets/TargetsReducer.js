@@ -5,7 +5,7 @@ import {
   REMOVE_TARGET, 
   SET_TARGET_EXPIRED, 
   SHOW_TARGET_DETAILS 
-} from "./constants";
+} from "./types";
 
 export const targetsReducer = (state, action) => {
   switch (action.type) {
@@ -23,6 +23,7 @@ export const targetsReducer = (state, action) => {
       return {
         ...state,
         targets: state.targets.map(target => target.id === action.id ? editedTarget : target),
+        viewedTarget: editedTarget,
       }
     };
     case REMOVE_TARGET: {

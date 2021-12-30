@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, ScrollView, StyleSheet, StatusBar, Platform } from "react-native";
 import HomeSlider from "../../components/Home/HomeSlider";
 import HomeToday from "../../components/Home/HomeToday";
@@ -6,15 +6,16 @@ import HomeCurrentTask from "../../components/Home/HomeCurrentTask";
 import HomeResults from "../../components/Home/HomeResult";
 import HomeGreeting from "../../components/Home/HomeGreeting";
 import HomeTasksCount from "../../components/Home/HomeTasksCount";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import TabScreenHeader from "../../components/headers/TabScreenHeader";
 import HomeExpiredTasks from "../../components/Home/HomeExpiredTasks";
 import { TasksContext } from "../../context/tasks/TasksContext";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 
 const Main = ({slides, navigation}) => {
-  const scrollPaddingTop = Platform.OS === 'ios' ? useSafeAreaInsets().top + 160 : useSafeAreaInsets().top + 120;
+
   const logic = useContext(TasksContext);
+  const deviceTopSpace = useSafeAreaInsets().top || 20;
 
   useEffect(() => {
     logic.onNewDayHandler(new Date());
@@ -27,16 +28,22 @@ const Main = ({slides, navigation}) => {
   }, [logic.state.tasks])
 
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container}}>
       <StatusBar 
         barStyle="light-content"
       />
-      <TabScreenHeader title="Daily Planner"/>
-      <HomeGreeting />
+      <TabScreenHeader 
+        title="Productive+" 
+        paddingTop={deviceTopSpace}
+      />
+      <HomeGreeting 
+        paddingTop={deviceTopSpace + 25 + 10}
+      />
       <ScrollView 
-        style={{...styles.scroll, paddingTop: scrollPaddingTop}}
+        style={{...styles.scroll, paddingTop: Platform.OS === 'ios' ? deviceTopSpace + 35 + 50 + 60 : deviceTopSpace + 35 + 50 + 30}}
         showsVerticalScrollIndicator={false}
       >
+
         <View style={styles.content}>
           <HomeSlider 
             navigation={navigation} 

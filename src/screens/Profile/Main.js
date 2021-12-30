@@ -7,11 +7,11 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Main = ({navigation}) => {
 
-  const containerPaddingTop = useSafeAreaInsets().top + 35 || 20 + 35;
+  const deviceTopSpace = useSafeAreaInsets().top || 20;
 
   return (
-    <View style={{...styles.container, paddingTop: containerPaddingTop}}>
-      <Heading title="Профиль"/>
+    <View style={{...styles.container, paddingTop: deviceTopSpace + 35}}>
+      <Heading title="Профиль" paddingTop={deviceTopSpace}/>
       <ScrollView
         style={styles.scroll}
         showsVerticalScrollIndicator={false}

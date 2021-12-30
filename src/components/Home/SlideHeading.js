@@ -1,14 +1,13 @@
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { colors } from "../constants/colors";
+import { colors } from "../../constants/colors";
+import { textStyles } from "../../constants/textStyles";
 
-const SlideHeading = ({image, title, navigation}) => {
-  const containerPaddingTop = useSafeAreaInsets().top + 10 || 20 + 10;
+const SlideHeading = ({image, title, navigation, paddingTop}) => {
   return (
-    <View style={{...styles.container, paddingTop: containerPaddingTop + 5}}>
+    <View style={{...styles.container, paddingTop}}>
       <TouchableOpacity
-        style={{...styles.backButton, top: containerPaddingTop}}
+        style={{...styles.backButton, top: paddingTop}}
         onPress={() => navigation.goBack()}
       >
         <Image 
@@ -41,9 +40,8 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   title: {
+    ...textStyles.big,
     textAlign: "center",
-    fontSize: 25,
-    lineHeight: 30,
     color: '#fff'
   },
   backImage: {

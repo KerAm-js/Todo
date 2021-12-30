@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { colors } from "./../constants/colors";
+import { colors } from "../../constants/colors";
+import { textStyles } from "../../constants/textStyles";
 
 const CheckInput = ({state, setState, title}) => {
 
@@ -38,11 +39,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: 10,
   },
   title: {
-    fontSize: 18,
-    lineHeight: 18,
+    ...textStyles.regular
   },
   button: {
     width: 30,

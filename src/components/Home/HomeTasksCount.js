@@ -1,8 +1,9 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { shadow } from "../constants/shadows";
-import { colors } from "../constants/colors";
+import { shadow } from "../../constants/shadows";
+import { colors } from "../../constants/colors";
+import { textStyles } from "../../constants/textStyles";
 
 
 const HomeTasksCount = ({count, navigation}) => {
@@ -52,13 +53,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     borderRadius: 20,
-    borderWidth: Platform.OS === 'ios' ? 0 : 1,
-    borderColor: colors.BORDER_COLOR_ANDROID,
+    backgroundColor: Platform.OS === 'ios' ? "#fff" : colors.LIGHTBLUE,
   },
   title: {
-    fontSize: 22,
-    lineHeight: 22,
-    fontWeight: '500',
+    ...textStyles.title,
     marginBottom: 20,
   },
   image: {
@@ -76,7 +74,6 @@ const styles = StyleSheet.create({
     borderColor: colors.BLUE,
   },
   text: {
-    fontSize: 18,
-    lineHeight: 18,
+    ...textStyles.regular,
   },
 });

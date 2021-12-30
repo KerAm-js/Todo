@@ -1,12 +1,12 @@
 import React from "react";
-import { Platform, StyleSheet, Text, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { colors } from "../constants/colors";
+import { StyleSheet, Text, View } from "react-native";
+import { colors } from "../../constants/colors";
+import { textStyles } from "../../constants/textStyles";
 
-const HomeGreeting = () => {
-  const containerPaddingTop = useSafeAreaInsets().top + 55 || 20 + 55;
+const HomeGreeting = ({paddingTop}) => {
+  
   return (
-    <View style={{...styles.container, paddingTop: containerPaddingTop}}>
+    <View style={{...styles.container, paddingTop: paddingTop + 10,}}>
       <Text style={styles.username}>Амир,</Text>
       <Text style={styles.greeting}>добро пожаловать!</Text>
     </View>
@@ -24,15 +24,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   username: {
-    fontSize: 25,
-    lineHeight: 25,
-    marginBottom: 5,
+    ...textStyles.big,
     color: '#fff',
-    fontWeight: '600'
   },
   greeting: {
-    lineHeight: 20,
-    fontSize: 18,
+    ...textStyles.regular,
     color: '#fff',
   }
 })

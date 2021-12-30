@@ -1,7 +1,8 @@
 import React from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
-import { colors } from "../constants/colors";
-import { shadow } from "../constants/shadows";
+import { colors } from "../../constants/colors";
+import { shadow } from "../../constants/shadows";
+import { textStyles } from "../../constants/textStyles";
 
 const HomeToday = () => {
 
@@ -37,7 +38,7 @@ const HomeToday = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Сегодня</Text>
       <View style={{...styles.block, ...shadow}}>
-        <Text style={styles.subtitle}>{dateString}</Text>
+        <Text style={styles.text}>{dateString}</Text>
       </View>
     </View>
   )
@@ -52,20 +53,15 @@ const styles = StyleSheet.create({
     paddingBottom: 35,
   },
   title: {
-    fontSize: 25,
-    lineHeight: 25,
-    fontWeight: '600',
+    ...textStyles.title,
     marginBottom: 20,
   },
-  subtitle: {
-    fontSize: 18,
-    lineHeight: 18,
+  text: {
+    ...textStyles.regular,
   },
   block: {
-    backgroundColor: "#fff",
+    backgroundColor: Platform.OS === 'ios' ? "#fff" : colors.LIGHTBLUE,
     borderRadius: 20,
-    borderColor: colors.BORDER_COLOR_ANDROID,
-    borderWidth: Platform.OS === 'ios' ? 0 : 1,
     padding: 20,
     minHeight: 70,
     flexDirection: 'row',

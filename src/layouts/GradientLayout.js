@@ -1,7 +1,7 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { StyleSheet } from "react-native";
-import { colors } from "../components/constants/colors";
+import { colors } from "../constants/colors";
 
 const GradientLayout = ({children, style}) => {
   return (

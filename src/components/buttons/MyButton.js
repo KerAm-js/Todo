@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity, Text } from "react-native";
-import { colors } from "../constants/colors";
+import { colors } from "../../constants/colors";
+import { textStyles } from "../../constants/textStyles";
 
 const MyButton = ({type, title, onPress}) => {
 
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   title: {
-    fontSize: 16,
+    ...textStyles.regular,
     textAlign: "center",
   }
 })

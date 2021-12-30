@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { colors } from './constants/colors';
+import { colors } from '../constants/colors';
 
 const TabBar = ({ state, descriptors, navigation }) => {
   const tabBarPaddingBottom = useSafeAreaInsets().bottom || 20;
@@ -70,6 +70,8 @@ const TabBar = ({ state, descriptors, navigation }) => {
               /> ;
             }
           }
+          
+          const btnDisabled = isFocused;
 
           return (
             <TouchableOpacity
@@ -81,6 +83,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
               onPress={onPress}
               onLongPress={onLongPress}
               style={styles.tabButton}
+              disabled={btnDisabled}
             >
               {
                 image

@@ -1,6 +1,7 @@
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { colors } from "../constants/colors";
+import { colors } from "../../constants/colors";
+import { textStyles } from "../../constants/textStyles";
 
 const TaskData = ({task, completeTask}) => {
 
@@ -78,8 +79,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   title: {
-    fontSize: 22,
-    fontWeight: "600",
+    ...textStyles.title,
   },
   button: {
     width: 40,
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     height: 16,
   },
   description: {
-    fontSize: 18,
+    ...textStyles.regular,
     marginBottom: 20,
   },
   timeBlock: {
@@ -106,11 +106,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   timeBlockTitle: {
-    fontSize: 18,
+    ...textStyles.regular,
     marginBottom: 5,
   },
   time: {
-    fontSize: 18,
+    ...textStyles.regular,
     marginBottom: 10,
   },
 })

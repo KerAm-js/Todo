@@ -1,7 +1,8 @@
 import React, { cloneElement } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from "react-native";
-import { colors } from "../constants/colors";
-import { shadow } from "../constants/shadows";
+import { colors } from "../../constants/colors";
+import { shadow } from "../../constants/shadows";
+import { textStyles } from "../../constants/textStyles";
 
 const TMtechnics = ({technics, activeSlide, setActiveSlide}) => {
   return (
@@ -69,6 +70,6 @@ const styles = StyleSheet.create({
     borderColor: colors.LIGHTBLUE
   },
   technicName: {
-    fontSize: 18,
+    ...textStyles.regular
   },
 })

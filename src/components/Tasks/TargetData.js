@@ -1,6 +1,7 @@
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { colors } from "../constants/colors";
+import { colors } from "../../constants/colors";
+import { textStyles } from "../../constants/textStyles";
 
 const TargetData = ({target, complete}) => {
   
@@ -39,7 +40,7 @@ const TargetData = ({target, complete}) => {
   let finishTimeString = 'Не указано';
 
   if (target?.finishTime) {
-    finishTimeString = `${target.finishTime.getDate()} ${months[target.finishTime.getMonth()]} ${target.finishTime.getFullYear()} года`;
+    finishTimeString = `${target.finishTime.getDate()} ${months[target.finishTime.getMonth()]} ${target.finishTime.getFullYear()} г.`;
   }
 
   return (
@@ -81,8 +82,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   title: {
-    fontSize: 22,
-    fontWeight: "600",
+    ...textStyles.title,
   },
   button: {
     width: 40,
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     height: 16,
   },
   description: {
-    fontSize: 18,
+    ...textStyles.regular,
     marginBottom: 20,
   },
   timeBlock: {
@@ -109,11 +109,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   timeBlockTitle: {
-    fontSize: 18,
+    ...textStyles.regular,
     marginBottom: 5,
   },
   time: {
-    fontSize: 18,
+    ...textStyles.regular,
     marginBottom: 10,
   },
 })

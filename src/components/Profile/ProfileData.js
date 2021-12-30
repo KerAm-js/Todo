@@ -1,5 +1,6 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
+import { textStyles } from "../../constants/textStyles";
 
 const ProfileData = ({user}) => {
 
@@ -22,7 +23,7 @@ const ProfileData = ({user}) => {
           {
             user.name || user.surname 
             ? <>
-                <Text style={styles.title}>{`${user.name} ${user.surname}`}</Text>
+                <Text style={styles.title}>{`${user?.name} ${user?.surname}`}</Text>
                 <Text style={styles.userData}>{user.login}</Text>
               </>
             : <>
@@ -76,21 +77,19 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   title: {
-    fontSize: 22,
-    fontWeight: "600",
+    ...textStyles.title,
     marginBottom: 5,
   },
   userData: {
-    fontSize: 15,
+    ...textStyles.small,
     marginBottom: 3,
   },
   subtitle: {
-    fontSize: 20,
-    fontWeight: "500",
+    ...textStyles.subtitle,
     marginBottom: 10,
   },
   text: {
-    fontSize: 16,
+    ...textStyles.regular,
     marginBottom: 30,
   },
 })

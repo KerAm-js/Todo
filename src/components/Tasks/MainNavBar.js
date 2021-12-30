@@ -1,7 +1,8 @@
 import React from "react";
 import { Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { colors } from "../constants/colors";
+import { colors } from "../../constants/colors";
+import { textStyles } from "../../constants/textStyles";
 
 const contents = [
   {
@@ -35,21 +36,22 @@ const MainNavBar = ({
   activeContent, 
   setActiveContent, 
   navigation, 
-  route
+  deviceTopSpace
 }) => {
-  const containerPaddingTop = useSafeAreaInsets().top + 55 || 20 + 55;
   return (
-    <View style={{...styles.container, paddingTop: containerPaddingTop}}>
+    <View style={{...styles.container, paddingTop: deviceTopSpace + 10}}>
       <View style={styles.navBar}>
         <View style={styles.navBarContent}>
           {
             navigators.map((nav, index) => {
               const textActiveStyle = nav.content === activeType ? {...styles.navTextActive} : null;
+              let btnDisable = nav.content === activeType ? true : false;
               return (
                 <TouchableOpacity 
                   key={index}
                   style={styles.navButton}
                   onPress={() => setActiveType(nav.content)}
+                  disabled={btnDisable}
                 >
                   <Text style={{...styles.navText, ...textActiveStyle}}>{nav.title}</Text>
                 </TouchableOpacity>
@@ -88,7 +90,10 @@ const MainNavBar = ({
               ...styles.title,
             }
 
+            let btnDisable = false;
+
             if (title === activeContent) {
+              btnDisable = true
               buttonStyle = {
                 ...styles.contentButton,
                 ...styles.contentButtonActive,
@@ -106,6 +111,7 @@ const MainNavBar = ({
                 key={index}
                 style={buttonStyle}
                 onPress={() => setActiveContent(title)}
+                disabled={btnDisable}
               >
                 <Image 
                   style={styles.image} 
@@ -133,7 +139,8 @@ const styles = StyleSheet.create({
   },
   navBar: {
     paddingHorizontal: 20,
-    paddingBottom: 15,
+    marginBottom: 10,
+    height: 24,
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -142,24 +149,24 @@ const styles = StyleSheet.create({
   },
   navButton: {
     marginRight: 15,
-    alignItems: "center",
+    height: '100%',
+    minWidth: 60,
   },
   navText: {
-    fontSize: 16,
-    lineHeight: 16,
-    fontWeight: "400",
+    ...textStyles.small,
     color: 'rgba(250, 250, 250, 0.6)'
   },
   navTextActive: {
-    fontWeight: "500",
     color: 'rgba(250, 250, 250, 1)'
   },
   scroll: {
   },
   contentButton: {
-    padding: 15,
-    width: 120,
+    paddingHorizontal: 15,
+    paddingTop: 15,
+    paddingBottom: 10,
     height: 80,
+    width: 120,
     backgroundColor: 'rgba(250, 250, 250, .2)',
     borderRadius: 15,
     justifyContent: "space-between",
@@ -174,11 +181,12 @@ const styles = StyleSheet.create({
   toImage: {
     width: 10,
     height: 10,
-    marginBottom: 2,
-    transform: [{rotate: '180deg'}]
+    transform: [{rotate: '180deg'}],
+    alignSelf: "center",
+    marginBottom: 9,
   },
   title: {
-    fontSize: 15,
+    ...textStyles.navBarSize,
     color: '#fff',
   },
   titleActive: {

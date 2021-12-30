@@ -2,8 +2,7 @@ import React, { useContext, useState } from "react";
 import { View, StyleSheet, Alert } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import MyButton from "../components/buttons/MyButton";
-import TaskData from "../components/Tasks/TaskData";
-import ViewingHeading from "../components/Tasks/ScreenHeader";
+import SlideScreenHeader from "../components/Tasks/SlideScreenHeader";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ModalLayout from "../layouts/ModalLayout";
 import TaskForm from "../components/Tasks/TaskForm";
@@ -12,7 +11,7 @@ import { TargetsContext } from "../context/targets/TargetsContext";
 
 const TargetViewing = ({navigation}) => {
 
-  const containerPaddingTop = useSafeAreaInsets().top + 45;
+  const diviceTopSpace = useSafeAreaInsets().top || 20;
   const [editModalVisible, setEditModalVisible] = useState(false);
   const targetContext = useContext(TargetsContext);
   
@@ -40,15 +39,16 @@ const TargetViewing = ({navigation}) => {
   }
 
   return (
-    <View style={{...styles.container, paddingTop: containerPaddingTop}}>
+    <View style={{...styles.container, paddingTop: diviceTopSpace + 35}}>
       {
         editModalVisible 
         ? <View style={{...styles.backdrop}}></View>
         : null
       }
-      <ViewingHeading 
+      <SlideScreenHeader 
         navigation={navigation}
         title="Просмотр"
+        paddingTop={diviceTopSpace}
       />
       <ScrollView
         style={styles.scroll}
@@ -71,7 +71,7 @@ const TargetViewing = ({navigation}) => {
         <ModalLayout
           visible={editModalVisible}
           close={closeModal}
-          style={{paddingTop: containerPaddingTop}}
+          style={{paddingTop: diviceTopSpace + 35}}
         >
           <TaskForm 
             name="target"

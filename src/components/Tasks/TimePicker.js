@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import {View, Text, Platform, StyleSheet, TouchableOpacity} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { colors } from './../constants/colors';
+import { colors } from '../../constants/colors';
+import { textStyles } from '../../constants/textStyles';
 
 const TimePicker = ({type, time, setTime, minimumDate, mode}) => {
 
@@ -70,10 +71,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   picker: {
-    width: 100,
+    minWidth: 150,
   },
   title: {
-    fontSize: 18,
+    ...textStyles.regular,
   },
   buttonAndroid: {
     backgroundColor: colors.LIGHTBLUE,

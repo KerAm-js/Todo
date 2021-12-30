@@ -1,14 +1,14 @@
 import React from "react";
 import { Image, StyleSheet, TouchableOpacity, View, Text } from "react-native";
-import { colors } from "../constants/colors";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { colors } from "../../constants/colors";
+import { textStyles } from "../../constants/textStyles";
 
-const ViewingHeading = ({navigation, title}) => {
-  const containerPaddingTop = useSafeAreaInsets().top + 5 || 20 + 5;
+const SlideScreenHeader = ({navigation, title, paddingTop}) => {
+
   return (
-    <View style={{...styles.container, paddingTop: containerPaddingTop}}>
+    <View style={{...styles.container, paddingTop}}>
       <TouchableOpacity
-        style={{...styles.backButton, top: containerPaddingTop}}
+        style={{...styles.backButton, top: paddingTop}}
         onPress={() => navigation.goBack()}
       >
         <Image 
@@ -21,7 +21,7 @@ const ViewingHeading = ({navigation, title}) => {
   )
 }
 
-export default ViewingHeading;
+export default SlideScreenHeader;
 
 const styles = StyleSheet.create({
   container: {
@@ -29,7 +29,8 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     backgroundColor: colors.ACCENT,
-    alignItems: "center"
+    alignItems: "center",
+    paddingBottom: 10,
   },
   backImage: {
     width: 20,
@@ -42,9 +43,7 @@ const styles = StyleSheet.create({
     left: 10,
   },
   title: {
-    fontSize: 25,
-    lineHeight: 25,
-    fontWeight: "600",
+    ...textStyles.big,
     color: '#fff',
   },
 })

@@ -9,7 +9,7 @@ import {
   SET_TASK_EXPIRED, 
   UPDATE_RESULT,
   ON_NEW_DAY_HANDLER,
-} from "./constants";
+} from "./types";
 
 export const tasksReducer = (state, action) => {
   switch (action.type) {
@@ -64,7 +64,7 @@ export const tasksReducer = (state, action) => {
         let result = [];
         const currentTime = new Date();
         state.tasks.forEach(task => {
-          if (task?.isExpired || task?.isDayExpired) {
+          if ((task?.isExpired || task?.isDayExpired) && !task.isCompleted) {
             result.push(task);
           }
         })
@@ -136,13 +136,7 @@ export const tasksReducer = (state, action) => {
       }
     };
     case ON_NEW_DAY_HANDLER: {
-    
-      const isDayEvaluate = state.currentDate.getDate() === action.date.getDate();
-      const isMonthEvaluate = state.currentDate.getMonth() === action.date.getMonth();
-      const isYearEvaluate = state.currentDate.getFullYear() === action.date.getFullYear();
-      const isSecondEvaluate = state.currentDate.getSeconds() + 20 > action.date.getSeconds();
-      
-      if (isDayEvaluate && isMonthEvaluate && isYearEvaluate) {
+      if (action.date.toLocaleDateString() === state.currentDate.toLocaleDateString()) {
         console.log('no update');
       } else {
         console.log('updated');

@@ -1,9 +1,10 @@
 import React from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { shadow } from "../constants/shadows";
-import { colors } from "../constants/colors";
+import { shadow } from "../../constants/shadows";
+import { colors } from "../../constants/colors";
 import Task from "../Tasks/Task";
+import { textStyles } from "../../constants/textStyles";
 
 const HomeExpiredTasks = ({expiredTasks, completeTask, showTaskDetails, navigation}) => {
   const title = 'Просрочено';
@@ -11,20 +12,16 @@ const HomeExpiredTasks = ({expiredTasks, completeTask, showTaskDetails, navigati
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
       {
-        expiredTasks.length !== 0
-          ? expiredTasks.map((task, index) => {
-              return (
-                <Task 
-                  key={index}
-                  task={task} 
-                  complete={() => completeTask(task.id)}
-                  showDetails={() => showTaskDetails(task.id, navigation)}
-                />
-              )
-            })
-          : <View style={{...styles.block, ...shadow}}>
-              <Text style={styles.noTasks}>Нет просроченных задач</Text>
-            </View>
+        expiredTasks.map((task, index) => {
+          return (
+            <Task 
+              key={index}
+              task={task} 
+              complete={() => completeTask(task.id)}
+              showDetails={() => showTaskDetails(task.id, navigation)}
+            />
+          )
+        })
       }
     </View>
   )
@@ -49,9 +46,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontSize: 22,
-    lineHeight: 22,
-    fontWeight: '500',
+    ...textStyles.title,
     marginBottom: 20,
   },
   textContent: {
@@ -67,18 +62,5 @@ const styles = StyleSheet.create({
     borderRadius: 17,
     borderWidth: 1,
     borderColor: colors.BLUE,
-  },
-  taskName: {
-    fontSize: 18,
-    lineHeight: 24,
-  },
-  taskTime: {
-    fontSize: 16,
-    lineHeight: 20,
-    marginTop: 10,
-  },
-  noTasks: {
-    fontSize: 18,
-    lineHeight: 24,
   },
 });

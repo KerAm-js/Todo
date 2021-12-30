@@ -3,7 +3,7 @@ import { View, StyleSheet, Alert } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import MyButton from "../components/buttons/MyButton";
 import TaskData from "../components/Tasks/TaskData";
-import ViewingHeading from "../components/Tasks/ScreenHeader";
+import SlideScreenHeader from "../components/Tasks/SlideScreenHeader";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ModalLayout from "../layouts/ModalLayout";
 import TaskForm from "../components/Tasks/TaskForm";
@@ -11,7 +11,7 @@ import { TasksContext } from "../context/tasks/TasksContext";
 
 const TaskViewing = ({navigation}) => {
 
-  const containerPaddingTop = useSafeAreaInsets().top + 45;
+  const deviceTopSpace = useSafeAreaInsets().top || 20;
   const [editModalVisible, setEditModalVisible] = useState(false);
   const logic = useContext(TasksContext);
   
@@ -39,15 +39,16 @@ const TaskViewing = ({navigation}) => {
   }
 
   return (
-    <View style={{...styles.container, paddingTop: containerPaddingTop}}>
+    <View style={{...styles.container, paddingTop: deviceTopSpace + 35}}>
       {
         editModalVisible 
         ? <View style={{...styles.backdrop}}></View>
         : null
       }
-      <ViewingHeading 
+      <SlideScreenHeader 
         navigation={navigation}
         title="Просмотр"
+        paddingTop={deviceTopSpace}
       />
       <ScrollView
         style={styles.scroll}
@@ -70,7 +71,7 @@ const TaskViewing = ({navigation}) => {
         <ModalLayout
           visible={editModalVisible}
           close={closeModal}
-          style={{paddingTop: containerPaddingTop}}
+          style={{paddingTop: deviceTopSpace + 35}}
         >
           <TaskForm 
             name="task"

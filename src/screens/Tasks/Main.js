@@ -1,19 +1,20 @@
 import React, { useState, useContext } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { FlatList, ScrollView, StyleSheet, View } from "react-native";
 import ModalLayout from "../../layouts/ModalLayout";
 import MainNavBar from "../../components/Tasks/MainNavBar";
 import Task from "../../components/Tasks/Task";
 import TaskForm from "../../components/Tasks/TaskForm";
 import TabScreenHeader from "../../components/headers/TabScreenHeader";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TasksContext } from "../../context/tasks/TasksContext";
 import { TargetsContext } from "../../context/targets/TargetsContext";
 import Target from "../../components/Tasks/Target";
 import AddButton from "../../components/buttons/AddButton";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 
 const Main = ({ navigation, route }) => {
 
+  const deviceTopSpace = useSafeAreaInsets().top || 20;
   const targetContext = useContext(TargetsContext);
   const targets = targetContext.state.targets;
 
@@ -43,18 +44,15 @@ const Main = ({ navigation, route }) => {
       showedContent = [...targets]
     }
   }
-  
-
-  const containerPaddingTop = useSafeAreaInsets().top + 55 + 131 || 20 + 55 + 131;
 
   return (
-    <View style={{...styles.container, paddingTop: containerPaddingTop}}>
+    <View style={{...styles.container, paddingTop: deviceTopSpace + 171}}>
       {
         addTaskModalVisible 
         ? <View style={{...styles.backdrop}}></View>
         : null
       }
-      <TabScreenHeader title="Работа" />
+      <TabScreenHeader title="Работа" paddingTop={deviceTopSpace}/>
       <MainNavBar 
         activeType={activeType}
         setActiveType={setActiveType}
@@ -62,44 +60,46 @@ const Main = ({ navigation, route }) => {
         setActiveContent={setActiveContent}
         navigation={navigation}
         route={route}
+        deviceTopSpace={deviceTopSpace + 25 + 10}
       />
-      <ScrollView 
+      <FlatList 
         style={styles.content}
         showsVerticalScrollIndicator={false}
+        data={showedContent}
+        keyExtractor={item => item.id}
+        renderItem={({item}, index) => {
+          let showDetails = () => taskContext.showTaskDetails(item.id, navigation);
+          let complete = () => taskContext.completeTask(item.id);
+
+          if (activeType === 'Targets') {
+            showDetails = () => targetContext.showTargetDetails(item.id, navigation);
+            complete = () => targetContext.completeTarget(item.id);
+          } 
+
+          return (
+            <View key={index}>
+              {
+                activeType === 'Tasks' 
+                  ? <Task 
+                      task={item} 
+                      showDetails={showDetails}
+                      complete={complete}
+                    />
+                  : <Target 
+                      target={item} 
+                      showDetails={showDetails}
+                      complete={complete}
+                    />
+              }
+            </View>
+          )
+        }}
       >
-        {
-          showedContent.map((item, index) => {
-            let showDetails = () => taskContext.showTaskDetails(item.id, navigation);
-            let complete = () => taskContext.completeTask(item.id);
-
-            if (activeType === 'Targets') {
-              showDetails = () => targetContext.showTargetDetails(item.id, navigation);
-              complete = () => targetContext.completeTarget(item.id);
-            } 
-
-            return (
-              <View key={index}>
-                {
-                  activeType === 'Tasks' 
-                    ? <Task 
-                        task={item} 
-                        showDetails={showDetails}
-                        complete={complete}
-                      />
-                    : <Target 
-                        target={item} 
-                        showDetails={showDetails}
-                        complete={complete}
-                      />
-                }
-              </View>
-            )
-          }) 
-        }
-        <ModalLayout
+      </FlatList>
+      <ModalLayout
           visible={addTaskModalVisible}
           close={() => setAddTaskModalVisible(false)}
-          style={{paddingTop: containerPaddingTop}}
+          style={{paddingTop: deviceTopSpace + 171}}
         >
           {
             activeType === 'Tasks' 
@@ -119,7 +119,6 @@ const Main = ({ navigation, route }) => {
               />
           }
         </ModalLayout>
-      </ScrollView>
       <AddButton onPress={() => setAddTaskModalVisible(true)}/>
     </View>
   )

@@ -1,7 +1,8 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
-import { colors } from "../constants/colors";
-import { shadow } from "../constants/shadows";
+import { colors } from "../../constants/colors";
+import { shadow } from "../../constants/shadows";
+import { textStyles } from "../../constants/textStyles";
 
 
 const StatsNumbers = ({stats}) => {
@@ -28,7 +29,7 @@ const StatsNumbers = ({stats}) => {
 
         <View style={styles.whiteBlock}>
           <View style={styles.circle}>
-            <Text style={styles.value}>{stats.completedInTime}</Text>
+            <Text style={styles.value}>{`${stats.completedInTime}%`}</Text>
           </View>
           <Text style={styles.title}>{`выполнено\n в срок`}</Text>
         </View>
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   title: {
-    fontSize: 16,
+    ...textStyles.regular,
     textAlign: 'center',
   },
   circle: {
@@ -97,10 +98,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   value: {
-    fontSize: 25,
+    ...textStyles.big,
   },  
   valueBigSize: {
-    fontSize: 40,
+    ...textStyles.extraBig,
     marginTop: 10,
   },
 })

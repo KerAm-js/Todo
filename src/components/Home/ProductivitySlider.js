@@ -1,7 +1,7 @@
 import React from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
-import { colors } from "../constants/colors";
-import { shadow } from "../constants/shadows";
+import { colors } from "../../constants/colors";
+import { textStyles } from "../../constants/textStyles";
 
 const ProductivitySlider = ({slides, activeSlide, setActiveSlide}) => {
   return (
@@ -60,10 +60,10 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   buttonActive: {
-    borderColor: colors.LIGHTBLUE,
     backgroundColor: colors.LIGHTBLUE,
+    borderColor: colors.LIGHTBLUE
   },
   title: {
-    fontSize: 18,
+    ...textStyles.regular
   },  
 })
