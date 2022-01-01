@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { FlatList, ScrollView, StyleSheet, View } from "react-native";
+import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
 import ModalLayout from "../../layouts/ModalLayout";
 import MainNavBar from "../../components/Tasks/MainNavBar";
 import Task from "../../components/Tasks/Task";
@@ -10,6 +10,8 @@ import { TargetsContext } from "../../context/targets/TargetsContext";
 import Target from "../../components/Tasks/Target";
 import AddButton from "../../components/buttons/AddButton";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { textStyles } from "../../constants/textStyles";
+import { colors } from "../../constants/colors";
 
 
 const Main = ({ navigation, route }) => {
@@ -26,22 +28,29 @@ const Main = ({ navigation, route }) => {
   const [activeContent, setActiveContent] = useState('Все задачи');
 
   let showedContent;
+  let noContentText;
   
   if (activeType === 'Tasks') {
     if (activeContent === 'Выполнено') {
       showedContent = tasks.filter(task => task.isCompleted);
+      noContentText = 'Нет выполненных задач';
     } else if (activeContent === 'Просрочено') {
       showedContent = tasks.filter(task => task.isExpired && !task.isCompleted);
+      noContentText = 'Нет просроченных задач';
     } else {
       showedContent = [...tasks]
+      noContentText = 'Нет добавленных задач';
     }
   } else if (activeType === 'Targets') {
     if (activeContent === 'Выполнено') {
       showedContent = targets.filter(task => task.isCompleted);
+      noContentText = 'Нет выполненных целей';
     } else if (activeContent === 'Просрочено') {
       showedContent = targets.filter(task => task.isExpired && !task.isCompleted);
+      noContentText = 'Нет просроченных целей';
     } else {
-      showedContent = [...targets]
+      showedContent = [...targets];
+      noContentText = 'Нет добавленных целей';
     }
   }
 
@@ -62,40 +71,50 @@ const Main = ({ navigation, route }) => {
         route={route}
         deviceTopSpace={deviceTopSpace + 25 + 10}
       />
-      <FlatList 
-        style={styles.content}
-        showsVerticalScrollIndicator={false}
-        data={showedContent}
-        keyExtractor={item => item.id}
-        renderItem={({item}, index) => {
-          let showDetails = () => taskContext.showTaskDetails(item.id, navigation);
-          let complete = () => taskContext.completeTask(item.id);
+      <View style={styles.content}>
+        {
+          !!showedContent.length
+            ? <FlatList 
+                style={styles.list}
+                showsVerticalScrollIndicator={false}
+                data={showedContent}
+                keyExtractor={item => item.id}
+                renderItem={({item}, index) => {
+                  let showDetails = () => taskContext.showTaskDetails(item.id, navigation);
+                  let complete = () => taskContext.completeTask(item.id);
 
-          if (activeType === 'Targets') {
-            showDetails = () => targetContext.showTargetDetails(item.id, navigation);
-            complete = () => targetContext.completeTarget(item.id);
-          } 
+                  if (activeType === 'Targets') {
+                    showDetails = () => targetContext.showTargetDetails(item.id, navigation);
+                    complete = () => targetContext.completeTarget(item.id);
+                  } 
 
-          return (
-            <View key={index}>
-              {
-                activeType === 'Tasks' 
-                  ? <Task 
-                      task={item} 
-                      showDetails={showDetails}
-                      complete={complete}
-                    />
-                  : <Target 
-                      target={item} 
-                      showDetails={showDetails}
-                      complete={complete}
-                    />
-              }
-            </View>
-          )
-        }}
-      >
-      </FlatList>
+                  return (
+                    <View key={index}>
+                      {
+                        activeType === 'Tasks' 
+                          ? <Task 
+                              task={item} 
+                              showDetails={showDetails}
+                              complete={complete}
+                            />
+                          : <Target 
+                              target={item} 
+                              showDetails={showDetails}
+                              complete={complete}
+                            />
+                      }
+                    </View>
+                  )
+                }}
+              >
+              </FlatList>
+            : <Text style={styles.noContentText}>
+                {noContentText}
+              </Text>
+        }
+      </View>
+      
+      
       <ModalLayout
           visible={addTaskModalVisible}
           close={() => setAddTaskModalVisible(false)}
@@ -133,10 +152,9 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   content: {
-    paddingTop: 25,
-    paddingHorizontal: 20,
     borderRadius: 25,
     backgroundColor: '#fff',
+    height: '100%',
   },
   backdrop: {
     position: "absolute",
@@ -144,5 +162,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, .4)',
     height: '100%',
     width: '100%',
+  },
+  list: {
+    borderRadius: 25,
+    paddingTop: 25,
+    paddingHorizontal: 20,
+  },
+  noContentText: {
+    ...textStyles.subtitle,
+    textAlign: "center",
+    marginTop: 40,
+    color: colors.ACCENT
   }
 })

@@ -1,37 +1,42 @@
-import React, { useState, useContext, useEffect } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
-import Heading from "../../components/Profile/Heading";
+import React, { useContext, useState } from "react";
+import { View, StyleSheet, ScrollView, Alert } from "react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Input from "../../components/Input";
 import MyButton from "../../components/buttons/MyButton";
+import SlideScreenHeader from "../../components/Tasks/SlideScreenHeader";
 import { ProfileContext } from "../../context/profile/ProfileContext";
-import { signin } from "../../backend/firebase";
+import { signup } from "../../backend/firebase";
 
-const SignIn = ({navigation}) => {
-
-  const profileCntxt = useContext(ProfileContext);
+const SignUp = ({navigation}) => {
+  
   const deviceTopSpace = useSafeAreaInsets().top || 20;
+  const profileCntxt = useContext(ProfileContext);
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [confirmedPassword, setConfirmedPassword] = useState();
 
-  useEffect(() => {
-    if (profileCntxt.token) {
-      navigation.navigate('Main');
+  const onSignUpHandler = () => {
+    if (password === confirmedPassword) {
+      signup(email, password, (token) => {
+        if (token) {
+          console.log(token)
+          console.log(email)
+          navigation.navigate("Main");
+          profileCntxt.createUser(token, email);
+        } 
+      });
+    } else {
+      Alert.alert("Пароли не совпадают")
     }
-  })
-
-  const onSignInHandler = () => {
-    signin(email, password, (token) => {
-      profileCntxt.login(email, token);
-      navigation.navigate("Main");
-    });
   }
-
-  useEffect(() => profileCntxt.autoLogin(() => navigation.navigate("Main")), []);
 
   return (
     <View style={{...styles.container, paddingTop: deviceTopSpace + 35}}>
-      <Heading title="Вход" paddingTop={deviceTopSpace}/>
+      <SlideScreenHeader 
+        paddingTop={deviceTopSpace}
+        title="Регистрация" 
+        navigation={navigation}
+      />
       <ScrollView
         style={styles.scroll}
         showsVerticalScrollIndicator={false}
@@ -47,25 +52,26 @@ const SignIn = ({navigation}) => {
             placeholder="Пароль" 
             value={password}
             onChangeText={text => setPassword(text)}
-            textContentType="password"
+            textContentType="newPassword"
+          />
+          <Input 
+            placeholder="Подтвердите пароль" 
+            value={confirmedPassword}
+            onChangeText={text => setConfirmedPassword(text)}
+            textContentType="newPassword"
           />
         </View>
         <MyButton 
-          title="Вход" 
+          title="Зарегистрироваться" 
           type="submit"
-          onPress={onSignInHandler}
-        />
-        <MyButton 
-          title="Регистрация" 
-          type="submit"
-          onPress={() => navigation.navigate("SignUp")}
+          onPress={onSignUpHandler}
         />
       </ScrollView>
     </View>
   )
 }
 
-export default SignIn;
+export default SignUp;
 
 const styles = StyleSheet.create({
   container: {

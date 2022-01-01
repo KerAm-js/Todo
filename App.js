@@ -5,6 +5,8 @@ import TasksState from "./src/context/tasks/TasksState";
 import RootNavigator from "./src/navigators/RootNavigator";
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
+import { ProfileContext } from "./src/context/profile/ProfileContext";
+import ProfileState from "./src/context/profile/ProfileState";
 
 async function loadApplication() {
   await Font.loadAsync({
@@ -29,12 +31,14 @@ export default function App() {
   }
 
   return (
-    <TargetsState>
-      <TasksState>
-        <NotesState>
-          <RootNavigator />
-        </NotesState>
-      </TasksState>
-    </TargetsState>   
+    <ProfileState>
+      <TargetsState>
+        <TasksState>
+          <NotesState>
+            <RootNavigator />
+          </NotesState>
+        </TasksState>
+      </TargetsState> 
+    </ProfileState>
   )
 }

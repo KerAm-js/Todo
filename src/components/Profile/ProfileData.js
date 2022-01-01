@@ -21,20 +21,22 @@ const ProfileData = ({user}) => {
       <View style={styles.heading}>
         <View style={styles.headingText}>
           {
-            user.name || user.surname 
+            user.name
             ? <>
-                <Text style={styles.title}>{`${user?.name} ${user?.surname}`}</Text>
-                <Text style={styles.userData}>{user.login}</Text>
+                <Text style={styles.title}>{`${user?.name || ''} ${user?.surname || ''}`}</Text>
+                <Text style={styles.userData}>{user.email}</Text>
               </>
-            : <>
-                <Text style={styles.title}>{user.login}</Text>
-              </>
+            : <Text style={styles.title}>{user.email}</Text>
           }
           {
             user.age ? <Text style={styles.userData}>{age}</Text> : null
           }
           {
-            user.location ? <Text style={styles.userData}>{user.location}</Text> : null
+            user.location 
+              ? <Text style={styles.userData}>{user.location}</Text> 
+              : !user.age 
+                  ? <Text style={styles.userData}>Личные данные не указаны</Text> 
+                  : null
           }
         </View>
         <Image 
@@ -42,22 +44,18 @@ const ProfileData = ({user}) => {
           source={require('../../images/alina-rubo-myU5tdqiX6g-unsplash.jpg')}
         />
       </View>
+      <Text style={styles.subtitle}>Род деятельности</Text>
       {
         user.job
-        ? <>
-            <Text style={styles.subtitle}>Род деятельности</Text>
-            <Text style={styles.text}>{user.job}</Text>
-          </>
-        : null
+        ? <Text style={styles.text}>{user.job}</Text>
+        : <Text style={styles.text}>Не указан</Text>
       }
+      {/* <Text style={styles.subtitle}>Любимая цитата</Text>
       {
         user.quote
-        ? <>
-            <Text style={styles.subtitle}>Любимая цитата</Text>
-            <Text style={styles.text}>{user.quote}</Text>
-          </>
-        : null
-      }
+        ? <Text style={styles.text}>{user.quote}</Text>
+        : <Text style={styles.text}>Не указана</Text>
+      } */}
     </>
   )
 }

@@ -1,4 +1,5 @@
 import { 
+  INIT_TASKS,
   ADD_TASK,
   EDIT_TASK,
   REMOVE_TASK,
@@ -13,6 +14,11 @@ import {
 
 export const tasksReducer = (state, action) => {
   switch (action.type) {
+    case INIT_TASKS : {
+      return {
+        ...action.state
+      }
+    };
     case ADD_TASK: {
       return {
         ...state,
@@ -136,10 +142,9 @@ export const tasksReducer = (state, action) => {
       }
     };
     case ON_NEW_DAY_HANDLER: {
-      if (action.date.toLocaleDateString() === state.currentDate.toLocaleDateString()) {
-        console.log('no update');
+      if (action.date.toLocaleDateString() === new Date(state.currentDate).toLocaleDateString()) {
+        null
       } else {
-        console.log('updated');
         //stats updating
         const tasksCount = state.stats.tasksCount + state.createdTasksCount;
         const workingDaysCount = state.stats.workingDaysCount + 1;

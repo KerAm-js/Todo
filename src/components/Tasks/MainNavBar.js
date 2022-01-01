@@ -1,6 +1,5 @@
 import React from "react";
-import { Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { colors } from "../../constants/colors";
 import { textStyles } from "../../constants/textStyles";
 

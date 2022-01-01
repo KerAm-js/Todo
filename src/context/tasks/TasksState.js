@@ -1,10 +1,11 @@
-import React, { useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import { 
   ADD_TASK, 
   COMPLETE_TASK, 
   EDIT_TASK, 
   FIND_CURRENT_TASKS, 
   FIND_EXPIRED_TASKS, 
+  INIT_TASKS, 
   ON_NEW_DAY_HANDLER, 
   REMOVE_TASK, 
   SET_TASK_EXPIRED, 
@@ -14,22 +15,12 @@ import {
 import { TasksContext } from "./TasksContext";
 import { tasksReducer } from "./TasksReducer";
 
+
 const TasksState = ({children}) => {
   const initialState = {
-    currentDate: new Date(),
+    currentDate: new Date().toString(),
     createdTasksCount: 1,
-    tasks: [
-      {
-        id: `0_${new Date().toString()}`,
-        title: "Задача 1",
-        description: null,
-        startTime: null,
-        finishTime: null,
-        isCompleted: false,
-        isExpired: false, 
-        isDayExpired: false,
-      }
-    ],
+    tasks: [],
     expiredTasks: [],
     currentTasks: [],
     viewedTask: null,
@@ -56,11 +47,25 @@ const TasksState = ({children}) => {
   const findCurrentTasks = () => dispatch({type: FIND_CURRENT_TASKS});
   const updateResult = () => dispatch({type: UPDATE_RESULT});
 
+  const initialize = async () => {
+    const currentData = await getData('tasksSate');
+    if (currentData) {
+      dispatch({type: INIT_TASKS, state: currentData});
+    }
+  }
+
+  // useEffect(() => {
+  //   initialize();
+  // }, []);
+
+  // useEffect(async () => {
+  //   await setData('tasksState', state);
+  // })
+
   const onNewDayHandler = date => {
     dispatch({ type: ON_NEW_DAY_HANDLER, date, })
   }
   
-
   const showTaskDetails = (id, navigation) => {
     dispatch({type: SHOW_TASK_DETAILS, id});
     navigation.navigate("TaskViewing");

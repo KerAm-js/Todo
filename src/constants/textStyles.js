@@ -3,6 +3,11 @@ export const textStyles = {
     fontFamily: 'nunito-semiBold',
     fontSize: 40,
   },
+  statsValue: {
+    fontFamily: 'nunito-semiBold',
+    fontSize: 25,
+    lineHeight: 35,
+  },
   big: {
     fontFamily: 'nunito-bold',
     fontSize: 25,

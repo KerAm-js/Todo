@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   value: {
-    ...textStyles.big,
+    ...textStyles.statsValue,
   },  
   valueBigSize: {
     ...textStyles.extraBig,

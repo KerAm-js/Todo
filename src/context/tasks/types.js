@@ -1,3 +1,4 @@
+export const INIT_TASKS = "INIT-TASKS";
 export const ADD_TASK = "ADD-TASK";
 export const REMOVE_TASK = "REMOVE-TASK";
 export const EDIT_TASK = "EDIT-TASK";
