@@ -47,21 +47,6 @@ const TasksState = ({children}) => {
   const findCurrentTasks = () => dispatch({type: FIND_CURRENT_TASKS});
   const updateResult = () => dispatch({type: UPDATE_RESULT});
 
-  const initialize = async () => {
-    const currentData = await getData('tasksSate');
-    if (currentData) {
-      dispatch({type: INIT_TASKS, state: currentData});
-    }
-  }
-
-  // useEffect(() => {
-  //   initialize();
-  // }, []);
-
-  // useEffect(async () => {
-  //   await setData('tasksState', state);
-  // })
-
   const onNewDayHandler = date => {
     dispatch({ type: ON_NEW_DAY_HANDLER, date, })
   }
@@ -76,10 +61,12 @@ const TasksState = ({children}) => {
   };
   
   const setTaskExpired = (id, start, end) => {
-    if (start && end && new Date() < end) {
+    const startTime = new Date(start);
+    const finishTime = new Date(end);
+    if (startTime && finishTime && new Date() < finishTime) {
       setTimeout(() => {
         dispatch({type: SET_TASK_EXPIRED, id});;
-      }, end - new Date());
+      }, finishTime - new Date());
     }
   };
 

@@ -25,14 +25,17 @@ const TaskData = ({task, completeTask}) => {
   let startTimeString = 'Не указано';
   let finishTimeString = 'Не указано';
 
+  const startTime = new Date(task.startTime);
+  const finishTime = new Date(task.finishTime);
+
   if (task?.startTime) {
-    const startHours = task.startTime.getHours() >= 10 ? `${task.startTime.getHours()}` : `0${task.startTime.getHours()}`;
-    const startMinutes = task.startTime.getMinutes() >= 10 ? `${task.startTime.getMinutes()}` : `0${task.startTime.getMinutes()}`;
+    const startHours = startTime.getHours() >= 10 ? `${startTime.getHours()}` : `0${startTime.getHours()}`;
+    const startMinutes = startTime.getMinutes() >= 10 ? `${startTime.getMinutes()}` : `0${startTime.getMinutes()}`;
     startTimeString = `${startHours}:${startMinutes}`;
   }
   if (task?.finishTime) {
-    const finishHours = task.finishTime.getHours() >= 10 ? `${task.finishTime.getHours()}` : `0${task.finishTime.getHours()}`;
-    const finishMinutes = task.finishTime.getMinutes() >= 10 ? `${task.finishTime.getMinutes()}` : `0${task.finishTime.getMinutes()}`;
+    const finishHours = finishTime.getHours() >= 10 ? `${finishTime.getHours()}` : `0${finishTime.getHours()}`;
+    const finishMinutes = finishTime.getMinutes() >= 10 ? `${finishTime.getMinutes()}` : `0${finishTime.getMinutes()}`;
     finishTimeString = `${finishHours}:${finishMinutes}`;
   }
 

@@ -36,11 +36,11 @@ const TargetData = ({target, complete}) => {
     />;
     borderColor = colors.DANGER
   }
-
+  const finishTime = new Date(target?.finishTime)
   let finishTimeString = 'Не указано';
 
   if (target?.finishTime) {
-    finishTimeString = `${target.finishTime.getDate()} ${months[target.finishTime.getMonth()]} ${target.finishTime.getFullYear()} г.`;
+    finishTimeString = `${finishTime.getDate()} ${months[finishTime.getMonth()]} ${finishTime.getFullYear()} г.`;
   }
 
   return (

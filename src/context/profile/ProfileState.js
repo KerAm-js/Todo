@@ -62,7 +62,6 @@ const ProfileState = ({children}) => {
   }
 
   const login = async (email, token) => {
-    console.log(email)
     try {
       //users getting
       const response = await fetch('https://productive-plus-default-rtdb.europe-west1.firebasedatabase.app/users.json', {
@@ -103,6 +102,24 @@ const ProfileState = ({children}) => {
     }
   }
 
+  const sendToServer = async (id, notes, targets, tasksData) => {
+    try {
+      const response = await fetch(`https://productive-plus-default-rtdb.europe-west1.firebasedatabase.app/users/${id}.json`, {
+        method: "PATCH",
+        headers: {'Content-type':'application/json'},
+        body: JSON.stringify({
+          notes,
+          targets,
+          tasksData,
+        })
+      })
+      const result = await response.json();
+      console.log(result);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   return (
     <ProfileContext.Provider value={{
       state,
@@ -111,6 +128,7 @@ const ProfileState = ({children}) => {
       createUser,
       login,
       autoLogin,
+      sendToServer,
     }}>
       {children}
     </ProfileContext.Provider>

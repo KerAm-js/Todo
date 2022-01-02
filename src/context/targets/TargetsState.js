@@ -11,7 +11,7 @@ const TargetsState = ({children}) => {
         id: `0_${new Date()}`,
         title: 'Цель 1',
         description: null,
-        finishTime: new Date(2022, 10, 10),
+        finishTime: new Date(2022, 10, 10).toString(),
         isCompleted: false,
         isExpired: false,
       }
@@ -44,8 +44,9 @@ const TargetsState = ({children}) => {
   }
 
   const setTargetExpired = (id, end) => {
+    const finishTime = new Date(end)
     const deadline = new Date(end);
-    deadline.setDate(end.getDate() + 1);
+    deadline.setDate(finishTime.getDate() + 1);
     if (id && end) {
       setTimeout(() => {
         dispatch({type: SET_TARGET_EXPIRED, id});

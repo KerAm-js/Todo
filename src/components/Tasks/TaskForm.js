@@ -36,12 +36,12 @@ const TaskForm = ({
       ? task?.description 
       : target?.description);
 
-  const [startTime, setStartTime] = useState(task?.startTime || new Date());
+  const [startTime, setStartTime] = useState(new Date(task?.startTime || null));
 
   const [finishTime, setFinishTime] = useState(
     name === 'task' 
-    ? task?.finishTime || new Date()
-    : target?.finishTime || new Date()
+    ? new Date(task?.finishTime || null)
+    : new Date(target?.finishTime || null)
   );
 
   const [isTimeAdded, setIsTimeAdded] = useState(
@@ -49,7 +49,8 @@ const TaskForm = ({
     ? false 
     : name === 'task' 
       ? task?.startTime && task?.finishTime 
-      : target?.finishTime);
+      : target?.finishTime
+  );
 
   const containerPaddingBottom = useSafeAreaInsets().bottom + 20 || 50;
 
@@ -61,8 +62,8 @@ const TaskForm = ({
         id: `${tasks?.length}_${new Date().toString()}`,
         title: title.trim(),
         description,
-        startTime: isTimeAdded ? startTime : null,
-        finishTime: isTimeAdded ? finishTime : null,
+        startTime: isTimeAdded ? startTime.toString() : null,
+        finishTime: isTimeAdded ? finishTime.toString() : null,
         isCompleted: false,
         isExpired: isTimeAdded ? (new Date() < finishTime ? false : true) : false,
         isDayExpired: false, 
@@ -73,7 +74,7 @@ const TaskForm = ({
         id: `${targets?.length}_${new Date().toString()}`,
         title: title.trim(),
         description,
-        finishTime: isTimeAdded ? finishTime : null,
+        finishTime: isTimeAdded ? finishTime.toString() : null,
         isCompleted: false,
         isExpired: false,
       });
@@ -88,8 +89,8 @@ const TaskForm = ({
       editTask({
         title: title.trim(),
         description,
-        startTime: isTimeAdded ? startTime : null,
-        finishTime: isTimeAdded ? finishTime : null,
+        startTime: isTimeAdded ? startTime.toString() : null,
+        finishTime: isTimeAdded ? finishTime.toString() : null,
         isCompleted: false,
         isExpired: isTimeAdded ? (new Date() < finishTime ? false : true) : false, 
         isDayExpired: task.isDayExpired,
@@ -99,7 +100,7 @@ const TaskForm = ({
       editTarget({
         title: title.trim(),
         description,
-        finishTime: isTimeAdded ? finishTime : null,
+        finishTime: isTimeAdded ? finishTime.toString() : null,
         isCompleted: false,
         isExpired: false,
       });
@@ -148,7 +149,7 @@ const TaskForm = ({
                       type="start"
                       time={startTime}
                       setTime={setStartTime}
-                      minimumDate={new Date()}
+                      minimumDate={type === 'add' ? new Date() : null}
                     />
                     <TimePicker 
                       type="finish"
@@ -162,7 +163,7 @@ const TaskForm = ({
                       type="finish"
                       time={finishTime}
                       setTime={setFinishTime}
-                      minimumDate={new Date()}
+                      minimumDate={type === 'add' ? new Date() : null}
                       mode={"date"}
                     />
                   </>

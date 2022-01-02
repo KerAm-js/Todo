@@ -6,6 +6,9 @@ import ProfileData from "../../components/Profile/ProfileData";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { signout } from "../../backend/firebase";
 import { ProfileContext } from "../../context/profile/ProfileContext";
+import { TargetsContext } from '../../context/targets/TargetsContext';
+import { TasksContext } from '../../context/tasks/TasksContext';
+import { NotesContext } from '../../context/notes/NotesContext';
 import ModalLayout from '../../layouts/ModalLayout';
 import EditForm from "../../components/Profile/EditForm";
 
@@ -13,6 +16,9 @@ const Main = ({navigation}) => {
 
   const deviceTopSpace = useSafeAreaInsets().top || 20;
   const profileCntxt = useContext(ProfileContext);
+  const targets = useContext(TargetsContext).state.targets;
+  const tasks = useContext(TasksContext).state;
+  const notes = useContext(NotesContext).state.notes;
   const [editModalVisible, setEditModalVisible] = useState(false);
   
   const closeEditModal = () => {
@@ -45,6 +51,17 @@ const Main = ({navigation}) => {
     )
   }
 
+  const onSaveDataHandler = () => {
+    const id = profileCntxt.state.userData.id;
+    const tasksData = {
+      taskList: tasks.tasks,
+      createdTasksCount: tasks.createdTasksCount,
+      stats: tasks.stats,
+      result: tasks.result,
+    }
+    profileCntxt.sendToServer(id, notes, targets, tasksData);
+  }
+
   return (
     <View style={{...styles.container, paddingTop: deviceTopSpace + 35}}>
       <Heading title="Профиль" paddingTop={deviceTopSpace}/>
@@ -58,7 +75,7 @@ const Main = ({navigation}) => {
         <MyButton 
           type="submit"
           title="Сохранить копию"
-          onPress={() => console.log('sended')}
+          onPress={onSaveDataHandler}
         />
         <MyButton 
           type="submit"

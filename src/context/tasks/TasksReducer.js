@@ -68,7 +68,6 @@ export const tasksReducer = (state, action) => {
     case FIND_EXPIRED_TASKS: {
       if (state.tasks.length > 0) {
         let result = [];
-        const currentTime = new Date();
         state.tasks.forEach(task => {
           if ((task?.isExpired || task?.isDayExpired) && !task.isCompleted) {
             result.push(task);
@@ -89,11 +88,15 @@ export const tasksReducer = (state, action) => {
       if (state.tasks.length > 0) {
         let result = [];
         const currentTime = new Date();
+
         state.tasks.forEach(task => {
-          if (task?.startTime <= currentTime && task?.finishTime > currentTime && !task?.isExpired) {
+          const startTime = new Date(task?.startTime);
+          const finishTime = new Date(task?.finishTime);
+          if (startTime <= currentTime && finishTime > currentTime && !task?.isExpired) {
             result.push(task);
           }
         })
+        
         if (result.length === 0) {
           const currentTask = state.tasks.find(task => !task.isCompleted && !task.isExpired)
           currentTask ? result.push(currentTask) : null

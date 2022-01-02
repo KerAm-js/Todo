@@ -22,9 +22,11 @@ const Target = ({target, complete, showDetails}) => {
     "Декабря",
   ]
 
+  const finishTime = new Date(target?.finishTime)
+
   let finishTimeString = 'Не указано';
   if (target?.finishTime) {
-    finishTimeString = `${target?.finishTime.getDate()} ${months[target?.finishTime.getMonth()]} ${target.finishTime.getFullYear()} г.`;
+    finishTimeString = `${finishTime.getDate()} ${months[finishTime.getMonth()]} ${finishTime.getFullYear()} г.`;
   }
   let borderColor = colors.BLUE;
   let image = null;
