@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Alert, ScrollView, StyleSheet, View } from "react-native";
+import { Alert, Modal, ScrollView, StyleSheet, View } from "react-native";
 import MyButton from "../../components/buttons/MyButton";
 import Heading from "../../components/Profile/Heading";
 import ProfileData from "../../components/Profile/ProfileData";
@@ -11,6 +11,7 @@ import { TasksContext } from '../../context/tasks/TasksContext';
 import { NotesContext } from '../../context/notes/NotesContext';
 import ModalLayout from '../../layouts/ModalLayout';
 import EditForm from "../../components/Profile/EditForm";
+import Loader from "../../components/Loader";
 
 const Main = ({navigation}) => {
 
@@ -62,6 +63,13 @@ const Main = ({navigation}) => {
     profileCntxt.sendToServer(id, notes, targets, tasksData);
   }
 
+  const onUploadDataFromServer = () => {
+    const id = profileCntxt.state.userData.id;
+    profileCntxt.uploadFromServer(id);
+  }
+
+  useEffect(() => profileCntxt.autoLogin(() => navigation.navigate("SignIn")), []);
+
   return (
     <View style={{...styles.container, paddingTop: deviceTopSpace + 35}}>
       <Heading title="Профиль" paddingTop={deviceTopSpace}/>
@@ -79,6 +87,11 @@ const Main = ({navigation}) => {
         />
         <MyButton 
           type="submit"
+          title="Загрузить данные"
+          onPress={onUploadDataFromServer}
+        />
+        <MyButton 
+          type="submit"
           title="Редактировать"
           onPress={openEditModal}
         />
@@ -88,6 +101,13 @@ const Main = ({navigation}) => {
           onPress={onSignOut}
         />
       </ScrollView>
+      <Modal
+        animationType="fade"
+        visible={profileCntxt.state.isLoading} 
+        transparent={true} 
+      >
+        <Loader />
+      </Modal>
       <ModalLayout
         visible={editModalVisible}
         close={closeEditModal}

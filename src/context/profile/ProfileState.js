@@ -2,7 +2,7 @@ import React, { useEffect, useReducer } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ProfileContext } from "./ProfileContext";
 import { profileReducer } from "./profileReducer";
-import { CREATE_USER, LOG_IN, LOG_OUT, EDIT_USER_DATA } from "./types";
+import { CREATE_USER, LOG_IN, LOG_OUT, EDIT_USER_DATA, SHOW_LOADER, HIDE_LOADER } from "./types";
 
 const ProfileState = ({children}) => {
   const initialState = {
@@ -11,15 +11,20 @@ const ProfileState = ({children}) => {
       name: "",
       surname: "",
       age: "",
-      place: "",
+      location: "",
       job: "",
     },
     token: null,
+    isLoading: false,
   }
   
   const [state, dispatch] = useReducer(profileReducer, initialState);
 
+  const showLoader = () => dispatch({type: SHOW_LOADER});
+  const hideLoader = () => dispatch({type: HIDE_LOADER});
+
   const editProfile = async (userData) => {
+    showLoader();
     try {
       const response = await fetch(`https://productive-plus-default-rtdb.europe-west1.firebasedatabase.app/users/${userData.id}/userData.json`, {
         method: "PATCH",
@@ -34,9 +39,11 @@ const ProfileState = ({children}) => {
     } catch (e) {
       console.log(e);
     }
+    hideLoader();
   }
 
   const createUser = async (token, email) => {
+    showLoader();
     try {
       const response = await fetch('https://productive-plus-default-rtdb.europe-west1.firebasedatabase.app/users.json', {
         method: "POST",
@@ -59,9 +66,11 @@ const ProfileState = ({children}) => {
     } catch (e) {
       console.log(e);
     }
+    hideLoader();
   }
 
   const login = async (email, token) => {
+    showLoader();
     try {
       //users getting
       const response = await fetch('https://productive-plus-default-rtdb.europe-west1.firebasedatabase.app/users.json', {
@@ -85,26 +94,36 @@ const ProfileState = ({children}) => {
     } catch (e) {
       console.log(e);
     }
+    hideLoader();
   }
 
   const logout = async () => {
-    await AsyncStorage.multiRemove(['token', 'email']);
-    dispatch({type: LOG_OUT});
+    showLoader();
+    try {
+      await AsyncStorage.multiRemove(['token', 'email']);
+      dispatch({type: LOG_OUT});
+    } catch (e) {
+      console.log(e);
+    }
+    hideLoader();
   }
 
-  const autoLogin = async (navigate) => {
+  const autoLogin = async (onAuthErrorHanlder) => {
+    showLoader();
     try {
       const [tokenArr, emailArr] = await AsyncStorage.multiGet(['token', 'email']);
       if (emailArr[1] && tokenArr[1]) {
         await login(emailArr[1], tokenArr[1]);
-        navigate();
       }
     } catch (e) {
-      console.log(e)
+      console.log(e);
+      onAuthErrorHanlder();
     }
+    hideLoader();
   }
 
   const sendToServer = async (id, notes, targets, tasksData) => {
+    showLoader();
     try {
       const response = await fetch(`https://productive-plus-default-rtdb.europe-west1.firebasedatabase.app/users/${id}.json`, {
         method: "PATCH",
@@ -120,6 +139,23 @@ const ProfileState = ({children}) => {
     } catch (e) {
       console.log(e);
     }
+    hideLoader();
+  }
+
+  const uploadFromServer = async id => {
+    showLoader();
+    try {
+      const response = await fetch(`https://productive-plus-default-rtdb.europe-west1.firebasedatabase.app/users/${id}.json`, {
+        method: "GET",
+        headers: {'Content-type':'application/json'},
+      })
+      const result = await response.json();
+      console.log('======================');
+      console.log(result);
+    } catch (e) {
+      console.log(e);
+    }
+    hideLoader();
   }
 
   return (
@@ -131,6 +167,7 @@ const ProfileState = ({children}) => {
       login,
       autoLogin,
       sendToServer,
+      uploadFromServer,
     }}>
       {children}
     </ProfileContext.Provider>

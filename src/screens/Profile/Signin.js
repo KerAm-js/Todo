@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { View, StyleSheet, ScrollView, Text } from "react-native";
+import { View, StyleSheet, ScrollView, Text, Modal } from "react-native";
 import Heading from "../../components/Profile/Heading";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Input from "../../components/Input";
@@ -10,6 +10,8 @@ import ErrorMessage from "../../components/Error";
 import Message from "../../components/Message";
 import { colors } from "../../constants/colors";
 import { textStyles } from "../../constants/textStyles";
+import ModalLayout from '../../layouts/ModalLayout';
+import Loader from "../../components/Loader";
 
 const SignIn = ({navigation}) => {
 
@@ -105,8 +107,6 @@ const SignIn = ({navigation}) => {
     navigation.navigate("SignUp");
   }
 
-  useEffect(() => profileCntxt.autoLogin(() => navigation.navigate("Main")), []);
-
   return (
     <View style={{...styles.container, paddingTop: deviceTopSpace + 35}}>
       <Heading title="Вход" paddingTop={deviceTopSpace}/>
@@ -148,6 +148,13 @@ const SignIn = ({navigation}) => {
           onPress={onMoveToSignUpScreen}
         />
       </ScrollView>
+      <Modal 
+        animationType="fade"
+        visible={profileCntxt.state.isLoading} 
+        transparent={true} 
+      >
+        <Loader />
+      </Modal>
     </View>
   )
 }

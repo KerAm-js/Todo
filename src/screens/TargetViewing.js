@@ -18,8 +18,8 @@ const TargetViewing = ({navigation}) => {
   const closeModal = () => setEditModalVisible(false);
   const taskRemoving = () => {
     Alert.alert(
-      "Удаление задачи",
-      "Вы уверены, что хотите удалить задачу?",
+      "Удаление цели",
+      "Вы уверены, что хотите удалить цель?",
       [
         {
           text: "Отмена",

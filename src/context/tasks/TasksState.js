@@ -20,7 +20,15 @@ const TasksState = ({children}) => {
   const initialState = {
     currentDate: new Date().toString(),
     createdTasksCount: 1,
-    tasks: [],
+    tasks: [
+      {
+        id: `0_${new Date()}`,
+        title: 'Задача 1',
+        description: null,
+        isCompleted: false,
+        isExpired: false,
+      }
+    ],
     expiredTasks: [],
     currentTasks: [],
     viewedTask: null,

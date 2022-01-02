@@ -31,7 +31,7 @@ export default Input;
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 10,
+    marginBottom: 5,
   },
   input: {
     ...textStyles.regular,

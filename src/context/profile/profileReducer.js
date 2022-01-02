@@ -1,7 +1,19 @@
-import { CREATE_USER, LOG_IN, LOG_OUT, EDIT_USER_DATA, SEND_ALL_DATA_TO_SERVER } from "./types";
+import { CREATE_USER, LOG_IN, LOG_OUT, EDIT_USER_DATA, SEND_ALL_DATA_TO_SERVER, SHOW_LOADER, HIDE_LOADER } from "./types";
 
 export const profileReducer = (state, action) => {
   switch (action.type) {
+    case SHOW_LOADER: {
+      return {
+        ...state,
+        isLoading: true,
+      }
+    };
+    case HIDE_LOADER: {
+      return {
+        ...state,
+        isLoading: false,
+      }
+    };
     case CREATE_USER: {
       return {
         userData: {

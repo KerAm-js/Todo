@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { View, StyleSheet, ScrollView, Alert } from "react-native";
+import { View, StyleSheet, ScrollView, Alert, Modal } from "react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Input from "../../components/Input";
 import MyButton from "../../components/buttons/MyButton";
@@ -8,6 +8,7 @@ import { ProfileContext } from "../../context/profile/ProfileContext";
 import { signup } from "../../backend/firebase";
 import ErrorMessage from "../../components/Error";
 import Message from "../../components/Message";
+import Loader from "../../components/Loader";
 
 const SignUp = ({navigation}) => {
   
@@ -156,6 +157,13 @@ const SignUp = ({navigation}) => {
           onPress={onSignUpHandler}
         />
       </ScrollView>
+      <Modal
+        animationType="fade"
+        visible={profileCntxt.state.isLoading} 
+        transparent={true} 
+      >
+        <Loader />
+      </Modal>
     </View>
   )
 }

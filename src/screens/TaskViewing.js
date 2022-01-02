@@ -11,9 +11,11 @@ import { TasksContext } from "../context/tasks/TasksContext";
 
 const TaskViewing = ({navigation}) => {
 
+  console.log(navigation);
+
   const deviceTopSpace = useSafeAreaInsets().top || 20;
   const [editModalVisible, setEditModalVisible] = useState(false);
-  const logic = useContext(TasksContext);
+  const tasksCntxt = useContext(TasksContext);
   
   const closeModal = () => setEditModalVisible(false);
   const taskRemoving = () => {
@@ -30,7 +32,7 @@ const TaskViewing = ({navigation}) => {
           text: "Удалить",
           onPress: () => {
             navigation.goBack();
-            logic.removeTask(logic.state.viewedTask.id);
+            tasksCntxt.removeTask(tasksCntxt.state.viewedTask.id);
           },
           style: "destructive"
         },
@@ -55,8 +57,8 @@ const TaskViewing = ({navigation}) => {
         showsVerticalScrollIndicator={false}
       >
         <TaskData 
-          task={logic.state.viewedTask}
-          completeTask={() => logic.completeTask(logic.state.viewedTask.id)}
+          task={tasksCntxt.state.viewedTask}
+          completeTask={() => tasksCntxt.completeTask(tasksCntxt.state.viewedTask.id)}
         />
         <MyButton 
           type="submit"
@@ -76,9 +78,9 @@ const TaskViewing = ({navigation}) => {
           <TaskForm 
             name="task"
             type="edit"
-            task={logic.state.viewedTask}
+            task={tasksCntxt.state.viewedTask}
             close={closeModal}
-            editTask={taskData => logic.editTask(logic.state.viewedTask.id, taskData)}
+            editTask={taskData => tasksCntxt.editTask(tasksCntxt.state.viewedTask.id, taskData)}
             navigation={navigation}
           />
         </ModalLayout>

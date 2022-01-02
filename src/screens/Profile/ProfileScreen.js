@@ -10,13 +10,20 @@ const Stack = createStackNavigator();
 const ProfileScreen = () => {
   
   return (
-    <Stack.Navigator initialRouteName={"SignIn"}>
+    <Stack.Navigator initialRouteName={"Main"}>
       <Stack.Group
         screenOptions={{
           title: "",
           headerShown: false,
         }}
       >
+        <Stack.Screen 
+          name="Main"
+        >
+          {
+            props => <Main {...props} />
+          }
+        </Stack.Screen>
         <Stack.Screen 
           name="SignIn"
         >
@@ -34,13 +41,6 @@ const ProfileScreen = () => {
         {
 
         }
-        <Stack.Screen 
-          name="Main"
-        >
-          {
-            props => <Main {...props} />
-          }
-        </Stack.Screen>
       </Stack.Group>
     </Stack.Navigator>
   )

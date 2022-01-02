@@ -12,7 +12,11 @@ const ModalLayout = ({visible, children, style, close}) => {
       <View 
         style={{...styles.container, ...style}}
       >
-        <Pressable style={styles.backdrop} onPress={close}></Pressable>
+        {
+          close 
+          ? <Pressable style={styles.backdrop} onPress={close}></Pressable>
+          : null
+        }
         <View style={styles.content}>
           {children}
         </View>

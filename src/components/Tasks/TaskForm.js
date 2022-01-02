@@ -36,12 +36,16 @@ const TaskForm = ({
       ? task?.description 
       : target?.description);
 
-  const [startTime, setStartTime] = useState(new Date(task?.startTime || null));
+  const [startTime, setStartTime] = useState(task?.startTime ? new Date(task?.startTime) : new Date());
 
   const [finishTime, setFinishTime] = useState(
     name === 'task' 
-    ? new Date(task?.finishTime || null)
-    : new Date(target?.finishTime || null)
+      ? task?.finishTime 
+        ? new Date(task?.finishTime)
+        : new Date() 
+      : target?.finishTime 
+        ? new Date(target?.finishTime)
+        : new Date() 
   );
 
   const [isTimeAdded, setIsTimeAdded] = useState(

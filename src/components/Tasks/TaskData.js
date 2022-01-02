@@ -25,8 +25,8 @@ const TaskData = ({task, completeTask}) => {
   let startTimeString = 'Не указано';
   let finishTimeString = 'Не указано';
 
-  const startTime = new Date(task.startTime);
-  const finishTime = new Date(task.finishTime);
+  const startTime = new Date(task?.startTime);
+  const finishTime = new Date(task?.finishTime);
 
   if (task?.startTime) {
     const startHours = startTime.getHours() >= 10 ? `${startTime.getHours()}` : `0${startTime.getHours()}`;
