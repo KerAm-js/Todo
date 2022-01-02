@@ -20,26 +20,34 @@ const app = initializeApp(firebaseConfig);
 
 const auth = getAuth();
 
-export const signup = (login, password, callBack) => {
+export const signup = (login, password, onSuccessHandler, onErrorHandler) => {
   createUserWithEmailAndPassword(auth, login, password)
     .then(userCredential => {
       const user = userCredential.user;
-      if (callBack) {
-        callBack(user.stsTokenManager.accessToken);
+      if (onSuccessHandler) {
+        onSuccessHandler(user.stsTokenManager.accessToken);
       }
     })
-    .catch((err) => console.log(err.code));
+    .catch((err) => {
+      if (onErrorHandler) {
+        onErrorHandler(err);
+      }
+    });
 }
 
-export const signin = (login, password, callBack) => {
+export const signin = (login, password, onSuccessHandler, onErrorHandler) => {
   signInWithEmailAndPassword(auth, login, password)
     .then(userCredential => {
       const user = userCredential.user;
-      if (callBack) {
-        callBack(user.stsTokenManager.accessToken);
+      if (onSuccessHandler) {
+        onSuccessHandler(user.stsTokenManager.accessToken);
       }
     })
-    .catch((err) => console.log(err.code));
+    .catch((err) => {
+      if (onErrorHandler) {
+        onErrorHandler(err);
+      }
+    });
 }
 
 export const signout = navigate => {

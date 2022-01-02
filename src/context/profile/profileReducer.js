@@ -1,4 +1,4 @@
-import { CREATE_USER, LOG_IN, LOG_OUT, EDIT_USER_DATA } from "./types";
+import { CREATE_USER, LOG_IN, LOG_OUT, EDIT_USER_DATA, SEND_ALL_DATA_TO_SERVER } from "./types";
 
 export const profileReducer = (state, action) => {
   switch (action.type) {

@@ -95,8 +95,10 @@ const ProfileState = ({children}) => {
   const autoLogin = async (navigate) => {
     try {
       const [tokenArr, emailArr] = await AsyncStorage.multiGet(['token', 'email']);
-      await login(emailArr[1], tokenArr[1]);
-      navigate();
+      if (emailArr[1] && tokenArr[1]) {
+        await login(emailArr[1], tokenArr[1]);
+        navigate();
+      }
     } catch (e) {
       console.log(e)
     }

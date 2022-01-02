@@ -6,28 +6,108 @@ import MyButton from "../../components/buttons/MyButton";
 import SlideScreenHeader from "../../components/Tasks/SlideScreenHeader";
 import { ProfileContext } from "../../context/profile/ProfileContext";
 import { signup } from "../../backend/firebase";
+import ErrorMessage from "../../components/Error";
+import Message from "../../components/Message";
 
 const SignUp = ({navigation}) => {
   
   const deviceTopSpace = useSafeAreaInsets().top || 20;
   const profileCntxt = useContext(ProfileContext);
+
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [confirmedPassword, setConfirmedPassword] = useState();
 
+  const [error, setError] = useState();
+  const [emailInvalid, setEmailInvalid] = useState(false);
+  const [passwordInvalid, setPasswordInvalid] = useState(false);
+  const [confirmedPassInvalid, setConfirmedPassInvalid] = useState(false);
+
   const onSignUpHandler = () => {
     if (password === confirmedPassword) {
-      signup(email, password, (token) => {
-        if (token) {
-          console.log(token)
-          console.log(email)
-          navigation.navigate("Main");
-          profileCntxt.createUser(token, email);
-        } 
-      });
+      signup(email, password, onSuccessSignUpHandler, onSingUpErrorHandler);
     } else {
-      Alert.alert("Пароли не совпадают")
+      setError('Пароли не совпадают:Пожалуйтса, проверьти пароли и повторите попытку')
     }
+  }
+
+  const onSuccessSignUpHandler = token => {
+    if (token) {
+      profileCntxt.createUser(token, email);
+      navigation.navigate("Main");
+    } 
+  }
+
+  const onSingUpErrorHandler = error => {
+    let errorMessage = `Что-то пошло не так:Пожалуйста, проверьте все поля ввода`;
+    switch (error.code) {
+
+      case 'auth/internal-error': {
+        errorMessage = `Неверный пароль:Пожалуйста, проверьте все поля и повторите попытку`;
+        break;
+      };
+
+      case 'auth/wrong-password': {
+        errorMessage = `Неверный пароль:Пожалуйста, проверьте все поля и повторите попытку`;
+        break;
+      };
+
+      case 'auth/invalid-email': {
+        errorMessage = `Неверный email:Пожалуйста, повторите попытку`;
+        break;
+      };
+
+      case 'auth/weak-password': {
+        errorMessage = `Слишком короткий пароль:Пароль должен содержать не менее 6 символов`;
+        break;
+      };
+
+      default: {
+        break;
+      }
+    }
+    console.log(error.code)
+    setError(errorMessage)
+  }
+
+  const validateEmail = (email, setInvalid) => {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const isValid = re.test(String(email).toLowerCase())
+    if (!email) {
+      setInvalid('Заполните это поле');
+    } else if (!isValid) {
+      setInvalid('Неверный e-mail');
+    } else {
+      setInvalid(null)
+    }
+  }
+
+  const validatePassword = (password, setInvalid) => {
+    if (!password) {
+      setInvalid('Заполните это поле');
+    } else if (password.length < 6) {
+      setInvalid('Пароль должен содержать не менее 6 символов');
+    } else {
+      setInvalid(null);
+    }
+  } 
+
+  const onInputChange = (text, setText, validation, setInvalid) => {
+    setError('');
+    setText(text.toLowerCase());
+    validation(text, setInvalid);
+  }
+
+  const onEmailChangeHandler = text => {
+    onInputChange(text, setEmail, validateEmail, setEmailInvalid);
+  }
+
+  const onPasswordChangeHanlder = text => {
+    onInputChange(text, setPassword, validatePassword, setPasswordInvalid);
+  }
+
+  const onConfirmedPasswordChangeHandler = text => {
+    onInputChange(text, setConfirmedPassword, validatePassword, setConfirmedPassInvalid);
   }
 
   return (
@@ -41,24 +121,33 @@ const SignUp = ({navigation}) => {
         style={styles.scroll}
         showsVerticalScrollIndicator={false}
       >
+        {
+          error 
+          ? <ErrorMessage message={error} />
+          : <Message message="Придумайте email и пароль для своего аккаунта"/>
+        }
         <View style={styles.inputs}>
           <Input 
+            style={{marginTop: 15}}
             placeholder="Логин" 
             value={email}
-            onChangeText={text => setEmail(text.toLowerCase())}
+            onChangeText={onEmailChangeHandler}
             textContentType="emailAddress"
+            invalid={emailInvalid}
           />
           <Input 
             placeholder="Пароль" 
             value={password}
-            onChangeText={text => setPassword(text)}
+            onChangeText={onPasswordChangeHanlder}
             textContentType="newPassword"
+            invalid={passwordInvalid}
           />
           <Input 
             placeholder="Подтвердите пароль" 
             value={confirmedPassword}
-            onChangeText={text => setConfirmedPassword(text)}
+            onChangeText={onConfirmedPasswordChangeHandler}
             textContentType="newPassword"
+            invalid={confirmedPassInvalid}
           />
         </View>
         <MyButton 
@@ -83,7 +172,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     paddingHorizontal: 20,
-    paddingTop: 40,
+    paddingTop: 25,
     paddingBottom: 90,
   },
   inputs: {
