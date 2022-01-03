@@ -1,20 +1,31 @@
-import React from 'react';
-import { StyleSheet, } from 'react-native';
+import React, {useEffect, useContext} from 'react';
 import HomeScreen from '../screens/Home/HomeScreen';
 import ProfileScreen from '../screens/Profile/ProfileScreen';
 import TasksScreen from '../screens/Tasks/TasksScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
 import TabBar from '../components/TabBar';
+import { TasksContext } from '../context/tasks/TasksContext';
 
 
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
 
+  const tasksCntxt = useContext(TasksContext);
+
+  useEffect(() => {
+    tasksCntxt.onNewDayHandler(new Date());
+  });
+
+  useEffect(() => {
+    tasksCntxt.findExpiredTasks();
+    tasksCntxt.findCurrentTasks();
+    tasksCntxt.updateResult();
+  }, [tasksCntxt.state.tasks]);
+
   return (
     <Tab.Navigator 
-      initialRouteName="Home" 
+      initialRouteName="Tasks" 
       tabBar={props => <TabBar {...props} />}
     >
       <Tab.Screen 

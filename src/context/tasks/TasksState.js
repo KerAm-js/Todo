@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useReducer } from "react";
 import { 
   ADD_TASK, 
   COMPLETE_TASK, 
@@ -9,6 +9,7 @@ import {
   REMOVE_TASK, 
   SET_TASK_EXPIRED, 
   SHOW_TASK_DETAILS, 
+  SORT_BY_TIME, 
   UPDATE_RESULT, 
   UPLOAD_TASKS
 } from "./types";
@@ -20,15 +21,7 @@ const TasksState = ({children}) => {
   const initialState = {
     currentDate: new Date().toString(),
     createdTasksCount: 1,
-    tasks: [
-      {
-        id: `0_${new Date()}`,
-        title: 'Задача 1',
-        description: null,
-        isCompleted: false,
-        isExpired: false,
-      }
-    ],
+    tasks: [],
     expiredTasks: [],
     currentTasks: [],
     viewedTask: null,
@@ -50,7 +43,6 @@ const TasksState = ({children}) => {
   }
 
   const [state, dispatch] = useReducer(tasksReducer, initialState);
-
   const findExpiredTasks = () => dispatch({type: FIND_EXPIRED_TASKS});
   const findCurrentTasks = () => dispatch({type: FIND_CURRENT_TASKS});
   const updateResult = () => dispatch({type: UPDATE_RESULT});
@@ -61,7 +53,19 @@ const TasksState = ({children}) => {
     currentDate, 
     stats, 
     createdTasksCount,
-  }) => dispatch({type: UPLOAD_TASKS, taskList, result, currentDate, stats, createdTasksCount});
+  }) => {
+    taskList.forEach(task => {
+      const currentDate = new Date();
+      const taskFinish = new Date(task.finishTime);
+      if (currentDate.toLocaleDateString() !== taskFinish.toLocaleDateString()) {
+        task.isDayExpired = true;
+      }
+      if (currentDate > taskFinish) {
+        task.isExpired = true;
+      }
+    })
+    dispatch({type: UPLOAD_TASKS, taskList, result, currentDate, stats, createdTasksCount})
+  };
 
   const onNewDayHandler = date => {
     dispatch({ type: ON_NEW_DAY_HANDLER, date, });

@@ -11,6 +11,7 @@ import {
   UPDATE_RESULT,
   ON_NEW_DAY_HANDLER,
   UPLOAD_TASKS,
+  SORT_BY_TIME,
 } from "./types";
 
 export const tasksReducer = (state, action) => {
@@ -33,13 +34,60 @@ export const tasksReducer = (state, action) => {
       }
     };
     case ADD_TASK: {
+      let tasksCopy = [...state.tasks];
+      const newTask = action.task;
+
+      if (newTask.startTime) {
+        let indexOfNewTask;
+        let firstPartOfArray;
+        let secondPartOfArray;
+
+        const newTaskStart = newTask.startTime;
+        const newTaskFinish = newTask.finishTime;
+
+        let firstIndex = tasksCopy.findIndex(task => {
+          if (task.startTime?.slice(16,21) === newTaskStart.slice(16,21)) {
+            return true;
+          }
+        })
+
+        if (firstIndex !== -1) {
+
+          const tasksWithSameStart = tasksCopy.filter(task => {
+            if (task.startTime?.slice(16,21) === newTaskStart.slice(16,21)) {
+              return true;
+            }
+          });
+
+          indexOfNewTask = tasksWithSameStart.findIndex(task => {
+            return task.finishTime?.slice(16,21) >= newTaskFinish.slice(16,21)
+          });
+
+          if (indexOfNewTask === -1) {
+            indexOfNewTask = tasksWithSameStart.length;
+          }
+
+          indexOfNewTask += firstIndex;
+        } else {
+          indexOfNewTask = tasksCopy.findIndex(task => {
+            if (task.startTime?.slice(16,21) > newTaskStart.slice(16,21)) {
+              return true;
+            }
+          });
+          if (indexOfNewTask === -1) {
+            indexOfNewTask = tasksCopy.findIndex(task => !task.startTime);
+          }
+        }
+        firstPartOfArray = tasksCopy.slice(0, indexOfNewTask );
+        secondPartOfArray = tasksCopy.slice(indexOfNewTask);
+        tasksCopy = [...firstPartOfArray, newTask, ...secondPartOfArray];
+      } else {
+        tasksCopy.push(newTask);
+      };
       return {
         ...state,
         createdTasksCount: state.createdTasksCount + 1,
-        tasks: [
-          ...state.tasks,
-          action.task,
-        ],
+        tasks: tasksCopy,
       }
     };
     case REMOVE_TASK: {
@@ -79,7 +127,7 @@ export const tasksReducer = (state, action) => {
       }
     };
     case FIND_EXPIRED_TASKS: {
-      if (state.tasks.length > 0) {
+      if (!state.tasks.length) {
         let result = [];
         state.tasks.forEach(task => {
           if ((task?.isExpired || task?.isDayExpired) && !task.isCompleted) {
@@ -98,14 +146,14 @@ export const tasksReducer = (state, action) => {
       }
     };
     case FIND_CURRENT_TASKS: {
-      if (state.tasks.length > 0) {
+      if (!state.tasks.length) {
         let result = [];
         const currentTime = new Date();
 
         state.tasks.forEach(task => {
           const startTime = new Date(task?.startTime);
           const finishTime = new Date(task?.finishTime);
-          if (startTime <= currentTime && finishTime > currentTime && !task?.isExpired) {
+          if (startTime <= currentTime && finishTime > currentTime && !task?.isExpired && !task?.isDayExpired) {
             result.push(task);
           }
         })
@@ -118,11 +166,10 @@ export const tasksReducer = (state, action) => {
           ...state,
           currentTasks: result
         }
-      } else {
-        return {
-          ...state,
-          currentTasks: [],
-        }
+      }
+      return {
+        ...state,
+        currentTasks: [],
       }
     };
     case SET_TASK_EXPIRED: {
@@ -159,7 +206,7 @@ export const tasksReducer = (state, action) => {
     };
     case ON_NEW_DAY_HANDLER: {
       if (action.date.toLocaleDateString() === new Date(state.currentDate).toLocaleDateString()) {
-        null
+        return state;
       } else {
         //stats updating
         const tasksCount = state.stats.tasksCount + state.createdTasksCount;

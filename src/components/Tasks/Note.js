@@ -4,7 +4,6 @@ import { colors } from "../../constants/colors";
 import { textStyles } from "../../constants/textStyles";
 
 const Note = ({text, updateNote, removeNote,}) => {
-
   const onRemoveNote = () => {
     Alert.alert(
       "Удаление заметки",

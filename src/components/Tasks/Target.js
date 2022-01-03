@@ -5,7 +5,7 @@ import { shadow } from "../../constants/shadows";
 import { textStyles } from "../../constants/textStyles";
 
 
-const Target = ({target, complete, showDetails}) => {
+const Target = ({target, complete, showDetails, style}) => {
 
   const months = [
     "Января",
@@ -47,7 +47,7 @@ const Target = ({target, complete, showDetails}) => {
 
   return (
     <TouchableOpacity 
-      style={{...styles.container, ...shadow}}
+      style={{...styles.container, ...shadow, ...style}}
       onLongPress={showDetails}
       activeOpacity={0.5}
     >

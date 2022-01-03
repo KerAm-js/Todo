@@ -43,8 +43,8 @@ const Main = ({navigation}) => {
         {
           text: "Выйти",
           onPress: () => {
-            signout(() => navigation.navigate('SignIn'));
             profileCntxt.logout();
+            signout(() => navigation.navigate('SignIn'));
           },
           style: "destructive",
         }
@@ -75,9 +75,7 @@ const Main = ({navigation}) => {
       targetsCntxt.uploadTargets,
       notesCntxt.uploadNotes,
     );
-  }
-
-  useEffect(() => profileCntxt.autoLogin(() => navigation.navigate("SignIn")), []);
+  };
 
   return (
     <View style={{...styles.container, paddingTop: deviceTopSpace + 35}}>

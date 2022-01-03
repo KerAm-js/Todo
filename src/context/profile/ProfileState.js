@@ -118,7 +118,7 @@ const ProfileState = ({children}) => {
       const [tokenArr, emailArr] = await AsyncStorage.multiGet(['token', 'email']);
       if (emailArr[1] && tokenArr[1]) {
         await login(emailArr[1], tokenArr[1]);
-      }
+      } 
     } catch (e) {
       console.log(e);
       onAuthErrorHanlder();

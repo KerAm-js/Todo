@@ -1,5 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
-import { View, ScrollView, StyleSheet, StatusBar, Platform } from "react-native";
+import React, { useContext, useEffect } from "react";
+import { View, ScrollView, StyleSheet, StatusBar, Platform, Modal } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 import HomeSlider from "../../components/Home/HomeSlider";
 import HomeToday from "../../components/Home/HomeToday";
 import HomeCurrentTask from "../../components/Home/HomeCurrentTask";
@@ -10,7 +12,7 @@ import TabScreenHeader from "../../components/headers/TabScreenHeader";
 import HomeExpiredTasks from "../../components/Home/HomeExpiredTasks";
 import { TasksContext } from "../../context/tasks/TasksContext";
 import { ProfileContext } from '../../context/profile/ProfileContext';
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Loader from "../../components/Loader";
 
 
 const Main = ({slides, navigation}) => {
@@ -18,16 +20,6 @@ const Main = ({slides, navigation}) => {
   const tasksCntxt = useContext(TasksContext);
   const profileCntxt = useContext(ProfileContext);
   const deviceTopSpace = useSafeAreaInsets().top || 20;
-
-  useEffect(() => {
-    tasksCntxt.onNewDayHandler(new Date());
-  });
-
-  useEffect(() => {
-    tasksCntxt.findExpiredTasks();
-    tasksCntxt.findCurrentTasks();
-    tasksCntxt.updateResult();
-  }, [tasksCntxt.state.tasks])
 
   return (
     <View style={{...styles.container}}>
@@ -76,6 +68,13 @@ const Main = ({slides, navigation}) => {
           <HomeResults result={tasksCntxt.state.result} />
         </View>
       </ScrollView>
+      <Modal
+        animationType="fade"
+        visible={profileCntxt.state.isLoading} 
+        transparent={true} 
+      >
+        <Loader />
+      </Modal>
     </View>
   )
 }

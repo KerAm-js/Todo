@@ -9,8 +9,7 @@ const TimePicker = ({type, time, setTime, minimumDate, mode}) => {
   const [show, setShow] = useState();
 
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || time;
-    setTime(currentDate);
+    setTime(selectedDate);
     setShow(Platform === 'ios');
   };
 

@@ -4,7 +4,7 @@ import { colors } from "../../constants/colors";
 import { shadow } from "../../constants/shadows";
 import { textStyles } from "../../constants/textStyles";
 
-const Task = ({task, showDetails, complete}) => {
+const Task = ({task, showDetails, complete, style}) => {
   let startTimeString = 'Не указано';
   let finishTimeString = 'Не указано';
 
@@ -41,7 +41,7 @@ const Task = ({task, showDetails, complete}) => {
 
   return (
     <TouchableOpacity 
-      style={{...styles.container, ...shadow}}
+      style={{...styles.container, ...shadow, ...style}}
       onLongPress={showDetails}
       activeOpacity={0.5}
     >

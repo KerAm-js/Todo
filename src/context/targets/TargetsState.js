@@ -1,5 +1,13 @@
 import React, { useReducer } from "react";
-import { ADD_TARGET, COMPLETE_TARGET, EDIT_TARGET, REMOVE_TARGET, SET_TARGET_EXPIRED, SHOW_TARGET_DETAILS, UPLOAD_TARGETS } from "./types";
+import { 
+  ADD_TARGET, 
+  COMPLETE_TARGET, 
+  EDIT_TARGET, 
+  REMOVE_TARGET, 
+  SET_TARGET_EXPIRED, 
+  SHOW_TARGET_DETAILS, 
+  UPLOAD_TARGETS 
+} from "./types";
 import { TargetsContext } from "./TargetsContext";
 import { targetsReducer } from "./TargetsReducer";
 
@@ -21,7 +29,17 @@ const TargetsState = ({children}) => {
 
   const [state, dispatch] = useReducer(targetsReducer, initialState);
 
-  const uploadTargets = targets => dispatch({type: UPLOAD_TARGETS, targets});
+  const uploadTargets = targets => {
+    targets.forEach(target => {
+      const currentDate = new Date();
+      const deadline = new Date(target.finishTime);
+      deadline.setDate(deadline.getDate() + 1);
+      if (currentDate > deadline) {
+        target.isExpired = true;
+      };
+    })
+    dispatch({type: UPLOAD_TARGETS, targets})
+  };
 
   const addTarget = target => {
     dispatch({type: ADD_TARGET, target});

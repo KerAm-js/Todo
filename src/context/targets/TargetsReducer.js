@@ -17,13 +17,38 @@ export const targetsReducer = (state, action) => {
       }
     };
     case ADD_TARGET: {
+      let targetsCopy = [...state.targets];
+      const newTarget = action.target;
+
+      if (newTarget.finishTime) {
+        let indexOfNewTarget;
+        let firstPartOfArray;
+        let secondPartOfArray;
+
+        let targetsWithFinish = targetsCopy.filter(target => target.finishTime);
+
+        if (targetsWithFinish.length > 0) {
+          indexOfNewTarget = targetsCopy.findIndex(target => (
+            new Date(target.finishTime) >= new Date(newTarget.finishTime)
+          ))
+          if (indexOfNewTarget === -1) {
+            indexOfNewTarget = targetsWithFinish.length;
+          }
+
+          firstPartOfArray = targetsCopy.slice(0, indexOfNewTarget );
+          secondPartOfArray = targetsCopy.slice(indexOfNewTarget);
+          targetsCopy = [...firstPartOfArray, newTarget, ...secondPartOfArray];
+        } else {
+          targetsCopy.unshift(newTarget);
+        }
+      } else {
+        targetsCopy.push(newTarget);
+      }
+
       return {
         ...state,
-        targets: [
-          ...state.targets,
-          action.target,
-        ]
-      }
+        targets: targetsCopy,
+      };
     };
     case EDIT_TARGET: {
       const editedTarget = {id: action.id, ...action.targetData};

@@ -42,10 +42,10 @@ const TaskForm = ({
     name === 'task' 
       ? task?.finishTime 
         ? new Date(task?.finishTime)
-        : new Date() 
+        : startTime
       : target?.finishTime 
         ? new Date(target?.finishTime)
-        : new Date() 
+        : startTime 
   );
 
   const [isTimeAdded, setIsTimeAdded] = useState(
@@ -114,6 +114,11 @@ const TaskForm = ({
     }
   }
 
+  const onEditStartTimeHandler = time => {
+    setStartTime(time);
+    time > finishTime ? setFinishTime(time) : null;
+  }
+
   let btnText = type === 'add' ? 'Добавить' : 'Сохранить';
   let formTitle = type === 'add' ? 'Новая задача' : 'Редактирование';
   if (name === 'target' && type === 'add') {
@@ -152,7 +157,7 @@ const TaskForm = ({
                     <TimePicker 
                       type="start"
                       time={startTime}
-                      setTime={setStartTime}
+                      setTime={onEditStartTimeHandler}
                       minimumDate={type === 'add' ? new Date() : null}
                     />
                     <TimePicker 
@@ -167,7 +172,7 @@ const TaskForm = ({
                       type="finish"
                       time={finishTime}
                       setTime={setFinishTime}
-                      minimumDate={type === 'add' ? new Date() : null}
+                      minimumDate={new Date()}
                       mode={"date"}
                     />
                   </>

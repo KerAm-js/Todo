@@ -10,3 +10,4 @@ export const SHOW_TASK_DETAILS = "SHOW-TASK-DETAILS";
 export const UPDATE_RESULT = "UPDATE-RESULT";
 export const ON_NEW_DAY_HANDLER = "ON-NEW-DAY-HANDLER";
 export const UPLOAD_TASKS = "UPLOAD_TASKS";
+export const SORT_BY_TIME = "SORT-BY-TIME";

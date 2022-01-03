@@ -8,9 +8,10 @@ import { ProfileContext } from '../../context/profile/ProfileContext';
 const Stack = createStackNavigator();
 
 const ProfileScreen = () => {
-  
+  const profileCntxt = useContext(ProfileContext);
+
   return (
-    <Stack.Navigator initialRouteName={"Main"}>
+    <Stack.Navigator initialRouteName={profileCntxt.state.token ? "Main" : "SignIn"}>
       <Stack.Group
         screenOptions={{
           title: "",
@@ -19,6 +20,9 @@ const ProfileScreen = () => {
       >
         <Stack.Screen 
           name="Main"
+          options={{
+            gestureEnabled: false
+          }}
         >
           {
             props => <Main {...props} />
@@ -26,6 +30,9 @@ const ProfileScreen = () => {
         </Stack.Screen>
         <Stack.Screen 
           name="SignIn"
+          options={{
+            gestureEnabled: false
+          }}
         >
           {
             props => <SignIn {...props} />
@@ -38,9 +45,6 @@ const ProfileScreen = () => {
             props => <SignUp {...props} />
           }
         </Stack.Screen>
-        {
-
-        }
       </Stack.Group>
     </Stack.Navigator>
   )

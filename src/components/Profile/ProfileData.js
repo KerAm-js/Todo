@@ -39,10 +39,10 @@ const ProfileData = ({user}) => {
                   : null
           }
         </View>
-        <Image 
+        {/* <Image 
           style={styles.avatar}
           source={require('../../images/alina-rubo-myU5tdqiX6g-unsplash.jpg')}
-        />
+        /> */}
       </View>
       <Text style={styles.subtitle}>Род деятельности</Text>
       {

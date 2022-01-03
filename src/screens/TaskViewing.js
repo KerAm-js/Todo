@@ -11,8 +11,6 @@ import { TasksContext } from "../context/tasks/TasksContext";
 
 const TaskViewing = ({navigation}) => {
 
-  console.log(navigation);
-
   const deviceTopSpace = useSafeAreaInsets().top || 20;
   const [editModalVisible, setEditModalVisible] = useState(false);
   const tasksCntxt = useContext(TasksContext);

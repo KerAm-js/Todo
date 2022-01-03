@@ -12,11 +12,14 @@ import AddButton from "../../components/buttons/AddButton";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { textStyles } from "../../constants/textStyles";
 import { colors } from "../../constants/colors";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 
 const Main = ({ navigation, route }) => {
 
   const deviceTopSpace = useSafeAreaInsets().top || 20;
+  const tabBarHeight = useBottomTabBarHeight();
+
   const targetContext = useContext(TargetsContext);
   const targets = targetContext.state.targets;
 
@@ -75,7 +78,7 @@ const Main = ({ navigation, route }) => {
         {
           !!showedContent.length
             ? <FlatList 
-                style={styles.list}
+                contentContainerStyle={{...styles.list, paddingBottom: tabBarHeight}}
                 showsVerticalScrollIndicator={false}
                 data={showedContent}
                 keyExtractor={item => item.id}
@@ -164,7 +167,6 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   list: {
-    borderRadius: 25,
     paddingTop: 25,
     paddingHorizontal: 20,
   },
