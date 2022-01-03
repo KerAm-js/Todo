@@ -4,11 +4,18 @@ import {
   EDIT_TARGET, 
   REMOVE_TARGET, 
   SET_TARGET_EXPIRED, 
-  SHOW_TARGET_DETAILS 
+  SHOW_TARGET_DETAILS, 
+  UPLOAD_TARGETS
 } from "./types";
 
 export const targetsReducer = (state, action) => {
   switch (action.type) {
+    case UPLOAD_TARGETS: {
+      return {
+        targets: [...action.targets],
+        viewedTarget: null,
+      }
+    };
     case ADD_TARGET: {
       return {
         ...state,

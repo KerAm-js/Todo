@@ -4,13 +4,13 @@ import {
   COMPLETE_TASK, 
   EDIT_TASK, 
   FIND_CURRENT_TASKS, 
-  FIND_EXPIRED_TASKS, 
-  INIT_TASKS, 
+  FIND_EXPIRED_TASKS,  
   ON_NEW_DAY_HANDLER, 
   REMOVE_TASK, 
   SET_TASK_EXPIRED, 
   SHOW_TASK_DETAILS, 
-  UPDATE_RESULT 
+  UPDATE_RESULT, 
+  UPLOAD_TASKS
 } from "./types";
 import { TasksContext } from "./TasksContext";
 import { tasksReducer } from "./TasksReducer";
@@ -55,8 +55,16 @@ const TasksState = ({children}) => {
   const findCurrentTasks = () => dispatch({type: FIND_CURRENT_TASKS});
   const updateResult = () => dispatch({type: UPDATE_RESULT});
 
+  const uploadTasks = ({
+    taskList, 
+    result, 
+    currentDate, 
+    stats, 
+    createdTasksCount,
+  }) => dispatch({type: UPLOAD_TASKS, taskList, result, currentDate, stats, createdTasksCount});
+
   const onNewDayHandler = date => {
-    dispatch({ type: ON_NEW_DAY_HANDLER, date, })
+    dispatch({ type: ON_NEW_DAY_HANDLER, date, });
   }
   
   const showTaskDetails = (id, navigation) => {
@@ -106,6 +114,7 @@ const TasksState = ({children}) => {
       showTaskDetails,
       updateResult,
       onNewDayHandler,
+      uploadTasks,
     }}>
       {children}
     </TasksContext.Provider>

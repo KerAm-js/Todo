@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, ScrollView, Alert } from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import MyButton from "../buttons/MyButton";
 import Input from "../Input";
@@ -14,8 +14,8 @@ const EditForm = ({ close, userData, editProfile }) => {
   const [location, setLocation] = useState(userData ? userData.location : '');
   const [job, setJob] = useState(userData ? userData.job : '');
 
-  const onEditHandler = () => {
-    editProfile({
+  const onEditHandler = async () => {
+    await editProfile({
       ...userData,
       name, 
       surname, 

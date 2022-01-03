@@ -2,10 +2,17 @@ import {
   ADD_NOTE,
   REMOVE_NOTE,
   UPDATE_NOTE,
+  UPLOAD_NOTES,
 } from "./types";
 
 export const notesReducer = (state, action) => {
   switch (action.type) {
+    case UPLOAD_NOTES: {
+      return {
+        ...state,
+        notes: [...action.notes]
+      }
+    };
     case ADD_NOTE: {
       return {
         ...state,

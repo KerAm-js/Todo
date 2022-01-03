@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Alert, Modal, ScrollView, StyleSheet, View } from "react-native";
+import { Alert, Modal, ScrollView, StyleSheet, Text, View } from "react-native";
 import MyButton from "../../components/buttons/MyButton";
 import Heading from "../../components/Profile/Heading";
 import ProfileData from "../../components/Profile/ProfileData";
@@ -17,9 +17,9 @@ const Main = ({navigation}) => {
 
   const deviceTopSpace = useSafeAreaInsets().top || 20;
   const profileCntxt = useContext(ProfileContext);
-  const targets = useContext(TargetsContext).state.targets;
-  const tasks = useContext(TasksContext).state;
-  const notes = useContext(NotesContext).state.notes;
+  const targetsCntxt = useContext(TargetsContext);
+  const tasksCntxt = useContext(TasksContext);
+  const notesCntxt = useContext(NotesContext);
   const [editModalVisible, setEditModalVisible] = useState(false);
   
   const closeEditModal = () => {
@@ -54,18 +54,27 @@ const Main = ({navigation}) => {
 
   const onSaveDataHandler = () => {
     const id = profileCntxt.state.userData.id;
+
     const tasksData = {
-      taskList: tasks.tasks,
-      createdTasksCount: tasks.createdTasksCount,
-      stats: tasks.stats,
-      result: tasks.result,
+      taskList: tasksCntxt.state.tasks,
+      createdTasksCount: tasksCntxt.state.createdTasksCount,
+      stats: tasksCntxt.state.stats,
+      result: tasksCntxt.state.result,
+      currentDate: tasksCntxt.state.currentDate,
     }
+    const targets = targetsCntxt.state.targets;
+    const notes = notesCntxt.state.notes;
     profileCntxt.sendToServer(id, notes, targets, tasksData);
   }
 
   const onUploadDataFromServer = () => {
     const id = profileCntxt.state.userData.id;
-    profileCntxt.uploadFromServer(id);
+    profileCntxt.uploadFromServer(
+      id,
+      tasksCntxt.uploadTasks,
+      targetsCntxt.uploadTargets,
+      notesCntxt.uploadNotes,
+    );
   }
 
   useEffect(() => profileCntxt.autoLogin(() => navigation.navigate("SignIn")), []);
@@ -80,7 +89,7 @@ const Main = ({navigation}) => {
         <ProfileData 
           user={profileCntxt.state.userData}
         />
-        <MyButton 
+       <MyButton 
           type="submit"
           title="Сохранить копию"
           onPress={onSaveDataHandler}

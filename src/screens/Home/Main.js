@@ -9,23 +9,25 @@ import HomeTasksCount from "../../components/Home/HomeTasksCount";
 import TabScreenHeader from "../../components/headers/TabScreenHeader";
 import HomeExpiredTasks from "../../components/Home/HomeExpiredTasks";
 import { TasksContext } from "../../context/tasks/TasksContext";
+import { ProfileContext } from '../../context/profile/ProfileContext';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 
 const Main = ({slides, navigation}) => {
 
-  const logic = useContext(TasksContext);
+  const tasksCntxt = useContext(TasksContext);
+  const profileCntxt = useContext(ProfileContext);
   const deviceTopSpace = useSafeAreaInsets().top || 20;
 
   useEffect(() => {
-    logic.onNewDayHandler(new Date());
+    tasksCntxt.onNewDayHandler(new Date());
   });
 
   useEffect(() => {
-    logic.findExpiredTasks();
-    logic.findCurrentTasks();
-    logic.updateResult();
-  }, [logic.state.tasks])
+    tasksCntxt.findExpiredTasks();
+    tasksCntxt.findCurrentTasks();
+    tasksCntxt.updateResult();
+  }, [tasksCntxt.state.tasks])
 
   return (
     <View style={{...styles.container}}>
@@ -38,6 +40,7 @@ const Main = ({slides, navigation}) => {
       />
       <HomeGreeting 
         paddingTop={deviceTopSpace + 25 + 10}
+        username={profileCntxt.state.userData.name}
       />
       <ScrollView 
         style={{...styles.scroll, paddingTop: Platform.OS === 'ios' ? deviceTopSpace + 35 + 50 + 60 : deviceTopSpace + 35 + 50 + 30}}
@@ -51,26 +54,26 @@ const Main = ({slides, navigation}) => {
           />
           <HomeToday />
           <HomeTasksCount 
-            count={logic.state.tasks.length} 
+            count={tasksCntxt.state.tasks.length} 
             navigation={navigation}
           />
           {
-            logic.state.expiredTasks?.length > 0
+            tasksCntxt.state.expiredTasks?.length > 0
               ? <HomeExpiredTasks 
-                  expiredTasks={logic.state.expiredTasks} 
-                  completeTask={logic.completeTask} 
-                  showTaskDetails={logic.showTaskDetails}
+                  expiredTasks={tasksCntxt.state.expiredTasks} 
+                  completeTask={tasksCntxt.completeTask} 
+                  showTaskDetails={tasksCntxt.showTaskDetails}
                   navigation={navigation}
                 />
               : null
           }
           <HomeCurrentTask 
-            currentTasks={logic.state.currentTasks} 
-            completeTask={logic.completeTask} 
-            showTaskDetails={logic.showTaskDetails}
+            currentTasks={tasksCntxt.state.currentTasks} 
+            completeTask={tasksCntxt.completeTask} 
+            showTaskDetails={tasksCntxt.showTaskDetails}
             navigation={navigation}
           />
-          <HomeResults result={logic.state.result} />
+          <HomeResults result={tasksCntxt.state.result} />
         </View>
       </ScrollView>
     </View>

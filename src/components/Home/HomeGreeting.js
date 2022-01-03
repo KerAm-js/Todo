@@ -3,12 +3,17 @@ import { StyleSheet, Text, View } from "react-native";
 import { colors } from "../../constants/colors";
 import { textStyles } from "../../constants/textStyles";
 
-const HomeGreeting = ({paddingTop}) => {
-  
+const HomeGreeting = ({paddingTop, username}) => {
   return (
     <View style={{...styles.container, paddingTop: paddingTop + 10,}}>
-      <Text style={styles.username}>Амир,</Text>
-      <Text style={styles.greeting}>добро пожаловать!</Text>
+      {
+        username
+        ? <>
+            <Text style={styles.username}>Амир,</Text>
+            <Text style={styles.greeting}>добро пожаловать!</Text>
+          </>
+        : <Text style={styles.greeting}>{`Планируйте свой день\nи повышайте продуктивность`}</Text>
+      }
     </View>
   )
 }

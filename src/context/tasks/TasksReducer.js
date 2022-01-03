@@ -10,10 +10,23 @@ import {
   SET_TASK_EXPIRED, 
   UPDATE_RESULT,
   ON_NEW_DAY_HANDLER,
+  UPLOAD_TASKS,
 } from "./types";
 
 export const tasksReducer = (state, action) => {
   switch (action.type) {
+    case UPLOAD_TASKS: {
+      return {
+        currentDate: action.currentDate,
+        createdTasksCount: action.currentDate,
+        tasks: [...action.taskList],
+        expiredTasks: [],
+        currentTasks: [],
+        viewedTask: null,
+        stats: {...action.stats},
+        result: {...action.result},
+      }
+    };
     case INIT_TASKS : {
       return {
         ...action.state
@@ -172,7 +185,7 @@ export const tasksReducer = (state, action) => {
 
         return {
           ...state,
-          currentDate: new Date(),
+          currentDate: new Date().toString(),
           createdTasksCount: tasks.length,
           tasks,
           stats,

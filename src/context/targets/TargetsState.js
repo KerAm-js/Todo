@@ -1,5 +1,5 @@
 import React, { useReducer } from "react";
-import { ADD_TARGET, COMPLETE_TARGET, EDIT_TARGET, REMOVE_TARGET, SET_TARGET_EXPIRED, SHOW_TARGET_DETAILS } from "./types";
+import { ADD_TARGET, COMPLETE_TARGET, EDIT_TARGET, REMOVE_TARGET, SET_TARGET_EXPIRED, SHOW_TARGET_DETAILS, UPLOAD_TARGETS } from "./types";
 import { TargetsContext } from "./TargetsContext";
 import { targetsReducer } from "./TargetsReducer";
 
@@ -20,6 +20,8 @@ const TargetsState = ({children}) => {
   }
 
   const [state, dispatch] = useReducer(targetsReducer, initialState);
+
+  const uploadTargets = targets => dispatch({type: UPLOAD_TARGETS, targets});
 
   const addTarget = target => {
     dispatch({type: ADD_TARGET, target});
@@ -63,6 +65,7 @@ const TargetsState = ({children}) => {
       completeTarget,
       showTargetDetails,
       setTargetExpired,
+      uploadTargets,
     }}>
       {children}
     </TargetsContext.Provider>

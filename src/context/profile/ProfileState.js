@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ProfileContext } from "./ProfileContext";
 import { profileReducer } from "./profileReducer";
 import { CREATE_USER, LOG_IN, LOG_OUT, EDIT_USER_DATA, SHOW_LOADER, HIDE_LOADER } from "./types";
+import { Alert } from "react-native";
 
 const ProfileState = ({children}) => {
   const initialState = {
@@ -34,10 +35,10 @@ const ProfileState = ({children}) => {
         })
       })
       const data = await response.json();
-      console.log(data);
       dispatch({type: EDIT_USER_DATA, userData,})
     } catch (e) {
       console.log(e);
+      Alert.alert("Что-то пошло не так");
     }
     hideLoader();
   }
@@ -65,6 +66,7 @@ const ProfileState = ({children}) => {
       }
     } catch (e) {
       console.log(e);
+      Alert.alert("Что-то пошло не так");
     }
     hideLoader();
   }
@@ -93,6 +95,7 @@ const ProfileState = ({children}) => {
       }
     } catch (e) {
       console.log(e);
+      Alert.alert("Что-то пошло не так");
     }
     hideLoader();
   }
@@ -104,6 +107,7 @@ const ProfileState = ({children}) => {
       dispatch({type: LOG_OUT});
     } catch (e) {
       console.log(e);
+      Alert.alert("Что-то пошло не так");
     }
     hideLoader();
   }
@@ -136,24 +140,29 @@ const ProfileState = ({children}) => {
       })
       const result = await response.json();
       console.log(result);
+      Alert.alert("Данные успешно сохранены");
     } catch (e) {
       console.log(e);
+      Alert.alert("Что-то пошло не так");
     }
     hideLoader();
   }
 
-  const uploadFromServer = async id => {
+  const uploadFromServer = async (id, uploadTasks, uploadTargets, uploadNotes) => {
     showLoader();
     try {
       const response = await fetch(`https://productive-plus-default-rtdb.europe-west1.firebasedatabase.app/users/${id}.json`, {
         method: "GET",
         headers: {'Content-type':'application/json'},
       })
-      const result = await response.json();
-      console.log('======================');
-      console.log(result);
+      const data = await response.json();
+      uploadTasks(data.tasksData);
+      uploadTargets(data.targets);
+      uploadNotes(data.notes);
+      Alert.alert("Ваша последняя копия успешно загружена");
     } catch (e) {
       console.log(e);
+      Alert.alert("Что-то пошло не так");
     }
     hideLoader();
   }
