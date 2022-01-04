@@ -1,4 +1,5 @@
 import React, { useReducer } from "react";
+
 import { 
   ADD_TASK, 
   COMPLETE_TASK, 
@@ -9,13 +10,13 @@ import {
   REMOVE_TASK, 
   SET_TASK_EXPIRED, 
   SHOW_TASK_DETAILS, 
-  SORT_BY_TIME, 
+  TO_START_TASK, 
   UPDATE_RESULT, 
   UPLOAD_TASKS
 } from "./types";
 import { TasksContext } from "./TasksContext";
 import { tasksReducer } from "./TasksReducer";
-
+import { presentNotification, setNotification } from "../../native/notifications"; 
 
 const TasksState = ({children}) => {
   const initialState = {
@@ -80,19 +81,39 @@ const TasksState = ({children}) => {
     dispatch({type: COMPLETE_TASK, id});
   };
   
-  const setTaskExpired = (id, start, end) => {
+  const setTaskExpired = (id, start, end, callBack = () => {}) => {
     const startTime = new Date(start);
     const finishTime = new Date(end);
     if (startTime && finishTime && new Date() < finishTime) {
       setTimeout(() => {
-        dispatch({type: SET_TASK_EXPIRED, id});;
+        dispatch({type: SET_TASK_EXPIRED, id, callBack});
       }, finishTime - new Date());
     }
   };
 
+  const setStartedTaskNotification = task => {
+    const start = new Date(task.startTime);
+    const currentDate = new Date();
+    const notificationTime = start - currentDate;
+    setTimeout(() => {
+      dispatch({type: TO_START_TASK, id: task.id, callBack: () => {
+        presentNotification(
+          "Пора приступать к задаче", 
+          `"${task.title}"`, 
+        );
+      }})
+    }, notificationTime)
+  }
+
   const addTask = task => {
-    dispatch({type: ADD_TASK, task});
-    setTaskExpired(task.id, task.startTime, task.finishTime);
+    setStartedTaskNotification(task);
+    dispatch({type: ADD_TASK, task, });
+    setTaskExpired(task.id, task.startTime, task.finishTime, () => {
+      presentNotification(
+        "Задача просрочена",
+        `"${task.title}"`,
+      );
+    });
   };
 
   const removeTask = id => {

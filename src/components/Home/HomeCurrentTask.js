@@ -7,7 +7,10 @@ import Task from "../Tasks/Task";
 import { textStyles } from "../../constants/textStyles";
 
 const HomeCurrentTask = ({currentTasks, completeTask, showTaskDetails, navigation}) => {
-  const title = currentTasks.length === 1 ? 'Текущая задача' : 'Текущие задачи';
+  const title = currentTasks.length === 1 || currentTasks.length === 0 
+    ? 'Текущая задача' 
+    : 'Текущие задачи';
+    
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>

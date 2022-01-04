@@ -11,7 +11,7 @@ import {
   UPDATE_RESULT,
   ON_NEW_DAY_HANDLER,
   UPLOAD_TASKS,
-  SORT_BY_TIME,
+  TO_START_TASK,
 } from "./types";
 
 export const tasksReducer = (state, action) => {
@@ -33,6 +33,12 @@ export const tasksReducer = (state, action) => {
         ...action.state
       }
     };
+    case TO_START_TASK: {
+      if (state.tasks.find(task => task.id === action.id)) {
+        action.callBack();
+      };
+      return state;
+    }
     case ADD_TASK: {
       let tasksCopy = [...state.tasks];
       const newTask = action.task;
@@ -174,11 +180,16 @@ export const tasksReducer = (state, action) => {
     };
     case SET_TASK_EXPIRED: {
       const tasksCopy = [...state.tasks];
-      tasksCopy.find(task => task.id === action.id).isExpired = true;
-      return {
-        ...state,
-        tasks: tasksCopy,
-      };
+      const task = tasksCopy.find(task => task.id === action.id);
+      if (task) {
+        task.isExpired = true;
+        action.callBack();
+        return {
+          ...state,
+          tasks: tasksCopy,
+        };
+      }
+      return state;
     };
     case SHOW_TASK_DETAILS: {
       return {
