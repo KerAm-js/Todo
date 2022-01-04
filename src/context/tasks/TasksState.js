@@ -1,11 +1,11 @@
 import React, { useReducer } from "react";
-
 import { 
   ADD_TASK, 
   COMPLETE_TASK, 
   EDIT_TASK, 
   FIND_CURRENT_TASKS, 
   FIND_EXPIRED_TASKS,  
+  GET_TASKS_FROM_LOCAL_DB,  
   ON_NEW_DAY_HANDLER, 
   REMOVE_TASK, 
   SET_TASK_EXPIRED, 
@@ -17,12 +17,24 @@ import {
 import { TasksContext } from "./TasksContext";
 import { tasksReducer } from "./TasksReducer";
 import { presentNotification, setNotification } from "../../native/notifications"; 
+import { DB } from "../../backend/db";
 
 const TasksState = ({children}) => {
   const initialState = {
     currentDate: new Date().toString(),
     createdTasksCount: 1,
-    tasks: [],
+    tasks: [
+      {
+        id: new Date().toString(),
+        title: 'Task 1',
+        description: '',
+        startTime: null,
+        finishTime: null,
+        isCompleted: false,
+        isExpired: false,
+        isDayExpiredL: false,
+      }
+    ],
     expiredTasks: [],
     currentTasks: [],
     viewedTask: null,
@@ -47,6 +59,13 @@ const TasksState = ({children}) => {
   const findExpiredTasks = () => dispatch({type: FIND_EXPIRED_TASKS});
   const findCurrentTasks = () => dispatch({type: FIND_CURRENT_TASKS});
   const updateResult = () => dispatch({type: UPDATE_RESULT});
+
+  const getTasksFromLocalDB = async () => {
+    const result = await DB.getTasks();
+    const tasks = await result;
+    console.log(tasks);
+    dispatch({type: GET_TASKS_FROM_LOCAL_DB, tasks});
+  }
 
   const uploadTasks = ({
     taskList, 
@@ -105,9 +124,11 @@ const TasksState = ({children}) => {
     }, notificationTime)
   }
 
-  const addTask = task => {
+  const addTask = async task => {
+    const result = await DB.addTask(task);
+    const id = await result;
+    dispatch({type: ADD_TASK, task: {...task, id}});
     setStartedTaskNotification(task);
-    dispatch({type: ADD_TASK, task, });
     setTaskExpired(task.id, task.startTime, task.finishTime, () => {
       presentNotification(
         "Задача просрочена",
@@ -140,6 +161,7 @@ const TasksState = ({children}) => {
       updateResult,
       onNewDayHandler,
       uploadTasks,
+      getTasksFromLocalDB,
     }}>
       {children}
     </TasksContext.Provider>

@@ -12,8 +12,12 @@ const Stack = createStackNavigator();
 export default function RootNavigator() {
 
   const profileCntxt = useContext(ProfileContext);
+  const tasksCntxt = useContext(TasksContext);
 
-  useEffect(profileCntxt.autoLogin, []);
+  useEffect(() => {
+    profileCntxt.autoLogin();
+    tasksCntxt.getTasksFromLocalDB();
+  }, []);
   
   return (
     <NavigationContainer>

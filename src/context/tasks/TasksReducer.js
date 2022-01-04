@@ -12,10 +12,17 @@ import {
   ON_NEW_DAY_HANDLER,
   UPLOAD_TASKS,
   TO_START_TASK,
+  GET_TASKS_FROM_LOCAL_DB,
 } from "./types";
 
 export const tasksReducer = (state, action) => {
   switch (action.type) {
+    case GET_TASKS_FROM_LOCAL_DB: {
+      return {
+        ...state,
+        tasks: action.tasks,
+      }
+    };
     case UPLOAD_TASKS: {
       return {
         currentDate: action.currentDate,
