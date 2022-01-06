@@ -1,5 +1,5 @@
-import React, { useEffect, useReducer } from "react";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useReducer } from "react";
+import AsyncStorageLib from "@react-native-async-storage/async-storage";
 import { ProfileContext } from "./ProfileContext";
 import { profileReducer } from "./profileReducer";
 import { CREATE_USER, LOG_IN, LOG_OUT, EDIT_USER_DATA, SHOW_LOADER, HIDE_LOADER } from "./types";
@@ -58,7 +58,7 @@ const ProfileState = ({children}) => {
       })
       const data = await response.json();
       if (token) {
-        AsyncStorage.multiSet([['token', token], ['email', email]]);
+        await AsyncStorageLib.multiSet([['token', token], ['email', email]]);
         dispatch({type: CREATE_USER, id: data.name, token, email,});
         editProfile({
           id: data.name,
@@ -90,7 +90,7 @@ const ProfileState = ({children}) => {
       });
       const userData = await res.json();
       if (token) {
-        AsyncStorage.multiSet([['token', token], ['email', email]]);
+        await AsyncStorageLib.multiSet([['token', token], ['email', email]]);
         dispatch({type: LOG_IN, token, userData})
       }
     } catch (e) {
@@ -103,7 +103,7 @@ const ProfileState = ({children}) => {
   const logout = async () => {
     showLoader();
     try {
-      await AsyncStorage.multiRemove(['token', 'email']);
+      await AsyncStorageLib.multiRemove(['token', 'email']);
       dispatch({type: LOG_OUT});
     } catch (e) {
       console.log(e);
@@ -115,7 +115,7 @@ const ProfileState = ({children}) => {
   const autoLogin = async (onAuthErrorHanlder) => {
     showLoader();
     try {
-      const [tokenArr, emailArr] = await AsyncStorage.multiGet(['token', 'email']);
+      const [tokenArr, emailArr] = await AsyncStorageLib.multiGet(['token', 'email']);
       if (emailArr[1] && tokenArr[1]) {
         await login(emailArr[1], tokenArr[1]);
       } 

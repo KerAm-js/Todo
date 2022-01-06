@@ -57,10 +57,8 @@ const Main = ({navigation}) => {
 
     const tasksData = {
       taskList: tasksCntxt.state.tasks,
-      createdTasksCount: tasksCntxt.state.createdTasksCount,
       stats: tasksCntxt.state.stats,
       result: tasksCntxt.state.result,
-      currentDate: tasksCntxt.state.currentDate,
     }
     const targets = targetsCntxt.state.targets;
     const notes = notesCntxt.state.notes;

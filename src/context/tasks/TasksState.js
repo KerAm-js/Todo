@@ -4,7 +4,7 @@ import {
   COMPLETE_TASK, 
   EDIT_TASK, 
   FIND_CURRENT_TASKS, 
-  FIND_EXPIRED_TASKS,  
+  FIND_EXPIRED_TASKS,   
   GET_TASKS_FROM_LOCAL_DB,  
   ON_NEW_DAY_HANDLER, 
   REMOVE_TASK, 
@@ -12,58 +12,64 @@ import {
   SHOW_TASK_DETAILS, 
   TO_START_TASK, 
   UPDATE_RESULT, 
-  UPLOAD_TASKS
+  UPDATE_STATS, 
+  UPLOAD_TASKS,
 } from "./types";
 import { TasksContext } from "./TasksContext";
 import { tasksReducer } from "./TasksReducer";
-import { presentNotification, setNotification } from "../../native/notifications"; 
+import { presentNotification } from "../../native/notifications"; 
 import { DB } from "../../backend/db";
+
 
 const TasksState = ({children}) => {
   const initialState = {
     currentDate: new Date().toString(),
-    createdTasksCount: 1,
-    tasks: [
-      {
-        id: new Date().toString(),
-        title: 'Task 1',
-        description: '',
-        startTime: null,
-        finishTime: null,
-        isCompleted: false,
-        isExpired: false,
-        isDayExpiredL: false,
-      }
-    ],
+    tasks: [],
     expiredTasks: [],
     currentTasks: [],
     viewedTask: null,
     stats: {
-      tasksCount: 0,
+      currentDate: new Date().toLocaleDateString(),
       completedTasksCount: 0,
       completedTasksPart: 0,
       completedInTime: 0,
       dailyTaskCreatingAverage: 0,
-      workingDaysCount: 0,
     },
     result: {
-      progress: null,
-      completedTasks: null,
-      expiredTasks: null,
-      tasksLeft: null,
-      completedInTime: null,
+      progress: 0,
+      completedTasks: 0,
+      expiredTasks: 0,
+      tasksLeft: 0,
+      completedInTime: 0,
     }
   }
 
   const [state, dispatch] = useReducer(tasksReducer, initialState);
+
   const findExpiredTasks = () => dispatch({type: FIND_EXPIRED_TASKS});
   const findCurrentTasks = () => dispatch({type: FIND_CURRENT_TASKS});
-  const updateResult = () => dispatch({type: UPDATE_RESULT});
+
+  const updateResult = () => {
+    dispatch({type: UPDATE_RESULT});
+  }
+
+  const getStatsFromLocalDB = async () => {
+    try {
+      const statsFromDB = await DB.getStats();
+      return statsFromDB[0];
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const updateStats = async () => {
+    const stats = await getStatsFromLocalDB();
+    dispatch({type: UPDATE_STATS, stats});
+  }
 
   const getTasksFromLocalDB = async () => {
     const result = await DB.getTasks();
     const tasks = await result;
-    console.log(tasks);
     dispatch({type: GET_TASKS_FROM_LOCAL_DB, tasks});
   }
 
@@ -90,7 +96,7 @@ const TasksState = ({children}) => {
   const onNewDayHandler = date => {
     dispatch({ type: ON_NEW_DAY_HANDLER, date, });
   }
-  
+
   const showTaskDetails = (id, navigation) => {
     dispatch({type: SHOW_TASK_DETAILS, id});
     navigation.navigate("TaskViewing");
@@ -99,7 +105,7 @@ const TasksState = ({children}) => {
   const completeTask = id => {
     dispatch({type: COMPLETE_TASK, id});
   };
-  
+
   const setTaskExpired = (id, start, end, callBack = () => {}) => {
     const startTime = new Date(start);
     const finishTime = new Date(end);
@@ -125,27 +131,40 @@ const TasksState = ({children}) => {
   }
 
   const addTask = async task => {
-    const result = await DB.addTask(task);
-    const id = await result;
-    dispatch({type: ADD_TASK, task: {...task, id}});
-    setStartedTaskNotification(task);
-    setTaskExpired(task.id, task.startTime, task.finishTime, () => {
-      presentNotification(
-        "Задача просрочена",
-        `"${task.title}"`,
-      );
-    });
+    try {
+      const result = await DB.addTask(task);
+      const id = await result;
+      dispatch({type: ADD_TASK, task: {...task, id}});
+      setStartedTaskNotification(task);
+      setTaskExpired(task.id, task.startTime, task.finishTime, () => {
+        presentNotification(
+          "Задача просрочена",
+          `"${task.title}"`,
+        );
+      });
+    } catch (e) {
+      console.log(e)
+    }
+    
   };
 
-  const removeTask = id => {
-    if (id) {
+  const removeTask = async id => {
+    try {
+      await DB.deleteTask(id);
       dispatch({type: REMOVE_TASK, id});
+    } catch (e) {
+      console.log(e);
     }
   };
 
-  const editTask = (id, taskData) => {
-    dispatch({type: EDIT_TASK, id, taskData});
-    setTaskExpired(id, taskData.startTime, taskData.finishTime);
+  const editTask = async (id, taskData) => {
+    try {
+      await DB.editTask(id, taskData);
+      dispatch({type: EDIT_TASK, id, taskData});
+      setTaskExpired(id, taskData.startTime, taskData.finishTime);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -162,6 +181,7 @@ const TasksState = ({children}) => {
       onNewDayHandler,
       uploadTasks,
       getTasksFromLocalDB,
+      updateStats,
     }}>
       {children}
     </TasksContext.Provider>

@@ -14,13 +14,14 @@ export default function TabNavigator() {
   const tasksCntxt = useContext(TasksContext);
 
   useEffect(() => {
-    tasksCntxt.onNewDayHandler(new Date());
+    // tasksCntxt.onNewDayHandler(new Date());
   });
 
   useEffect(() => {
     tasksCntxt.findExpiredTasks();
     tasksCntxt.findCurrentTasks();
     tasksCntxt.updateResult();
+    tasksCntxt.updateStats();
   }, [tasksCntxt.state.tasks]);
 
   return (

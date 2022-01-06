@@ -46,10 +46,10 @@ const Main = ({ navigation, route }) => {
     }
   } else if (activeType === 'Targets') {
     if (activeContent === 'Выполнено') {
-      showedContent = targets.filter(task => task.isCompleted);
+      showedContent = targets.filter(target => target.isCompleted);
       noContentText = 'Нет выполненных целей';
     } else if (activeContent === 'Просрочено') {
-      showedContent = targets.filter(task => task.isExpired && !task.isCompleted);
+      showedContent = targets.filter(target => target.isExpired && !target.isCompleted);
       noContentText = 'Нет просроченных целей';
     } else {
       showedContent = [...targets];

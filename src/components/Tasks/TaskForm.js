@@ -69,8 +69,8 @@ const TaskForm = ({
         startTime: isTimeAdded ? startTime.toString() : null,
         finishTime: isTimeAdded ? finishTime.toString() : null,
         isCompleted: false,
+        isCompletedInTime: false,
         isExpired: isTimeAdded ? (new Date() < finishTime ? false : true) : false,
-        isDayExpired: false, 
       });
       close();
     } else if(title?.trim() && name === 'target') {
@@ -96,8 +96,8 @@ const TaskForm = ({
         startTime: isTimeAdded ? startTime.toString() : null,
         finishTime: isTimeAdded ? finishTime.toString() : null,
         isCompleted: false,
+        isCompletedInTime: false,
         isExpired: isTimeAdded ? (new Date() < finishTime ? false : true) : false, 
-        isDayExpired: task.isDayExpired,
       })
       close();
     } else if (title?.trim() && name === 'target') {
