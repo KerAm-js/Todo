@@ -102,8 +102,30 @@ const TasksState = ({children}) => {
     navigation.navigate("TaskViewing");
   }; 
 
-  const completeTask = id => {
-    dispatch({type: COMPLETE_TASK, id});
+  const completeTask = async id => {
+    try {
+      let isTaskCompleted;
+      let isTaskCompletedInTime;
+      const tasksCopy = state.tasks.map(task => {
+        if (task.id === id) {
+          const isCompleted = task.isCompleted;
+          const isExpired = task.isExpired;
+          task.isCompleted = Number(!isCompleted);
+          task.isCompletedInTime = Number(!isCompleted) && Number(!isExpired);
+          //for DB
+          isTaskCompleted = Number(!isCompleted);
+          isTaskCompletedInTime =  Number(!isCompleted) && Number(!isExpired);
+          
+          return task;
+        }
+        return task;
+      });
+      console.log(isTaskCompleted, isTaskCompletedInTime);
+      await DB.completeTask(id, Number(isTaskCompleted), Number(isTaskCompletedInTime));
+      dispatch({type: COMPLETE_TASK, tasks: tasksCopy});
+    } catch (e) {
+      console.log(e)
+    }
   };
 
   const setTaskExpired = (id, start, end, callBack = () => {}) => {
@@ -136,7 +158,7 @@ const TasksState = ({children}) => {
       const id = await result;
       dispatch({type: ADD_TASK, task: {...task, id}});
       setStartedTaskNotification(task);
-      setTaskExpired(task.id, task.startTime, task.finishTime, () => {
+      setTaskExpired(id, task.startTime, task.finishTime, () => {
         presentNotification(
           "Задача просрочена",
           `"${task.title}"`,

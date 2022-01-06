@@ -17,12 +17,16 @@ async function loadApplication() {
       'nunito-semiBold': require('./assets/fonts/Nunito-SemiBold.ttf'),
       'nunito-regular': require('./assets/fonts/Nunito-Regular.ttf'),
     })
+
     await DB.initTasks();
+    await DB.initTargets();
     await DB.initStats();
+
     let stats = await DB.getStats();
     if (stats.length === 0) {
       let id = await DB.addStatsRow();
     }
+    
     console.log('Data base started');
   } catch (e) {
     console.log(e);

@@ -7,7 +7,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
   const tabBarPaddingBottom = useSafeAreaInsets().bottom || 20;
   return ( 
     <View style={styles.container}>
-      <View style={{...styles.tabBar, paddingBottom: tabBarPaddingBottom}}>
+      <View style={{...styles.tabBar, paddingBottom: tabBarPaddingBottom + 10}}>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
           const isFocused = state.index === index;

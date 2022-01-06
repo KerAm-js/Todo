@@ -124,29 +124,19 @@ export const tasksReducer = (state, action) => {
       }
     };
     case COMPLETE_TASK: {
-      const tasksCopy = [...state.tasks];
-      tasksCopy.forEach(task => {
-        if (task.id === action.id) {
-          task.isCompleted = !task.isCompleted;
-          if (!task.isExpired && task.isCompleted) {
-            task.isCompletedInTime = true; 
-          } else {
-            task.isCompletedInTime = false;
-          }
-        }
-      })
       return {
         ...state,
-        tasks: [
-          ...tasksCopy
-        ]
+        tasks: action.tasks
       }
     };
     case FIND_EXPIRED_TASKS: {
-      if (!state.tasks.length) {
+      if (!!state.tasks.length) {
         let result = [];
         state.tasks.forEach(task => {
-          if ((task?.isExpired) && !task.isCompleted) {
+          const currentTime = new Date();
+          const finishTime = new Date(task?.finishTime);
+          if ((task?.isExpired || finishTime < currentTime) && !task.isCompleted) {
+            task.isExpired = 1;
             result.push(task);
           }
         })
@@ -164,9 +154,8 @@ export const tasksReducer = (state, action) => {
     case FIND_CURRENT_TASKS: {
       if (!!state.tasks.length) {
         let result = [];
-        const currentTime = new Date();
-
         state.tasks.forEach(task => {
+          const currentTime = new Date();
           const startTime = new Date(task?.startTime);
           const finishTime = new Date(task?.finishTime);
           if (startTime <= currentTime && finishTime > currentTime) {

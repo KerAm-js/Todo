@@ -98,6 +98,33 @@ export class DB {
     })
   }
 
+  static setTaskExpired(id, isExpired) {
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          "UPDATE tasks SET isExpired = ? WHERE id = ?",
+          [isExpired, id],
+          (_, result) => resolve(result),
+          (_, err) => reject(err),
+        )
+      })
+    })
+  }
+
+  static completeTask(id, isCompleted, isCompletedInTime) {
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          "UPDATE tasks SET isCompleted = ?, isCompletedInTime = ? WHERE id = ?",
+          [isCompleted, isCompletedInTime, id],
+          (_, result) => resolve(result),
+          (_, err) => reject(err),
+        )
+      })
+    })
+  }
+
+  //stats
   statistics
   static initStats() {
     return new Promise((resolve, reject) => {
@@ -152,6 +179,97 @@ export class DB {
           [tasksCount, completedTasksCount, completedInTimeCount, workingDaysCount, currentDate],
           (_, result) => resolve(result),
           (_, error) => reject(error)
+        )
+      })
+    })
+  }
+
+  //targets
+  static initTargets() {
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          "CREATE TABLE IF NOT EXISTS targets (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, description TEXT, finishTime TEXT, isCompleted INT, isExpired INT)",
+          [],
+          (_, result) => resolve(result),
+          (_, error) => reject(error),
+        )
+      })
+    })
+  }
+  static getTargets() {
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          "SELECT * FROM targets",
+          [],
+          (_, result) => resolve(result.rows._array),
+          (_, err) => reject(err),
+        )
+      })
+    })
+  }
+
+  static addTarget({title, description, finishTime, isCompleted, isExpired}) {
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          "INSERT INTO tasks (title, description, finishTime, isCompleted, isExpired) VALUES (?, ?, ?, ?, ?)",
+          [
+            title, 
+            description,  
+            finishTime, 
+            Number(isCompleted), 
+            Number(isExpired)
+          ],
+          (_, result) => resolve(result.insertId),
+          (_, err) => reject(err)  
+        )
+      })
+    })
+  }
+
+  static editTarget(id, {title, description, finishTime, isCompleted, isExpired}) {
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          "UPDATE tasks SET title = ?, description = ?, finishTime = ?, isCompleted = ?, isExpired = ? WHERE id = ?",
+          [
+            title, 
+            description, 
+            finishTime, 
+            Number(isCompleted), 
+            Number(isExpired),
+            id,
+          ],
+          (_, result) => resolve(result),
+          (_, error) => reject(error),
+        )
+      })
+    })
+  }
+
+  static deleteTarget(id) {
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          "DELETE FROM tasks WHERE id = ?",
+          [id],
+          (_, result) => resolve(result),
+          (_,error) => reject(error),
+        )
+      })
+    })
+  }
+
+  static completeTarget(id, isCompleted) {
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          "UPDATE tasks SET isCompleted = ? WHERE id = ?",
+          [isCompleted, id],
+          (_, result) => resolve(result),
+          (_, err) => reject(err),
         )
       })
     })

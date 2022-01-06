@@ -63,14 +63,13 @@ const TaskForm = ({
   const onAddHandler = () => {
     if (title?.trim() && name === 'task') {
       addTask({
-        id: `${tasks?.length}_${new Date().toString()}`,
         title: title.trim(),
         description,
         startTime: isTimeAdded ? startTime.toString() : null,
         finishTime: isTimeAdded ? finishTime.toString() : null,
-        isCompleted: false,
-        isCompletedInTime: false,
-        isExpired: isTimeAdded ? (new Date() < finishTime ? false : true) : false,
+        isCompleted: 0,
+        isCompletedInTime: 0,
+        isExpired: isTimeAdded ? (new Date() < finishTime ? 0 : 1) : 0,
       });
       close();
     } else if(title?.trim() && name === 'target') {
@@ -79,8 +78,8 @@ const TaskForm = ({
         title: title.trim(),
         description,
         finishTime: isTimeAdded ? finishTime.toString() : null,
-        isCompleted: false,
-        isExpired: false,
+        isCompleted: 0,
+        isExpired: 0,
       });
       close();
     } else {
@@ -95,9 +94,9 @@ const TaskForm = ({
         description,
         startTime: isTimeAdded ? startTime.toString() : null,
         finishTime: isTimeAdded ? finishTime.toString() : null,
-        isCompleted: false,
-        isCompletedInTime: false,
-        isExpired: isTimeAdded ? (new Date() < finishTime ? false : true) : false, 
+        isCompleted: 0,
+        isCompletedInTime: 0,
+        isExpired: isTimeAdded ? (new Date() < finishTime ? 0 : 1) : 0, 
       })
       close();
     } else if (title?.trim() && name === 'target') {
@@ -105,8 +104,8 @@ const TaskForm = ({
         title: title.trim(),
         description,
         finishTime: isTimeAdded ? finishTime.toString() : null,
-        isCompleted: false,
-        isExpired: false,
+        isCompleted: 0,
+        isExpired: 0,
       });
       close();
     } else {
