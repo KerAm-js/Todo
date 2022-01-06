@@ -51,7 +51,7 @@ export const tasksReducer = (state, action) => {
       let tasksCopy = [...state.tasks];
       const newTask = action.task;
 
-      if (newTask.startTime) {
+      if (newTask.startTime && state.tasks.length > 0) {
         let indexOfNewTask;
         let firstPartOfArray;
         let secondPartOfArray;
@@ -60,17 +60,13 @@ export const tasksReducer = (state, action) => {
         const newTaskFinish = newTask.finishTime;
 
         let firstIndex = tasksCopy.findIndex(task => {
-          if (task.startTime?.slice(16,21) === newTaskStart.slice(16,21)) {
-            return true;
-          }
+          return task.startTime?.slice(16,21) === newTaskStart.slice(16,21);
         })
 
         if (firstIndex !== -1) {
 
           const tasksWithSameStart = tasksCopy.filter(task => {
-            if (task.startTime?.slice(16,21) === newTaskStart.slice(16,21)) {
-              return true;
-            }
+            return task.startTime?.slice(16,21) === newTaskStart.slice(16,21);
           });
 
           indexOfNewTask = tasksWithSameStart.findIndex(task => {
@@ -84,17 +80,19 @@ export const tasksReducer = (state, action) => {
           indexOfNewTask += firstIndex;
         } else {
           indexOfNewTask = tasksCopy.findIndex(task => {
-            if (task.startTime?.slice(16,21) > newTaskStart.slice(16,21)) {
-              return true;
-            }
+            return task.startTime?.slice(16,21) > newTaskStart.slice(16,21);
           });
           if (indexOfNewTask === -1) {
             indexOfNewTask = tasksCopy.findIndex(task => !task.startTime);
           }
         }
-        firstPartOfArray = tasksCopy.slice(0, indexOfNewTask );
-        secondPartOfArray = tasksCopy.slice(indexOfNewTask);
-        tasksCopy = [...firstPartOfArray, newTask, ...secondPartOfArray];
+        if (indexOfNewTask === -1) {
+          tasksCopy.push(newTask);
+        } else {
+          firstPartOfArray = tasksCopy.slice(0, indexOfNewTask );
+          secondPartOfArray = tasksCopy.slice(indexOfNewTask);
+          tasksCopy = [...firstPartOfArray, newTask, ...secondPartOfArray];
+        }
       } else {
         tasksCopy.push(newTask);
       };
@@ -181,7 +179,7 @@ export const tasksReducer = (state, action) => {
       const tasksCopy = [...state.tasks];
       const task = tasksCopy.find(task => task.id === action.id);
       if (task) {
-        task.isExpired = true;
+        task.isExpired = 1;
         action.callBack();
         return {
           ...state,

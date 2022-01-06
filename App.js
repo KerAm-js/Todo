@@ -21,12 +21,13 @@ async function loadApplication() {
     await DB.initTasks();
     await DB.initTargets();
     await DB.initStats();
+    await DB.initNotes();
 
     let stats = await DB.getStats();
     if (stats.length === 0) {
       let id = await DB.addStatsRow();
     }
-    
+
     console.log('Data base started');
   } catch (e) {
     console.log(e);

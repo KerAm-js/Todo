@@ -1,9 +1,12 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { Image, Alert, StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { colors } from "../../constants/colors";
 import { textStyles } from "../../constants/textStyles";
 
-const Note = ({text, updateNote, removeNote,}) => {
+const Note = ({text, updateNote, removeNote}) => {
+  
+  const [noteText, setNoteText] = useState(text);
+
   const onRemoveNote = () => {
     Alert.alert(
       "Удаление заметки",
@@ -25,10 +28,12 @@ const Note = ({text, updateNote, removeNote,}) => {
     )
   }
 
-  const onTextCleanHandler = () => {
-    if (text === '') {
+  const onBlurHanlder = () => {
+    if (noteText === '') {
       removeNote();
-    } 
+    } else {
+      updateNote(noteText);
+    }
   }
 
   const inputElement = useRef(null);
@@ -41,12 +46,12 @@ const Note = ({text, updateNote, removeNote,}) => {
     <View style={styles.container}>
       <TextInput 
         style={styles.input}
-        value={text}
+        value={noteText}
         autoFocus={true}
-        onChangeText={text => updateNote(text)}
+        onChangeText={text => setNoteText(text)}
         multiline={true}
         ref={inputElement}
-        onBlur={onTextCleanHandler}
+        onBlur={onBlurHanlder}
         placeholder="Введите текст"
       />
       <TouchableOpacity

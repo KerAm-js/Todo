@@ -2,18 +2,6 @@ import * as SQLite from 'expo-sqlite';
 
 export const db = SQLite.openDatabase("tasks.db")
 
-// "CREATE TABLE IF NOT EXISTS tasks ("
-//             +"id INTEGER PRIMARY KEY NOT NULL," 
-//             +"title TEXT NOT NULL, "
-//             +"description TEXT, "
-//             +"startTime TEXT, "
-//             +"finishTime TEXT, "
-//             +"isCompleted INT, "
-//             +"isExpired INT, "
-//             +"isDayExpired INT)",
-//           [],
-
-//"CREATE TABLE IF NOT EXISTS tasks (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, description TEXT, startTime TEXT, finishTime TEXT, isCompleted INT, isCompletedInTime INT, isExpired INT)",
 
 export class DB {
   //tasks
@@ -98,12 +86,12 @@ export class DB {
     })
   }
 
-  static setTaskExpired(id, isExpired) {
+  static setTaskExpired(id) {
     return new Promise((resolve, reject) => {
       db.transaction(tx => {
         tx.executeSql(
-          "UPDATE tasks SET isExpired = ? WHERE id = ?",
-          [isExpired, id],
+          "UPDATE tasks SET isExpired = 1 WHERE id = ?",
+          [id],
           (_, result) => resolve(result),
           (_, err) => reject(err),
         )
@@ -214,7 +202,7 @@ export class DB {
     return new Promise((resolve, reject) => {
       db.transaction(tx => {
         tx.executeSql(
-          "INSERT INTO tasks (title, description, finishTime, isCompleted, isExpired) VALUES (?, ?, ?, ?, ?)",
+          "INSERT INTO targets (title, description, finishTime, isCompleted, isExpired) VALUES (?, ?, ?, ?, ?)",
           [
             title, 
             description,  
@@ -233,7 +221,7 @@ export class DB {
     return new Promise((resolve, reject) => {
       db.transaction(tx => {
         tx.executeSql(
-          "UPDATE tasks SET title = ?, description = ?, finishTime = ?, isCompleted = ?, isExpired = ? WHERE id = ?",
+          "UPDATE targets SET title = ?, description = ?, finishTime = ?, isCompleted = ?, isExpired = ? WHERE id = ?",
           [
             title, 
             description, 
@@ -253,7 +241,7 @@ export class DB {
     return new Promise((resolve, reject) => {
       db.transaction(tx => {
         tx.executeSql(
-          "DELETE FROM tasks WHERE id = ?",
+          "DELETE FROM targets WHERE id = ?",
           [id],
           (_, result) => resolve(result),
           (_,error) => reject(error),
@@ -266,9 +254,88 @@ export class DB {
     return new Promise((resolve, reject) => {
       db.transaction(tx => {
         tx.executeSql(
-          "UPDATE tasks SET isCompleted = ? WHERE id = ?",
+          "UPDATE targets SET isCompleted = ? WHERE id = ?",
           [isCompleted, id],
           (_, result) => resolve(result),
+          (_, err) => reject(err),
+        )
+      })
+    })
+  }
+
+  static setTargetExpired(id) {
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          "UPDATE targets SET isExpired = 1 WHERE id = ?",
+          [id],
+          (_, result) => resolve(result),
+          (_, err) => reject(err),
+        )
+      })
+    })
+  }
+
+  //notes 
+  static initNotes() {
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          "CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY NOT NULL, text TEXT)",
+          [],
+          resolve,
+          (_, err) => reject(err),
+        )
+      })
+    })
+  }
+
+  static getNotes() {
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          "SELECT * FROM notes",
+          [],
+          (_, result) => resolve(result.rows._array),
+          (_, err) => reject(err),
+        )
+      })
+    })
+  }
+
+  static addNote() {
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          "INSERT INTO notes (text) VALUES (?)",
+          [''],
+          (_, result) => resolve(result.insertId),
+          (_, err) => reject(err), 
+        )
+      })
+    })
+  }
+
+  static editNote(id, text) {
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          "UPDATE notes SET text = ? WHERE id = ?",
+          [text, id],
+          resolve,
+          (_, err) => reject(err),
+        )
+      })
+    })
+  }
+
+  static deleteNote(id) {
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          "DELETE FROM notes WHERE id = ?",
+          [id],
+          resolve,
           (_, err) => reject(err),
         )
       })

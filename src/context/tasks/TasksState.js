@@ -46,7 +46,22 @@ const TasksState = ({children}) => {
 
   const [state, dispatch] = useReducer(tasksReducer, initialState);
 
-  const findExpiredTasks = () => dispatch({type: FIND_EXPIRED_TASKS});
+  const findExpiredTasks = async () => {
+    try {
+      state.tasks.forEach(async task => {
+        if (task.finishTime) {
+          const finish = new Date(task.finishTime);
+          const currentDate = new Date();
+          if (finish < currentDate && !task.isExpired) {
+            await DB.setTaskExpired(task.id);
+            dispatch({ type: SET_TASK_EXPIRED, id: task.id, callBack: () => {}, })
+          }
+        }
+      })
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const findCurrentTasks = () => dispatch({type: FIND_CURRENT_TASKS});
 
   const updateResult = () => {
@@ -70,7 +85,7 @@ const TasksState = ({children}) => {
   const getTasksFromLocalDB = async () => {
     const result = await DB.getTasks();
     const tasks = await result;
-    dispatch({type: GET_TASKS_FROM_LOCAL_DB, tasks});
+    tasks.forEach(task => dispatch({type: ADD_TASK, task}))
   }
 
   const uploadTasks = ({
@@ -83,9 +98,6 @@ const TasksState = ({children}) => {
     taskList.forEach(task => {
       const currentDate = new Date();
       const taskFinish = new Date(task.finishTime);
-      if (currentDate.toLocaleDateString() !== taskFinish.toLocaleDateString()) {
-        task.isDayExpired = true;
-      }
       if (currentDate > taskFinish) {
         task.isExpired = true;
       }
@@ -120,7 +132,6 @@ const TasksState = ({children}) => {
         }
         return task;
       });
-      console.log(isTaskCompleted, isTaskCompletedInTime);
       await DB.completeTask(id, Number(isTaskCompleted), Number(isTaskCompletedInTime));
       dispatch({type: COMPLETE_TASK, tasks: tasksCopy});
     } catch (e) {
@@ -128,7 +139,7 @@ const TasksState = ({children}) => {
     }
   };
 
-  const setTaskExpired = (id, start, end, callBack = () => {}) => {
+  const setTaskExpired = async (id, start, end, callBack = () => {}) => {
     const startTime = new Date(start);
     const finishTime = new Date(end);
     if (startTime && finishTime && new Date() < finishTime) {

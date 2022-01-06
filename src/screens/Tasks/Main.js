@@ -1,5 +1,5 @@
-import React, { useState, useContext } from "react";
-import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useState, useContext, useEffect } from "react";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import ModalLayout from "../../layouts/ModalLayout";
 import MainNavBar from "../../components/Tasks/MainNavBar";
 import Task from "../../components/Tasks/Task";
@@ -20,11 +20,11 @@ const Main = ({ navigation, route }) => {
   const deviceTopSpace = useSafeAreaInsets().top || 20;
   const tabBarHeight = useBottomTabBarHeight();
 
-  const targetContext = useContext(TargetsContext);
-  const targets = targetContext.state.targets;
+  const targetsCntxt = useContext(TargetsContext);
+  const targets = targetsCntxt.state.targets;
 
-  const taskContext = useContext(TasksContext);
-  const tasks = taskContext.state.tasks;
+  const tasksCntxt = useContext(TasksContext);
+  const tasks = tasksCntxt.state.tasks;
 
   const [addTaskModalVisible, setAddTaskModalVisible] = useState(false);
   const [activeType, setActiveType] = useState("Tasks");
@@ -57,6 +57,10 @@ const Main = ({ navigation, route }) => {
     }
   }
 
+  useEffect(() => {
+    targetsCntxt.findExpiredTargets();
+  }, [targetsCntxt.targets]);
+
   return (
     <View style={{...styles.container, paddingTop: deviceTopSpace + 171}}>
       {
@@ -83,12 +87,12 @@ const Main = ({ navigation, route }) => {
                 data={showedContent}
                 keyExtractor={item => item.id}
                 renderItem={({item}, index) => {
-                  let showDetails = () => taskContext.showTaskDetails(item.id, navigation);
-                  let complete = () => taskContext.completeTask(item.id);
+                  let showDetails = () => tasksCntxt.showTaskDetails(item.id, navigation);
+                  let complete = () => tasksCntxt.completeTask(item.id);
 
                   if (activeType === 'Targets') {
-                    showDetails = () => targetContext.showTargetDetails(item.id, navigation);
-                    complete = () => targetContext.completeTarget(item.id);
+                    showDetails = () => targetsCntxt.showTargetDetails(item.id, navigation);
+                    complete = () => targetsCntxt.completeTarget(item.id);
                   } 
 
                   return (
@@ -130,14 +134,14 @@ const Main = ({ navigation, route }) => {
                 type="add" 
                 close={() => setAddTaskModalVisible(false)} 
                 tasks={tasks}
-                addTask={taskContext.addTask}
+                addTask={tasksCntxt.addTask}
               />
             : <TaskForm 
                 name="target"
                 type="add" 
                 close={() => setAddTaskModalVisible(false)} 
                 targets={targets}
-                addTarget={targetContext.addTarget}
+                addTarget={targetsCntxt.addTarget}
               />
           }
         </ModalLayout>

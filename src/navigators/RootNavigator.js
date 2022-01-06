@@ -6,6 +6,8 @@ import TabNavigator from './TabNavigator';
 import TargetViewing from '../screens/TargetViewing';
 import { ProfileContext } from '../context/profile/ProfileContext';
 import { TasksContext } from '../context/tasks/TasksContext';
+import { TargetsContext } from '../context/targets/TargetsContext';
+import { NotesContext } from '../context/notes/NotesContext';
 
 const Stack = createStackNavigator();
 
@@ -13,10 +15,14 @@ export default function RootNavigator() {
 
   const profileCntxt = useContext(ProfileContext);
   const tasksCntxt = useContext(TasksContext);
+  const targetsCntxt = useContext(TargetsContext);
+  const notesCntxt = useContext(NotesContext);
 
   useEffect(() => {
     profileCntxt.autoLogin();
     tasksCntxt.getTasksFromLocalDB();
+    targetsCntxt.getTargetsFromLocalDB();
+    notesCntxt.getNotesFromLocalDB();
   }, []);
   
   return (

@@ -10,7 +10,7 @@ export const notesReducer = (state, action) => {
     case UPLOAD_NOTES: {
       return {
         ...state,
-        notes: [...action.notes]
+        notes: action.notes,
       }
     };
     case ADD_NOTE: {
@@ -19,7 +19,7 @@ export const notesReducer = (state, action) => {
         notes: [
           ...state.notes,
           {
-            id: `${state.notes.length}_${new Date()}`,
+            id: action.id,
             text: "",
           },
         ]

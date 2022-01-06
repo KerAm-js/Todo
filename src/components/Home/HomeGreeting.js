@@ -12,7 +12,7 @@ const HomeGreeting = ({paddingTop, username}) => {
             <Text style={styles.username}>Амир,</Text>
             <Text style={styles.greeting}>добро пожаловать!</Text>
           </>
-        : <Text style={styles.greeting}>{`Планируйте свой день\nи повышайте продуктивность`}</Text>
+        : <Text style={styles.noUserText}>{`Планируйте свой день\nи повышайте продуктивность`}</Text>
       }
     </View>
   )
@@ -35,5 +35,10 @@ const styles = StyleSheet.create({
   greeting: {
     ...textStyles.regular,
     color: '#fff',
+  },
+  noUserText: {
+    ...textStyles.subtitle,
+    color: '#fff',
+    marginTop: 5,
   }
 })

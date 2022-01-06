@@ -2,6 +2,8 @@ import {
   ADD_TARGET, 
   COMPLETE_TARGET, 
   EDIT_TARGET, 
+  FIND_EXPIRED_TARGETS, 
+  GET_TARGETS_FROM_LOCAL_DB, 
   REMOVE_TARGET, 
   SET_TARGET_EXPIRED, 
   SHOW_TARGET_DETAILS, 
@@ -10,6 +12,12 @@ import {
 
 export const targetsReducer = (state, action) => {
   switch (action.type) {
+    case GET_TARGETS_FROM_LOCAL_DB: {
+      return {
+        ...state,
+        targets: action.targets,
+      }
+    };
     case UPLOAD_TARGETS: {
       return {
         targets: [...action.targets],
@@ -71,7 +79,7 @@ export const targetsReducer = (state, action) => {
           if (target.id === action.id) {
             return {
               ...target,
-              isExpired: true
+              isExpired: 1,
             }
           } else {
             return target
@@ -80,19 +88,29 @@ export const targetsReducer = (state, action) => {
       }
     };
     case COMPLETE_TARGET: {
-      const targetsCopy = [...state.targets];
-      targetsCopy.forEach(target => {
-        target.id === action.id ? target.isCompleted = !target.isCompleted : null
-      });
       return {
         ...state,
-        targets: targetsCopy
+        targets: action.targets,
       }
     };
     case SHOW_TARGET_DETAILS: {
       return {
         ...state,
         viewedTarget: state.targets.find(target => target.id === action.id),
+      }
+    };
+    case FIND_EXPIRED_TARGETS: {
+      const targetsCopy = state.targets.map(target => {
+        const finish = new Date(target.finishTime);
+        const currentDate = new Date();
+        if (finish < currentDate) {
+          target.isExpired = 1;
+        }
+        return target;
+      });
+      return {
+        ...state,
+        targets: targetsCopy,
       }
     };
     default:
