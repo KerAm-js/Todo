@@ -131,11 +131,13 @@ export const tasksReducer = (state, action) => {
       if (!!state.tasks.length) {
         let result = [];
         state.tasks.forEach(task => {
-          const currentTime = new Date();
-          const finishTime = new Date(task?.finishTime);
-          if ((task?.isExpired || finishTime < currentTime) && !task.isCompleted) {
-            task.isExpired = 1;
-            result.push(task);
+          if (task.finishTime) {
+            const currentTime = new Date();
+            const finishTime = new Date(task?.finishTime);
+            if ((task?.isExpired || finishTime < currentTime) && !task.isCompleted) {
+              task.isExpired = 1;
+              result.push(task);
+            }
           }
         })
         return {
@@ -195,91 +197,41 @@ export const tasksReducer = (state, action) => {
       }
     };
     case UPDATE_RESULT: {
-      const completedTasks = state.tasks.reduce((prev, task) => task.isCompleted ? prev + 1 : prev, 0);
-      const expiredTasks = state.tasks.reduce((prev, task) => task.isExpired ? prev + 1 : prev, 0);
-      const progress = Math.round((completedTasks / state.tasks.length) * 100) || 0;
-      const tasksLeft = state.tasks.length - completedTasks;
-      const completedInTime = state.tasks.reduce((prev, task) => task.isCompleted && task.isCompletedInTime ? prev + 1 : prev, 0);
-      
-      const result = {
-        progress,
-        completedTasks,
-        expiredTasks,
-        tasksLeft,
-        completedInTime,
-      };
+      const result = action.getResult(state.tasks);
       return {
         ...state,
         result,
       }
     };
     case UPDATE_STATS: {
-      const tasksCount = Number(action.stats.tasksCount) + state.tasks.length;
-      const completedInTimeCount = Number(action.stats.completedInTimeCount) + state.result.completedInTime;
-      const completedTasksCount = Number(action.stats.completedTasksCount) + state.result.completedTasks;
-      const workingDaysCount = Number(action.stats.workingDaysCount);
-
-      const completedTasksPart = tasksCount ? Math.round((completedTasksCount / tasksCount) * 100) : 0;
-      const dailyTaskCreatingAverage = workingDaysCount ? Math.round((tasksCount / workingDaysCount)) : 0;
-      const completedInTime = completedTasksCount ? Math.round((completedInTimeCount/completedTasksCount) * 100 ) : 0;
-
-      const stats = {
-        completedTasksCount,
-        completedTasksPart,
-        dailyTaskCreatingAverage,
-        completedInTime,
-        currentDate: state.stats.currentDate,
-      };
-
+      const stats = action.getStatsForReducer(state.tasks, state.result);
       return {
         ...state,
         stats,
       }
     };
     case ON_NEW_DAY_HANDLER: {
-      if (action.date.toLocaleDateString() === state.currentDate) {
-        return state;
-      } else {
-        //stats updating
-        const tasksCount = state.stats.tasksCount + state.createdTasksCount;
-        const workingDaysCount = state.stats.workingDaysCount + 1;
-        const completedTasksCount = state.stats.completedTasksCount + state.result.completedTasks;
-        const completedTasksPart = Math.round((completedTasksCount / tasksCount) * 100);
-        const completedInTime = state.stats.completedInTime + state.result.completedInTime;
-        const dailyTaskCreatingAverage = Math.round((tasksCount / workingDaysCount));
-        const stats = {
-          tasksCount,
-          completedTasksCount,
-          completedTasksPart,
-          completedInTime,
-          dailyTaskCreatingAverage,
-          workingDaysCount,
-        }
+      // const currentDate = new Date().toLocaleDateString();
+      // const tasks = state.tasks.filter(task => !task.isCompleted);
+      // tasks.forEach(task => {
+      //   task.startTime = null;
+      //   tasks.finishTime = null;
+      //   task.isExpired = 0;
+      // });
 
-        //completed tasks removing
-        let tasks = state.tasks.filter(task => !task.isCompleted);
-        tasks = tasks.map(task => {
-          return {...task, startTime: null, finishTime: null, isExpired: true}
-        })
+      // const stats = {
+      //   ...state.stats,
+      //   currentDate,
+      //   workingDaysCount: state.stats.workingDaysCount + 1,
+      // }
 
-        return {
-          ...state,
-          currentDate: new Date().toString(),
-          createdTasksCount: tasks.length,
-          tasks,
-          stats,
-          expiredTasks: [],
-          currentTasks: [],
-          viewedTask: null,
-          result: {
-            progress: 0,
-            completedTasks: 0,
-            expiredTasks: 0,
-            tasksLeft: 0,
-            completedInTime: 0,
-          }
-        }
+      // action.callback(stats, tasks);
+      // console.log(stats);
+      return {
+        ...state,
+        tasks: action.tasks,
       }
+      return state;
     };
     default: {
       return state;

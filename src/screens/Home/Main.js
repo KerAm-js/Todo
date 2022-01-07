@@ -50,7 +50,7 @@ const Main = ({slides, navigation}) => {
             navigation={navigation}
           />
           {
-            tasksCntxt.state.expiredTasks?.length > 0
+            tasksCntxt.state.expiredTasks.length > 0
               ? <HomeExpiredTasks 
                   expiredTasks={tasksCntxt.state.expiredTasks} 
                   completeTask={tasksCntxt.completeTask} 

@@ -30,6 +30,41 @@ export class DB {
     })
   }
 
+  static updateAllTasks(tasks) {
+    let valuesString = '(?, ?, ?, ?, ?, ?, ?)';
+    const values = [];
+
+    tasks.forEach(task => Object.keys(task).forEach(key => key !== 'id' ? values.push(task[key]) : null));
+    console.log(values);
+    for (let i = 0; i < tasks.length; i++) {
+      valuesString += ', (?, ?, ?, ?, ?, ?, ?)';
+    }
+
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          `INSERT INTO tasks (title, description, startTime, finishTime, isCompleted, isCompletedInTime, isExpired) VALUES ${valuesString}`,
+          [values],
+          (_, result) => resolve(result.rows._array),
+          (_, err) => reject(err),
+        )
+      })
+    })
+  }
+
+  static deleteAllTasks() {
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          "DELETE FROM tasks",
+          [],
+          resolve,
+          (_, err) => reject(err),
+        )
+      })
+    })
+  }
+
   static addTask({title, description, startTime, finishTime, isCompleted, isCompletedInTime, isExpired}) {
     return new Promise((resolve, reject) => {
       db.transaction(tx => {
@@ -163,7 +198,7 @@ export class DB {
     return new Promise((resolve, reject) => {
       db.transaction(tx => {
         tx.executeSql(
-          "UPDATE tasks SET tasksCount = ?, completedTasksCount = ?, completedInTimeCount = ?, workingDaysCount = ?, currentDate = ? WHERE id = 1",
+          "UPDATE stats SET tasksCount = ?, completedTasksCount = ?, completedInTimeCount = ?, workingDaysCount = ?, currentDate = ? WHERE id = 1",
           [tasksCount, completedTasksCount, completedInTimeCount, workingDaysCount, currentDate],
           (_, result) => resolve(result),
           (_, error) => reject(error)

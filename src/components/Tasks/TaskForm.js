@@ -69,7 +69,7 @@ const TaskForm = ({
         finishTime: isTimeAdded ? finishTime.toString() : null,
         isCompleted: 0,
         isCompletedInTime: 0,
-        isExpired: isTimeAdded ? (new Date() < finishTime ? 0 : 1) : 0,
+        isExpired: isTimeAdded ? new Date() < new Date(finishTime) ? 0 : 1 : 0,
       });
       close();
     } else if(title?.trim() && name === 'target') {

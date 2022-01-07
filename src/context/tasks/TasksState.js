@@ -19,11 +19,11 @@ import { TasksContext } from "./TasksContext";
 import { tasksReducer } from "./TasksReducer";
 import { presentNotification } from "../../native/notifications"; 
 import { DB } from "../../backend/db";
+import { FIND_EXPIRED_TARGETS } from "../targets/types";
 
 
 const TasksState = ({children}) => {
   const initialState = {
-    currentDate: new Date().toString(),
     tasks: [],
     expiredTasks: [],
     currentTasks: [],
@@ -54,18 +54,60 @@ const TasksState = ({children}) => {
           const currentDate = new Date();
           if (finish < currentDate && !task.isExpired) {
             await DB.setTaskExpired(task.id);
-            dispatch({ type: SET_TASK_EXPIRED, id: task.id, callBack: () => {}, })
+            dispatch({ type: SET_TASK_EXPIRED, id: task.id, callBack: () => {}, });
           }
         }
       })
+      dispatch({type: FIND_EXPIRED_TASKS});
     } catch (e) {
       console.log(e);
     }
   };
+
   const findCurrentTasks = () => dispatch({type: FIND_CURRENT_TASKS});
 
+  const getResult = (tasks) => {
+    const completedTasks = tasks.reduce((prev, task) => task.isCompleted ? prev + 1 : prev, 0);
+    const expiredTasks = tasks.reduce((prev, task) => task.isExpired ? prev + 1 : prev, 0);
+    const progress = Math.round((completedTasks / state.tasks.length) * 100) || 0;
+    const tasksLeft = tasks.length - completedTasks;
+    const completedInTime = tasks.reduce((prev, task) => task.isCompleted && task.isCompletedInTime ? prev + 1 : prev, 0);
+    
+    return {
+      progress,
+      completedTasks,
+      expiredTasks,
+      tasksLeft,
+      completedInTime,
+    };
+  }
+
+  const getStats = (stats, tasks, result) => {
+    const tasksCount = Number(stats.tasksCount) + tasks.length;
+    const completedInTimeCount = Number(stats.completedInTimeCount) + result.completedInTime;
+    const completedTasksCount = Number(stats.completedTasksCount) + result.completedTasks;
+    const workingDaysCount = Number(stats.workingDaysCount);
+    const currentDate = stats.currentDate
+
+    const completedTasksPart = tasksCount ? Math.round((completedTasksCount / tasksCount) * 100) : 0;
+    const dailyTaskCreatingAverage = workingDaysCount ? Math.round((tasksCount / workingDaysCount)) : 0;
+    const completedInTime = completedTasksCount ? Math.round((completedInTimeCount/completedTasksCount) * 100 ) : 0;
+
+    return {
+      ...stats,
+      tasksCount,
+      completedInTimeCount,
+      completedTasksCount,
+      workingDaysCount,
+      completedTasksPart,
+      dailyTaskCreatingAverage,
+      completedInTime,
+      currentDate,
+    };
+  }
+
   const updateResult = () => {
-    dispatch({type: UPDATE_RESULT});
+    dispatch({type: UPDATE_RESULT, getResult});
   }
 
   const getStatsFromLocalDB = async () => {
@@ -78,14 +120,32 @@ const TasksState = ({children}) => {
   }
 
   const updateStats = async () => {
-    const stats = await getStatsFromLocalDB();
-    dispatch({type: UPDATE_STATS, stats});
+    try {
+      const stats = await getStatsFromLocalDB();
+      const getStatsForReducer = (tasks, result) => getStats(stats, tasks, result)
+      dispatch({type: UPDATE_STATS, getStatsForReducer});
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   const getTasksFromLocalDB = async () => {
-    const result = await DB.getTasks();
-    const tasks = await result;
-    tasks.forEach(task => dispatch({type: ADD_TASK, task}))
+    try {
+      const result = await DB.getTasks();
+      const tasks = await result;
+      return tasks
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const updateTasks = async () => {
+    try {
+      const tasks = await getTasksFromLocalDB();
+      tasks.forEach(task => dispatch({type: ADD_TASK, task}));
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   const uploadTasks = ({
@@ -105,8 +165,46 @@ const TasksState = ({children}) => {
     dispatch({type: UPLOAD_TASKS, taskList, result, currentDate, stats, createdTasksCount})
   };
 
-  const onNewDayHandler = date => {
-    dispatch({ type: ON_NEW_DAY_HANDLER, date, });
+  const onNewDayHandler = async () => {
+    const stats = await getStatsFromLocalDB();
+    const currentDate = new Date().toLocaleDateString();
+    console.log(stats);
+    if (stats.currentDate === currentDate) {
+      await updateTasks();
+    } else {
+      const tasks = await getTasksFromLocalDB();
+      console.log(tasks);
+      const result = getResult(tasks);
+
+      const currentStats = getStats(stats, tasks, result);
+      const statsForUpdating = {
+        ...currentStats,
+        currentDate,
+        workingDaysCount: currentStats.workingDaysCount + 1,
+      }
+      const expiredTasks = tasks.filter(task => !task.isCompleted)
+      const tasksForUpdating = expiredTasks.map(task => ({
+        ...task,
+        startTime: null,
+        finishTime: null,
+        isExpired: 0,
+      }));
+
+      await DB.updateStats(statsForUpdating);
+      // {
+      //   currentDate,
+      //   workingDaysCount: 1,
+      //   tasksCount: 0,
+      //   completedTasksCount: 0,
+      //   completedInTimeCount: 0,
+      // }
+      await DB.deleteAllTasks();
+
+      if (tasksForUpdating.length > 0) {
+        await DB.updateAllTasks(tasksForUpdating);
+        await updateTasks();
+      };
+    }
   }
 
   const showTaskDetails = (id, navigation) => {
@@ -169,12 +267,14 @@ const TasksState = ({children}) => {
       const id = await result;
       dispatch({type: ADD_TASK, task: {...task, id}});
       setStartedTaskNotification(task);
-      setTaskExpired(id, task.startTime, task.finishTime, () => {
-        presentNotification(
-          "Задача просрочена",
-          `"${task.title}"`,
-        );
-      });
+      if (task.startTime) {
+        setTaskExpired(id, task.startTime, task.finishTime, () => {
+          presentNotification(
+            "Задача просрочена",
+            `"${task.title}"`,
+          );
+        });
+      }
     } catch (e) {
       console.log(e)
     }
@@ -213,7 +313,7 @@ const TasksState = ({children}) => {
       updateResult,
       onNewDayHandler,
       uploadTasks,
-      getTasksFromLocalDB,
+      updateTasks,
       updateStats,
     }}>
       {children}

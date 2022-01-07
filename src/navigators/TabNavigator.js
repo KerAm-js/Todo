@@ -1,4 +1,4 @@
-import React, {useEffect, useContext} from 'react';
+import React, {useEffect, useContext, useCallback} from 'react';
 import HomeScreen from '../screens/Home/HomeScreen';
 import ProfileScreen from '../screens/Profile/ProfileScreen';
 import TasksScreen from '../screens/Tasks/TasksScreen';
@@ -13,16 +13,20 @@ export default function TabNavigator() {
 
   const tasksCntxt = useContext(TasksContext);
 
-  useEffect(() => {
-    // tasksCntxt.onNewDayHandler(new Date());
-  });
+  const dataUpdating = useCallback(async () => {
+    await tasksCntxt.findExpiredTasks();
+    await tasksCntxt.findCurrentTasks();
+    await tasksCntxt.updateResult();
+    await tasksCntxt.updateStats();
+  })
 
-  useEffect(() => {
-    tasksCntxt.findExpiredTasks();
-    tasksCntxt.findCurrentTasks();
-    tasksCntxt.updateResult();
-    tasksCntxt.updateStats();
+  useEffect(async () => {
+    dataUpdating();
   }, [tasksCntxt.state.tasks]);
+
+  // useEffect(async () => {
+  //   await tasksCntxt.onNewDayHandler();
+  // }, [])
 
   return (
     <Tab.Navigator 

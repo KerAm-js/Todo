@@ -31,7 +31,7 @@ const Task = ({task, showDetails, complete, style}) => {
       style={styles.successImage}
     />;
     borderColor = colors.SUCCESS
-  } else if (task.isExpired) {
+  } else if (!!task.isExpired) {
     image = <Image 
       source={require('../../images/danger.png')} 
       style={styles.image}

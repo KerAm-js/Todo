@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useContext} from 'react';
+import React, {useEffect, useState, useContext, useCallback} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import TaskViewing from '../screens/TaskViewing';
@@ -18,11 +18,16 @@ export default function RootNavigator() {
   const targetsCntxt = useContext(TargetsContext);
   const notesCntxt = useContext(NotesContext);
 
+  const dataUploading = useCallback(async () => {
+    await profileCntxt.autoLogin();
+    // await tasksCntxt.updateTasks();
+    await tasksCntxt.onNewDayHandler();
+    await targetsCntxt.getTargetsFromLocalDB();
+    await notesCntxt.getNotesFromLocalDB();
+  })
+
   useEffect(() => {
-    profileCntxt.autoLogin();
-    tasksCntxt.getTasksFromLocalDB();
-    targetsCntxt.getTargetsFromLocalDB();
-    notesCntxt.getNotesFromLocalDB();
+    dataUploading();
   }, []);
   
   return (
