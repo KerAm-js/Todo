@@ -13,13 +13,13 @@ import {
   TO_START_TASK, 
   UPDATE_RESULT, 
   UPDATE_STATS, 
+  UPLOAD_STATS, 
   UPLOAD_TASKS,
 } from "./types";
 import { TasksContext } from "./TasksContext";
 import { tasksReducer } from "./TasksReducer";
 import { presentNotification } from "../../native/notifications"; 
 import { DB } from "../../backend/db";
-import { FIND_EXPIRED_TARGETS } from "../targets/types";
 
 
 const TasksState = ({children}) => {
@@ -148,32 +148,54 @@ const TasksState = ({children}) => {
     }
   }
 
-  const uploadTasks = ({
-    taskList, 
-    result, 
-    currentDate, 
-    stats, 
-    createdTasksCount,
-  }) => {
-    taskList.forEach(task => {
-      const currentDate = new Date();
-      const taskFinish = new Date(task.finishTime);
-      if (currentDate > taskFinish) {
-        task.isExpired = true;
+  const uploadTasks = async tasks => {
+    try {
+      if (!tasks) {
+        await DB.deleteAllTasks();
+        dispatch({type: UPLOAD_TASKS, taskList: []});
+      } else {
+        if (tasks?.length > 0) {
+          const taskList = tasks.map(task => ({
+            id: task.id,
+            title: task.title,
+            description: task.description || null,
+            startTime: task.startTime || null,
+            finishTime: task.finishTime || null,
+            isCompleted: task.isCompleted,
+            isCompletedInTime: task.isCompletedInTime,
+            isExpired: task.isExpired,
+          }))
+          await DB.deleteAllTasks();
+          dispatch({type: UPLOAD_TASKS, taskList: []});
+          taskList.forEach(async task => {
+            const result = await DB.addTask(task);
+            const id = await result;
+            dispatch({type: ADD_TASK, task: {...task, id}});
+          });
+        }
       }
-    })
-    dispatch({type: UPLOAD_TASKS, taskList, result, currentDate, stats, createdTasksCount})
+      
+    } catch (e) {
+      console.log(e)
+    }
   };
+
+  const uploadStats = async stats => {
+    try {
+      await DB.updateStats(stats);
+      dispatch({type: UPLOAD_STATS, stats});
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   const onNewDayHandler = async () => {
     const stats = await getStatsFromLocalDB();
     const currentDate = new Date().toLocaleDateString();
-    console.log(stats);
     if (stats.currentDate === currentDate) {
       await updateTasks();
     } else {
       const tasks = await getTasksFromLocalDB();
-      console.log(tasks);
       const result = getResult(tasks);
 
       const currentStats = getStats(stats, tasks, result);
@@ -191,18 +213,14 @@ const TasksState = ({children}) => {
       }));
 
       await DB.updateStats(statsForUpdating);
-      // {
-      //   currentDate,
-      //   workingDaysCount: 1,
-      //   tasksCount: 0,
-      //   completedTasksCount: 0,
-      //   completedInTimeCount: 0,
-      // }
       await DB.deleteAllTasks();
 
       if (tasksForUpdating.length > 0) {
-        await DB.updateAllTasks(tasksForUpdating);
-        await updateTasks();
+        tasksForUpdating.forEach(async task => {
+          const result = await DB.addTask(task);
+          const id = await result;
+          dispatch({type: ADD_TASK, task: {...task, id}});
+        });
       };
     }
   }
@@ -283,7 +301,7 @@ const TasksState = ({children}) => {
 
   const removeTask = async id => {
     try {
-      await DB.deleteTask(id);
+      const result = await DB.deleteTask(id);
       dispatch({type: REMOVE_TASK, id});
     } catch (e) {
       console.log(e);
@@ -313,6 +331,7 @@ const TasksState = ({children}) => {
       updateResult,
       onNewDayHandler,
       uploadTasks,
+      uploadStats,
       updateTasks,
       updateStats,
     }}>

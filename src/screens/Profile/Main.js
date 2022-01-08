@@ -54,15 +54,12 @@ const Main = ({navigation}) => {
 
   const onSaveDataHandler = () => {
     const id = profileCntxt.state.userData.id;
-
-    const tasksData = {
-      taskList: tasksCntxt.state.tasks,
-      stats: tasksCntxt.state.stats,
-      result: tasksCntxt.state.result,
-    }
+    const tasks = tasksCntxt.state.tasks;
+    const stats = tasksCntxt.state.stats;
     const targets = targetsCntxt.state.targets;
     const notes = notesCntxt.state.notes;
-    profileCntxt.sendToServer(id, notes, targets, tasksData);
+
+    profileCntxt.sendToServer(id, notes, targets, tasks, stats);
   }
 
   const onUploadDataFromServer = () => {
@@ -70,6 +67,7 @@ const Main = ({navigation}) => {
     profileCntxt.uploadFromServer(
       id,
       tasksCntxt.uploadTasks,
+      tasksCntxt.uploadStats,
       targetsCntxt.uploadTargets,
       notesCntxt.uploadNotes,
     );

@@ -30,21 +30,19 @@ export class DB {
     })
   }
 
-  static updateAllTasks(tasks) {
+  static updateAllTasks(tasksValues) {
     let valuesString = '(?, ?, ?, ?, ?, ?, ?)';
-    const values = [];
-
-    tasks.forEach(task => Object.keys(task).forEach(key => key !== 'id' ? values.push(task[key]) : null));
-    console.log(values);
-    for (let i = 0; i < tasks.length; i++) {
-      valuesString += ', (?, ?, ?, ?, ?, ?, ?)';
+    if (tasksValues.length > 1) {
+      for (let i = 1; i < tasksValues.length / 7; i++) {
+        valuesString += ', (?, ?, ?, ?, ?, ?, ?)';
+      }
     }
 
     return new Promise((resolve, reject) => {
       db.transaction(tx => {
         tx.executeSql(
           `INSERT INTO tasks (title, description, startTime, finishTime, isCompleted, isCompletedInTime, isExpired) VALUES ${valuesString}`,
-          [values],
+          [...tasksValues],
           (_, result) => resolve(result.rows._array),
           (_, err) => reject(err),
         )
@@ -114,7 +112,7 @@ export class DB {
         tx.executeSql(
           "DELETE FROM tasks WHERE id = ?",
           [id],
-          (_, result) => resolve(result),
+          (_, result) => resolve(result.rowsAffected.toString()),
           (_,error) => reject(error),
         )
       })
@@ -233,6 +231,39 @@ export class DB {
     })
   }
 
+  static updateAllTargets(targetsValues) {
+    let valuesString = '(?, ?, ?, ?, ?)';
+    if (targetsValues.length > 1) {
+      for (let i = 1; i < targetsValues.length / 5; i++) {
+        valuesString += ', (?, ?, ?, ?, ?)';
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          `INSERT INTO targets (title, description, finishTime, isCompleted, isExpired) VALUES ${valuesString}`,
+          [...targetsValues],
+          (_, result) => resolve(result.rows._array),
+          (_, err) => reject(err),
+        )
+      })
+    })
+  }
+
+  static deleteAllTargets() {
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          "DELETE FROM targets",
+          [],
+          resolve,
+          (_, err) => reject(err),
+        )
+      })
+    })
+  }
+
   static addTarget({title, description, finishTime, isCompleted, isExpired}) {
     return new Promise((resolve, reject) => {
       db.transaction(tx => {
@@ -338,12 +369,45 @@ export class DB {
     })
   }
 
-  static addNote() {
+  static updateAllNotes(notesValues) {
+    let valuesString = '(?)';
+    if (notesValues.length > 1) {
+      for (let i = 1; i < notesValues.length; i++) {
+        valuesString += ', (?)';
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          `INSERT INTO notes (text) VALUES ${valuesString}`,
+          [...notesValues],
+          (_, result) => resolve(result),
+          (_, err) => reject(err),
+        )
+      })
+    })
+  }
+
+  static deleteAllNotes() {
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          "DELETE FROM notes",
+          [],
+          resolve,
+          (_, err) => reject(err),
+        )
+      })
+    })
+  }
+
+  static addNote(note) {
     return new Promise((resolve, reject) => {
       db.transaction(tx => {
         tx.executeSql(
           "INSERT INTO notes (text) VALUES (?)",
-          [''],
+          [note?.text || ''],
           (_, result) => resolve(result.insertId),
           (_, err) => reject(err), 
         )

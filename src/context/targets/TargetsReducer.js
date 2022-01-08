@@ -20,7 +20,7 @@ export const targetsReducer = (state, action) => {
     };
     case UPLOAD_TARGETS: {
       return {
-        targets: [...action.targets],
+        targets: [...action.targetsList],
         viewedTarget: null,
       }
     };

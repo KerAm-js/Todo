@@ -42,10 +42,29 @@ const NotesState = ({children}) => {
       await DB.editNote(id, text);
       dispatch({type: UPDATE_NOTE, id, text});
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
   };
-  const uploadNotes = notes => dispatch({type: UPLOAD_NOTES, notes});
+  const uploadNotes = async notes => {
+    try {
+      if (!notes) {
+        dispatch({type: UPLOAD_NOTES, notes: []});
+      } else {
+        if (notes.length > 0) {
+          await DB.deleteAllNotes();
+          dispatch({type: UPLOAD_NOTES, notes: []});
+          notes.forEach(async note => {
+            const result = await DB.addNote(note);
+            const id = await result;
+            dispatch({type: ADD_NOTE, id, text: note.text});
+          });
+        }
+        dispatch({type: UPLOAD_NOTES, notes});
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <NotesContext.Provider value={{

@@ -126,7 +126,7 @@ const ProfileState = ({children}) => {
     hideLoader();
   }
 
-  const sendToServer = async (id, notes, targets, tasksData) => {
+  const sendToServer = async (id, notes, targets, tasks, stats) => {
     showLoader();
     try {
       const response = await fetch(`https://productive-plus-default-rtdb.europe-west1.firebasedatabase.app/users/${id}.json`, {
@@ -135,11 +135,11 @@ const ProfileState = ({children}) => {
         body: JSON.stringify({
           notes,
           targets,
-          tasksData,
+          tasks,
+          stats,
         })
       })
       const result = await response.json();
-      console.log(result);
       Alert.alert("Данные успешно сохранены");
     } catch (e) {
       console.log(e);
@@ -148,7 +148,7 @@ const ProfileState = ({children}) => {
     hideLoader();
   }
 
-  const uploadFromServer = async (id, uploadTasks, uploadTargets, uploadNotes) => {
+  const uploadFromServer = async (id, uploadTasks, uploadStats, uploadTargets, uploadNotes) => {
     showLoader();
     try {
       const response = await fetch(`https://productive-plus-default-rtdb.europe-west1.firebasedatabase.app/users/${id}.json`, {
@@ -156,7 +156,8 @@ const ProfileState = ({children}) => {
         headers: {'Content-type':'application/json'},
       })
       const data = await response.json();
-      uploadTasks(data.tasksData);
+      uploadStats(data.stats);
+      uploadTasks(data.tasks);
       uploadTargets(data.targets);
       uploadNotes(data.notes);
       Alert.alert("Ваша последняя копия успешно загружена");

@@ -14,6 +14,7 @@ import {
   TO_START_TASK,
   GET_TASKS_FROM_LOCAL_DB,
   UPDATE_STATS,
+  UPLOAD_STATS,
 } from "./types";
 
 export const tasksReducer = (state, action) => {
@@ -210,23 +211,13 @@ export const tasksReducer = (state, action) => {
         stats,
       }
     };
+    case UPLOAD_STATS: {
+      return {
+        ...state,
+        stats: action.stats,
+      }
+    };
     case ON_NEW_DAY_HANDLER: {
-      // const currentDate = new Date().toLocaleDateString();
-      // const tasks = state.tasks.filter(task => !task.isCompleted);
-      // tasks.forEach(task => {
-      //   task.startTime = null;
-      //   tasks.finishTime = null;
-      //   task.isExpired = 0;
-      // });
-
-      // const stats = {
-      //   ...state.stats,
-      //   currentDate,
-      //   workingDaysCount: state.stats.workingDaysCount + 1,
-      // }
-
-      // action.callback(stats, tasks);
-      // console.log(stats);
       return {
         ...state,
         tasks: action.tasks,

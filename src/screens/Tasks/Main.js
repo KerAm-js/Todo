@@ -96,7 +96,7 @@ const Main = ({ navigation, route }) => {
                   } 
 
                   return (
-                    <View key={index}>
+                    <View>
                       {
                         activeType === 'Tasks' 
                           ? <Task 

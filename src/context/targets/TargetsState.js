@@ -32,16 +32,33 @@ const TargetsState = ({children}) => {
     }
   }
 
-  const uploadTargets = targets => {
-    targets.forEach(target => {
-      const currentDate = new Date();
-      const deadline = new Date(target.finishTime);
-      deadline.setDate(deadline.getDate() + 1);
-      if (currentDate > deadline) {
-        target.isExpired = true;
-      };
-    })
-    dispatch({type: UPLOAD_TARGETS, targets})
+  const uploadTargets = async targets => {
+    try {
+      if (!targets) {
+        dispatch({type: UPLOAD_TARGETS, targetsList: []});
+      } else {
+        if (targets.length > 0) {
+          const targetsList = targets.map(target => ({
+            title: target.title,
+            description: target.description || null,
+            finishTime: target.finishTime || null,
+            isCompleted: target.isCompleted,
+            isExpired: target.isExpired,
+          }))
+          await DB.deleteAllTargets();
+          dispatch({type: UPLOAD_TARGETS, targetsList: []});
+          console.log('from firebase', targetsList);
+          targetsList.forEach(async target => {
+            const result = await DB.addTarget(target);
+            const id = await result;
+            dispatch({type: ADD_TARGET, target: {...target, id}});
+          });
+        }
+      }
+      
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const addTarget = async target => {
@@ -56,7 +73,7 @@ const TargetsState = ({children}) => {
 
   const editTarget = async (id, targetData) => {
     try {
-      await DB.editTarget(targetData);
+      await DB.editTarget(id, targetData);
       dispatch({type: EDIT_TARGET, id, targetData});
       setTargetExpired(id, targetData.finishTime);
     } catch (e) {
