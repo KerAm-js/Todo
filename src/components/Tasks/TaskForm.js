@@ -188,7 +188,7 @@ const TaskForm = ({
         type="danger"
         onPress={close}
       />
-      <View style={{height: containerPaddingBottom}}>
+      <View style={{height: containerPaddingBottom + 20}}>
       </View>
     </ScrollView>
   )

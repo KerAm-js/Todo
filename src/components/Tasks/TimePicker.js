@@ -20,7 +20,7 @@ const TimePicker = ({type, time, setTime, minimumDate, mode}) => {
     <View style={styles.container}>
       <Text style={styles.title}>{mode ? "Выполнить до" : title}</Text>
       <DateTimePicker
-        value={time}
+        value={time || new Date()}
         mode={mode || "time"}
         is24Hour={true}
         display="default"
@@ -40,12 +40,12 @@ const TimePicker = ({type, time, setTime, minimumDate, mode}) => {
           style={styles.buttonAndroid}
           onPress={() => setShow(true)}
         >
-          <Text style={styles.btnText}>{time ? time.toLocaleTimeString().slice(0, 5) : 'Установить'}</Text>
+          <Text style={styles.btnText}>{time ? mode ? time.toLocaleDateString() : time.toLocaleTimeString().slice(0, 5) : 'Установить'}</Text>
         </TouchableOpacity>
         {
           show
             ? <DateTimePicker
-                value={time}
+                value={time || new Date()}
                 mode={mode || "time"}
                 is24Hour={true}
                 display="default"
