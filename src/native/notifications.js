@@ -20,24 +20,25 @@ async function requestPermissionsAsync() {
   }
 }
 
-export const setNotification = (title, body, time) => {
+export const setNotification = async (title, body, time) => {
   const isNotifictaionAvailable = requestPermissionsAsync();
   if (isNotifictaionAvailable && time && time > 1) {
     Notifications.setNotificationHandler({
       handleNotification: async () => ({
         shouldShowAlert: true,
-        shouldPlaySound: false,
-        shouldSetBadge: false,
+        shouldPlaySound: true,
+        shouldSetBadge: true,
       }),
     });
     
-    Notifications.scheduleNotificationAsync({
+    const identifier = await Notifications.scheduleNotificationAsync({
       content: {
         title,
         body,
       },
       trigger: {seconds: time},
     });
+    return identifier;
   }
 } 
 
@@ -47,8 +48,8 @@ export const presentNotification = (title, body) => {
     Notifications.setNotificationHandler({
       handleNotification: async () => ({
         shouldShowAlert: true,
-        shouldPlaySound: false,
-        shouldSetBadge: false,
+        shouldPlaySound: true,
+        shouldSetBadge: true,
       }),
     });
     
@@ -60,4 +61,17 @@ export const presentNotification = (title, body) => {
       trigger: null,
     });
   }
+}
+
+export const getAllNotifications = async () => {
+  const result = await Notifications.getAllScheduledNotificationsAsync();
+  return result;
+}
+
+export const deleteNotification = async notificationId => {
+  await Notifications.cancelScheduledNotificationAsync(notificationId);
+}
+
+export const deleteAllNotifications = async () => {
+  await Notifications.cancelAllScheduledNotificationsAsync();
 }

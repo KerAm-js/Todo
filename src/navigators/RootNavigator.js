@@ -20,7 +20,6 @@ export default function RootNavigator() {
 
   const dataUploading = useCallback(async () => {
     await profileCntxt.autoLogin();
-    // await tasksCntxt.updateTasks();
     await tasksCntxt.onNewDayHandler();
     await targetsCntxt.getTargetsFromLocalDB();
     await notesCntxt.getNotesFromLocalDB();

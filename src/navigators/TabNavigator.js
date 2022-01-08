@@ -18,6 +18,7 @@ export default function TabNavigator() {
     await tasksCntxt.findCurrentTasks();
     await tasksCntxt.updateResult();
     await tasksCntxt.updateStats();
+    await tasksCntxt.updateNotifications();
   })
 
   useEffect(async () => {

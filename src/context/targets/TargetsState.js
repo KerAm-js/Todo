@@ -25,6 +25,7 @@ const TargetsState = ({children}) => {
 
   const getTargetsFromLocalDB = async () => {
     try {
+      dispatch({type: UPLOAD_TARGETS, targetsList: []});
       const targets = await DB.getTargets();
       targets.forEach(target => dispatch({type: ADD_TARGET, target}))
     } catch (e) {

@@ -5,12 +5,9 @@ import {
   EDIT_TASK, 
   FIND_CURRENT_TASKS, 
   FIND_EXPIRED_TASKS,   
-  GET_TASKS_FROM_LOCAL_DB,  
-  ON_NEW_DAY_HANDLER, 
   REMOVE_TASK, 
   SET_TASK_EXPIRED, 
   SHOW_TASK_DETAILS, 
-  TO_START_TASK, 
   UPDATE_RESULT, 
   UPDATE_STATS, 
   UPLOAD_STATS, 
@@ -18,7 +15,7 @@ import {
 } from "./types";
 import { TasksContext } from "./TasksContext";
 import { tasksReducer } from "./TasksReducer";
-import { presentNotification } from "../../native/notifications"; 
+import { deleteAllNotifications, setNotification } from "../../native/notifications"; 
 import { DB } from "../../backend/db";
 
 
@@ -41,7 +38,8 @@ const TasksState = ({children}) => {
       expiredTasks: 0,
       tasksLeft: 0,
       completedInTime: 0,
-    }
+    },
+    notifications: [],
   }
 
   const [state, dispatch] = useReducer(tasksReducer, initialState);
@@ -141,6 +139,7 @@ const TasksState = ({children}) => {
 
   const updateTasks = async () => {
     try {
+      dispatch({type: UPLOAD_TASKS, taskList: []});
       const tasks = await getTasksFromLocalDB();
       tasks.forEach(task => dispatch({type: ADD_TASK, task}));
     } catch (e) {
@@ -265,18 +264,42 @@ const TasksState = ({children}) => {
     }
   };
 
-  const setStartedTaskNotification = task => {
-    const start = new Date(task.startTime);
-    const currentDate = new Date();
-    const notificationTime = start - currentDate;
-    setTimeout(() => {
-      dispatch({type: TO_START_TASK, id: task.id, callBack: () => {
-        presentNotification(
-          "Пора приступать к задаче", 
-          `"${task.title}"`, 
-        );
-      }})
-    }, notificationTime)
+  const setStartedTaskNotification = async (task, id) => {
+    if (task.startTime && !task.isExpired && !task.isCompleted) {
+      const start = new Date(task.startTime);
+      const currentDate = new Date();
+      const notificationTime = Math.round((start - currentDate) / 1000);
+      const notificationId = await setNotification(
+        "Пора приступать к задаче", 
+        `"${task.title}"`, 
+        notificationTime
+      );
+    }
+  }
+
+  const setExpiredTaskNotification = async (task, id) => {
+    if (task.finishTime && !task.isExpired && !task.isCompleted) {
+      const finish = new Date(task.finishTime);
+      const currentDate = new Date();
+      const notificationTime = (finish - currentDate) / 1000;
+      const notificationId = await setNotification(
+        "Задача просрочена", 
+        `"${task.title}"`, 
+        notificationTime
+      );
+    }
+  }
+
+  const updateNotifications = async () => {
+    await deleteAllNotifications();
+    state.tasks.forEach(async task => {
+      if (task.startTime && !task.isExpired && !task.isCompleted) {
+        await setStartedTaskNotification(task);
+      }
+      if (task.finishTime && !task.isExpired && !task.isCompleted) {
+        await setExpiredTaskNotification(task);
+      }
+    })
   }
 
   const addTask = async task => {
@@ -284,15 +307,6 @@ const TasksState = ({children}) => {
       const result = await DB.addTask(task);
       const id = await result;
       dispatch({type: ADD_TASK, task: {...task, id}});
-      setStartedTaskNotification({...task, id});
-      if (task.startTime) {
-        setTaskExpired(id, task.startTime, task.finishTime, () => {
-          presentNotification(
-            "Задача просрочена",
-            `"${task.title}"`,
-          );
-        });
-      }
     } catch (e) {
       console.log(e)
     }
@@ -301,7 +315,7 @@ const TasksState = ({children}) => {
 
   const removeTask = async id => {
     try {
-      const result = await DB.deleteTask(id);
+      await DB.deleteTask(id);
       dispatch({type: REMOVE_TASK, id});
     } catch (e) {
       console.log(e);
@@ -334,6 +348,7 @@ const TasksState = ({children}) => {
       uploadStats,
       updateTasks,
       updateStats,
+      updateNotifications,
     }}>
       {children}
     </TasksContext.Provider>

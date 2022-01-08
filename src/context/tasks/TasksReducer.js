@@ -15,6 +15,7 @@ import {
   GET_TASKS_FROM_LOCAL_DB,
   UPDATE_STATS,
   UPLOAD_STATS,
+  ADD_NOTIFICATION,
 } from "./types";
 
 export const tasksReducer = (state, action) => {
@@ -222,8 +223,16 @@ export const tasksReducer = (state, action) => {
         ...state,
         tasks: action.tasks,
       }
-      return state;
     };
+    case ADD_NOTIFICATION: {
+      return {
+        ...state,
+        notifications: [
+          ...state.notifications,
+          action.notification,
+        ]
+      }
+    }
     default: {
       return state;
     }

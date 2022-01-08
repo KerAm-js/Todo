@@ -14,6 +14,7 @@ const NotesState = ({children}) => {
 
   const getNotesFromLocalDB = async () => {
     try {
+      dispatch({type: UPLOAD_NOTES, notes: []});
       const notes = await DB.getNotes();
       dispatch({type: UPLOAD_NOTES, notes});
     } catch (e) {
