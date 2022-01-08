@@ -284,7 +284,7 @@ const TasksState = ({children}) => {
       const result = await DB.addTask(task);
       const id = await result;
       dispatch({type: ADD_TASK, task: {...task, id}});
-      setStartedTaskNotification(task);
+      setStartedTaskNotification({...task, id});
       if (task.startTime) {
         setTaskExpired(id, task.startTime, task.finishTime, () => {
           presentNotification(
