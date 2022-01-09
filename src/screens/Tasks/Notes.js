@@ -1,13 +1,14 @@
-import React, { useState, useContext } from "react";
-import { StyleSheet, View, ScrollView, Text, FlatList } from "react-native";
-import SlideScreenHeader from "../../components/Tasks/SlideScreenHeader";
+import React, { useContext } from "react";
+import { StyleSheet, View, Text, FlatList, Alert } from "react-native";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import SlideScreenHeader from "../../components/Tasks/SlideScreenHeader";
 import Note from "../../components/Tasks/Note";
-import AddButton from "../../components/buttons/AddButton";
+import TasksScreenButtons from "../../components/buttons/TasksScreenButtons";
 import { NotesContext } from "../../context/notes/NotesContext";
 import { textStyles } from "../../constants/textStyles";
 import { colors } from "../../constants/colors";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 
 const Notes = ({navigation}) => {
@@ -16,6 +17,25 @@ const Notes = ({navigation}) => {
 
   const notesContext = useContext(NotesContext);
   const notes = notesContext.state.notes;
+
+  const deleteAllNotes = () => {
+    Alert.alert(
+      "Удаление заметок",
+      "Вы уверены, что хотите удалить все заметки?",
+      [
+        {
+          text: "Отмена",
+          onPress: () => null,
+          style: "Cancel"
+        },
+        {
+          text: "Удалить",
+          onPress: notesContext.deleteAllNotes,
+          style: "destructive"
+        },
+      ]
+    )
+  }
 
   return (
     <View style={{...styles.container, paddingTop: deviceTopSpace + 35}}>
@@ -46,7 +66,10 @@ const Notes = ({navigation}) => {
             </Text>
         }
       </View>
-      <AddButton onPress={notesContext.addNote}/>
+      <TasksScreenButtons 
+        addButton={notesContext.addNote}
+        deleteButton={deleteAllNotes}
+      />
     </View>
   )
 }

@@ -13,7 +13,7 @@ const StatsNumbers = ({stats}) => {
         <View style={styles.blueBlock}>
           <View style={styles.blueBlockBackground}>
             <Text style={styles.valueBigSize}>{stats.completedTasksCount}</Text>
-            <Text style={styles.title}>{`задач\n выполнено за\n всё время`}</Text>
+            <Text style={styles.title}>{`количество\n выполненных\n задач`}</Text>
           </View>
         </View>
 
@@ -37,7 +37,7 @@ const StatsNumbers = ({stats}) => {
         <View style={styles.blueBlock}>
           <View style={styles.blueBlockBackground}>
             <Text style={styles.valueBigSize}>{stats.dailyTaskCreatingAverage}</Text>
-            <Text style={styles.title}>{`задач\n в среднем\n создаётся в день`}</Text>
+            <Text style={styles.title}>{`средняя\n дневная\n активность`}</Text>
           </View>
         </View>
 

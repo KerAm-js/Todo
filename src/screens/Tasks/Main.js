@@ -1,5 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, View, Alert } from "react-native";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 import ModalLayout from "../../layouts/ModalLayout";
 import MainNavBar from "../../components/Tasks/MainNavBar";
 import Task from "../../components/Tasks/Task";
@@ -8,11 +11,9 @@ import TabScreenHeader from "../../components/headers/TabScreenHeader";
 import { TasksContext } from "../../context/tasks/TasksContext";
 import { TargetsContext } from "../../context/targets/TargetsContext";
 import Target from "../../components/Tasks/Target";
-import AddButton from "../../components/buttons/AddButton";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import TasksScreenButtons from "../../components/buttons/TasksScreenButtons";
 import { textStyles } from "../../constants/textStyles";
 import { colors } from "../../constants/colors";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 
 const Main = ({ navigation, route }) => {
@@ -32,7 +33,7 @@ const Main = ({ navigation, route }) => {
 
   let showedContent;
   let noContentText;
-  
+
   if (activeType === 'Tasks') {
     if (activeContent === 'Выполнено') {
       showedContent = tasks.filter(task => task.isCompleted);
@@ -55,6 +56,44 @@ const Main = ({ navigation, route }) => {
       showedContent = [...targets];
       noContentText = 'Нет добавленных целей';
     }
+  }
+
+  const deleteAllContent = () => {
+    if (activeType === 'Tasks') {
+      Alert.alert(
+        "Удаление задач",
+        "Вы уверены, что хотите удалить все задачи?",
+        [
+          {
+            text: "Отмена",
+            onPress: () => null,
+            style: "Cancel"
+          },
+          {
+            text: "Удалить",
+            onPress: tasksCntxt.deleteAllTasks,
+            style: "destructive"
+          },
+        ]
+      )
+    } else if (activeType === 'Targets') {
+      Alert.alert(
+        "Удаление целей",
+        "Вы уверены, что хотите удалить все цели?",
+        [
+          {
+            text: "Отмена",
+            onPress: () => null,
+            style: "Cancel"
+          },
+          {
+            text: "Удалить",
+            onPress: targetsCntxt.deleteAllTargets,
+            style: "destructive"
+          },
+        ]
+      )
+    } 
   }
 
   useEffect(() => {
@@ -145,7 +184,10 @@ const Main = ({ navigation, route }) => {
               />
           }
         </ModalLayout>
-      <AddButton onPress={() => setAddTaskModalVisible(true)}/>
+      <TasksScreenButtons 
+        addButton={() => setAddTaskModalVisible(true)} 
+        deleteButton={deleteAllContent}
+      />
     </View>
   )
 }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TextInput, ScrollView, Alert } from "react-native";
+import { StyleSheet, Text, View, TextInput, ScrollView, Alert, Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import MyButton from "../buttons/MyButton";
 import CheckInput from "./CheckInput";
@@ -141,6 +141,7 @@ const TaskForm = ({
           style={{ ...styles.input, ...styles.textArea}}
           value={description}
           onChangeText={text => setDescription(text)}
+          onBlur={() => !description.trim() ? setDescription('') : null}
           multiline={true}
           placeholder="Описание"
         />
@@ -212,11 +213,12 @@ const styles = StyleSheet.create({
   input: {
   },
   textArea: {
-    alignItems: "flex-start",
-    borderWidth: 1,
-    borderRadius: 20,
-    paddingTop: 10,
-    minHeight: 120,
+    alignItems: "center",
+    borderWidth: Platform.OS === 'android' ? 0 : 1,
+    borderBottomWidth: 1,
+    borderRadius: Platform.OS === 'android' ? 0 : 20,
+    paddingTop: 15,
+    minHeight: Platform.OS === 'android' ? 50 : 120,
     marginBottom: 20,
   },
 })

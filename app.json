@@ -2,6 +2,7 @@
   "expo": {
     "name": "Productive Plus",
     "slug": "rn-productive-plus",
+    "owner": "amir_gendargenoevskiy",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

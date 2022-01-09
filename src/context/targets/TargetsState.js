@@ -62,6 +62,15 @@ const TargetsState = ({children}) => {
     }
   };
 
+  const deleteAllTargets = async () => {
+    try {
+      await DB.deleteAllTargets();
+      dispatch({type: UPLOAD_TARGETS, targetsList: []});
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   const addTarget = async target => {
     try {
       const id = await DB.addTarget(target);
@@ -163,6 +172,7 @@ const TargetsState = ({children}) => {
       uploadTargets,
       getTargetsFromLocalDB,
       findExpiredTargets,
+      deleteAllTargets,
     }}>
       {children}
     </TargetsContext.Provider>

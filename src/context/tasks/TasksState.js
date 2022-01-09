@@ -188,6 +188,15 @@ const TasksState = ({children}) => {
     }
   }
 
+  const deleteAllTasks = async () => {
+    try {
+      await DB.deleteAllTasks();
+      dispatch({type: UPLOAD_TASKS, taskList: []});
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   const onNewDayHandler = async () => {
     const stats = await getStatsFromLocalDB();
     const currentDate = new Date().toLocaleDateString();
@@ -342,8 +351,9 @@ const TasksState = ({children}) => {
       findExpiredTasks,
       findCurrentTasks,
       showTaskDetails,
-      updateResult,
       onNewDayHandler,
+      deleteAllTasks,
+      updateResult,
       uploadTasks,
       uploadStats,
       updateTasks,

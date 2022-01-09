@@ -65,7 +65,16 @@ const NotesState = ({children}) => {
     } catch (e) {
       console.log(e);
     }
-  };
+  }
+
+  const deleteAllNotes = async () => {
+    try {
+      await DB.deleteAllNotes();
+      dispatch({type: UPLOAD_NOTES, notes: []});
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   return (
     <NotesContext.Provider value={{
@@ -75,6 +84,7 @@ const NotesState = ({children}) => {
       removeNote,
       uploadNotes,
       getNotesFromLocalDB,
+      deleteAllNotes,
     }}>
       {children}
     </NotesContext.Provider>

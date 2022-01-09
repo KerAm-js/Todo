@@ -17,12 +17,16 @@ const Input = props => {
     }
   }
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, marginBottom: props.validation ? 5 : 15}}>
       <TextInput 
         {...props}
         style={inputStyle}
       />
-      <Text style={styles.inputErrorMessage}>{props.invalid}</Text> 
+      {
+        props.validation 
+          ? <Text style={styles.inputErrorMessage}>{props.invalid}</Text> 
+          : null
+      }
     </View>
   )
 }
@@ -31,7 +35,6 @@ export default Input;
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 5,
   },
   input: {
     ...textStyles.regular,
