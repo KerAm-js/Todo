@@ -40,8 +40,8 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   leftButton: {
-    width: 50,
-    height: 30,
+    width: 60,
+    height: 40,
     borderTopLeftRadius: 10,
     borderBottomLeftRadius: 10,
     backgroundColor: colors.ACCENT,
@@ -49,8 +49,8 @@ const styles = StyleSheet.create({
     alignItems: "center",   
   },
   rightButton: {
-    width: 50,
-    height: 30,
+    width: 60,
+    height: 40,
     borderTopRightRadius: 10,
     borderBottomRightRadius: 10,
     backgroundColor: colors.DANGER,

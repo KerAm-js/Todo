@@ -141,7 +141,7 @@ const TaskForm = ({
           style={{ ...styles.input, ...styles.textArea}}
           value={description}
           onChangeText={text => setDescription(text)}
-          onBlur={() => !description.trim() ? setDescription('') : null}
+          onBlur={() => !description?.trim() ? setDescription('') : null}
           multiline={true}
           placeholder="Описание"
         />
