@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useState } from "react/cjs/react.development";
 import SlideHeading from "../../components/Home/SlideHeading";
 import TMtechnics from "../../components/Home/TMtechnics";
 import { textStyles } from "../../constants/textStyles";
