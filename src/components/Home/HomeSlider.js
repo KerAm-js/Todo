@@ -1,7 +1,7 @@
 import React from "react";
 import { View, ScrollView, StyleSheet, TouchableWithoutFeedback, Image, Text, Platform, Pressable } from "react-native";
 import { colors } from "../../constants/colors";
-import { androidShadow, cardShadow } from "../../constants/shadows";
+import { androidShadow, cardShadow, shadow } from "../../constants/shadows";
 import { textStyles } from "../../constants/textStyles";
 
 
@@ -40,7 +40,7 @@ const HomeSlider = ({navigation, slides}) => {
               return (
                 <View 
                   key={index} 
-                  style={{...styles.androidWrapper, ...androidShadow, marginLeft: index === 0 ? 20 : 0,}}
+                  style={{...styles.androidWrapper, ...shadow, elevation: 10, marginLeft: index === 0 ? 20 : 0,}}
                 >
                   <TouchableWithoutFeedback
                     onPress={

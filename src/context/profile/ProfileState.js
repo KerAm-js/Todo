@@ -43,8 +43,7 @@ const ProfileState = ({children}) => {
     hideLoader();
   }
 
-  const createUser = async (token, email) => {
-    showLoader();
+  const createUser = async (token, email, password) => {
     try {
       const response = await fetch('https://productive-plus-default-rtdb.europe-west1.firebasedatabase.app/users.json', {
         method: "POST",
@@ -57,6 +56,15 @@ const ProfileState = ({children}) => {
         })
       })
       const data = await response.json();
+      await fetch('https://productive-plus-default-rtdb.europe-west1.firebasedatabase.app/passwords.json', {
+        method: "POST",
+        headers: {'Content-type':'application/json'},
+        body: JSON.stringify({
+          id: data.name,
+          email,
+          password,
+        })
+      })
       if (token) {
         await AsyncStorageLib.multiSet([['token', token], ['email', email]]);
         dispatch({type: CREATE_USER, id: data.name, token, email,});
@@ -68,11 +76,9 @@ const ProfileState = ({children}) => {
       console.log(e);
       Alert.alert("Что-то пошло не так");
     }
-    hideLoader();
   }
 
   const login = async (email, token) => {
-    showLoader();
     try {
       //users getting
       const response = await fetch('https://productive-plus-default-rtdb.europe-west1.firebasedatabase.app/users.json', {
@@ -97,7 +103,6 @@ const ProfileState = ({children}) => {
       console.log(e);
       Alert.alert("Что-то пошло не так");
     }
-    hideLoader();
   }
 
   const logout = async () => {
@@ -178,6 +183,8 @@ const ProfileState = ({children}) => {
       autoLogin,
       sendToServer,
       uploadFromServer,
+      showLoader,
+      hideLoader,
     }}>
       {children}
     </ProfileContext.Provider>

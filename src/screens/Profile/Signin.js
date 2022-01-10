@@ -25,7 +25,8 @@ const SignIn = ({navigation}) => {
   const [emailInvalid, setEmailInvalid] = useState(false);
   const [passwordInvalid, setPasswordInvalid] = useState(false);
 
-  const onSignInHandler = () => {
+  const onSignInHandler = async () => {
+    profileCntxt.showLoader();
     signin(email, password, onSuccessAuthHanlder, onAuthErrorHanlder);
   }
 
@@ -34,6 +35,7 @@ const SignIn = ({navigation}) => {
     setEmail('');
     setPassword('');
     setError('');
+    profileCntxt.hideLoader();
     navigation.navigate("Main");
   }
 
@@ -60,8 +62,8 @@ const SignIn = ({navigation}) => {
         break;
       }
     }
-    console.log(error.code)
-    setError(errorMessage)
+    profileCntxt.hideLoader();
+    setError(errorMessage);
   }
 
   const validateEmail = (email, setInvalid) => {
@@ -70,7 +72,7 @@ const SignIn = ({navigation}) => {
     if (!email) {
       setInvalid('Заполните это поле');
     } else if (!isValid) {
-      setInvalid('Неверный e-mail');
+      setInvalid('e-mail должен содержать "@" и "."');
     } else {
       setInvalid(null)
     }
@@ -127,6 +129,7 @@ const SignIn = ({navigation}) => {
             onChangeText={onEmailChangeHandler}
             textContentType="emailAddress"
             invalid={emailInvalid}
+            validation={true}
           />
           <Input 
             style={passwordInvalid ? styles.inputInvalidStyle : null}
@@ -135,6 +138,7 @@ const SignIn = ({navigation}) => {
             onChangeText={onPasswordChangeHanlder}
             textContentType="password"
             invalid={passwordInvalid}
+            validation={true}
           />
         </View>
         <MyButton 

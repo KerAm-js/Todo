@@ -57,10 +57,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   whiteBlock: {
-    minHeight: 190,
-    borderWidth: Platform.OS === 'ios' ? 0 : 1,
-    borderColor: '#eee',
     ...shadow,
+    minHeight: 190,
     alignItems: "center",
     borderRadius: 20,
     backgroundColor: '#fff',

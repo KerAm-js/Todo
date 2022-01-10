@@ -3,12 +3,17 @@ import { StyleSheet, View, Text } from "react-native";
 import { colors } from "../constants/colors";
 import { textStyles } from "../constants/textStyles";
 
-const Message = ({message, style}) => {
+const Message = ({message, style, title}) => {
   const containerStyle = {
     ...styles.container,
   }
   return (
     <View style={{...containerStyle, ...style}}>
+      {
+        title 
+          ? <Text style={styles.title}>{title}</Text>
+          : null
+      }
       <Text style={styles.text}>{message}</Text>
     </View>
   )
@@ -29,4 +34,8 @@ const styles = StyleSheet.create({
     ...textStyles.regular,
     minHeight: 24,
   },
+  title: {
+    ...textStyles.subtitle,
+    marginBottom: 10,
+  }
 })

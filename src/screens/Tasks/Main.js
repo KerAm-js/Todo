@@ -60,39 +60,43 @@ const Main = ({ navigation, route }) => {
 
   const deleteAllContent = () => {
     if (activeType === 'Tasks') {
-      Alert.alert(
-        "Удаление задач",
-        "Вы уверены, что хотите удалить все задачи?",
-        [
-          {
-            text: "Отмена",
-            onPress: () => null,
-            style: "Cancel"
-          },
-          {
-            text: "Удалить",
-            onPress: tasksCntxt.deleteAllTasks,
-            style: "destructive"
-          },
-        ]
-      )
+      if (tasksCntxt.state.tasks?.length > 0) {
+        Alert.alert(
+          "Удаление задач",
+          "Вы уверены, что хотите удалить все задачи?",
+          [
+            {
+              text: "Отмена",
+              onPress: () => null,
+              style: "Cancel"
+            },
+            {
+              text: "Удалить",
+              onPress: tasksCntxt.deleteAllTasks,
+              style: "destructive"
+            },
+          ]
+        )
+      }
     } else if (activeType === 'Targets') {
-      Alert.alert(
-        "Удаление целей",
-        "Вы уверены, что хотите удалить все цели?",
-        [
-          {
-            text: "Отмена",
-            onPress: () => null,
-            style: "Cancel"
-          },
-          {
-            text: "Удалить",
-            onPress: targetsCntxt.deleteAllTargets,
-            style: "destructive"
-          },
-        ]
-      )
+      if (targetsCntxt.state.targets?.length > 0) {
+        Alert.alert(
+          "Удаление целей",
+          "Вы уверены, что хотите удалить все цели?",
+          [
+            {
+              text: "Отмена",
+              onPress: () => null,
+              style: "Cancel"
+            },
+            {
+              text: "Удалить",
+              onPress: targetsCntxt.deleteAllTargets,
+              style: "destructive"
+            },
+          ]
+        )
+      }
     } 
   }
 

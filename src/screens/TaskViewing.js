@@ -58,30 +58,32 @@ const TaskViewing = ({navigation}) => {
           task={tasksCntxt.state.viewedTask}
           completeTask={() => tasksCntxt.completeTask(tasksCntxt.state.viewedTask.id)}
         />
-        <MyButton 
-          type="submit"
-          title="Редактировать"
-          onPress={() => setEditModalVisible(true)}
-        />
-        <MyButton 
-          type="danger"
-          title="Удалить"
-          onPress={taskRemoving}
-        />
-        <ModalLayout
-          visible={editModalVisible}
-          close={closeModal}
-          style={{paddingTop: deviceTopSpace + 35}}
-        >
-          <TaskForm 
-            name="task"
-            type="edit"
-            task={tasksCntxt.state.viewedTask}
-            close={closeModal}
-            editTask={taskData => tasksCntxt.editTask(tasksCntxt.state.viewedTask.id, taskData)}
-            navigation={navigation}
+        <View style={{paddingHorizontal: 20}}>
+          <MyButton 
+            type="submit"
+            title="Редактировать"
+            onPress={() => setEditModalVisible(true)}
           />
-        </ModalLayout>
+          <MyButton 
+            type="danger"
+            title="Удалить"
+            onPress={taskRemoving}
+          />
+          <ModalLayout
+            visible={editModalVisible}
+            close={closeModal}
+            style={{paddingTop: deviceTopSpace + 35}}
+          >
+            <TaskForm 
+              name="task"
+              type="edit"
+              task={tasksCntxt.state.viewedTask}
+              close={closeModal}
+              editTask={taskData => tasksCntxt.editTask(tasksCntxt.state.viewedTask.id, taskData)}
+              navigation={navigation}
+            />
+          </ModalLayout>
+        </View>
       </ScrollView>
     </View>
   )
@@ -98,8 +100,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    paddingHorizontal: 20,
-    paddingTop: 30,
     paddingBottom: 90,
   },
   image: {

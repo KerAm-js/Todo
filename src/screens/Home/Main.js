@@ -38,7 +38,6 @@ const Main = ({slides, navigation}) => {
         style={{...styles.scroll, paddingTop: Platform.OS === 'ios' ? deviceTopSpace + 35 + 50 + 60 : deviceTopSpace + 35 + 50 + 30}}
         showsVerticalScrollIndicator={false}
       >
-
         <View style={styles.content}>
           <HomeSlider 
             navigation={navigation} 

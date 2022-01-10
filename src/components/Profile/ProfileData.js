@@ -1,5 +1,6 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
+import { shadow } from "../../constants/shadows";
 import { textStyles } from "../../constants/textStyles";
 
 const ProfileData = ({user}) => {
@@ -17,7 +18,7 @@ const ProfileData = ({user}) => {
   }
 
   return (
-    <>
+    <View style={{...styles.container, ...shadow}}>
       <View style={styles.heading}>
         <View style={styles.headingText}>
           {
@@ -56,13 +57,22 @@ const ProfileData = ({user}) => {
         ? <Text style={styles.text}>{user.quote}</Text>
         : <Text style={styles.text}>Не указана</Text>
       } */}
-    </>
+    </View>
   )
 }
 
 export default ProfileData;
 
 const styles = StyleSheet.create({
+  container: {
+    marginTop: 30,
+    marginBottom: 20,
+    marginHorizontal: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 25,
+    borderRadius: 20,
+    backgroundColor: '#fff',
+  },
   heading: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -88,6 +98,5 @@ const styles = StyleSheet.create({
   },
   text: {
     ...textStyles.regular,
-    marginBottom: 30,
   },
 })

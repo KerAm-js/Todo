@@ -17,7 +17,7 @@ const Input = props => {
     }
   }
   return (
-    <View style={{...styles.container, marginBottom: props.validation ? 5 : 15}}>
+    <View style={{...styles.container, marginBottom: props.validation ? 0 : 15}}>
       <TextInput 
         {...props}
         style={inputStyle}
@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
     ...textStyles.extraSmall,
     color: colors.DANGER,
     marginLeft: 14,
-    marginTop: 10,
+    marginTop: 5,
+    marginBottom: 5,
   }
 })

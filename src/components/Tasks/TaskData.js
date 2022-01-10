@@ -1,6 +1,7 @@
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { colors } from "../../constants/colors";
+import { shadow } from "../../constants/shadows";
 import { textStyles } from "../../constants/textStyles";
 
 const TaskData = ({task, completeTask}) => {
@@ -40,7 +41,7 @@ const TaskData = ({task, completeTask}) => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, ...shadow}}>
       <View style={styles.heading}>
         <Text style={styles.title}>{task?.title}</Text>
         <TouchableOpacity 
@@ -74,6 +75,12 @@ export default TaskData;
 const styles = StyleSheet.create({
   container: {
     marginBottom: 30,
+    marginHorizontal: 20,
+    marginTop: 30,
+    paddingHorizontal: 20,
+    paddingVertical: 25,
+    borderRadius: 20,
+    backgroundColor: '#fff',
   },
   heading: {
     flexDirection: "row",

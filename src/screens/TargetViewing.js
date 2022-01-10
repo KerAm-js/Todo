@@ -58,30 +58,32 @@ const TargetViewing = ({navigation}) => {
           target={targetContext.state.viewedTarget}
           complete={() => targetContext.completeTarget(targetContext.state.viewedTarget.id)}
         />
-        <MyButton 
-          type="submit"
-          title="Редактировать"
-          onPress={() => setEditModalVisible(true)}
-        />
-        <MyButton 
-          type="danger"
-          title="Удалить"
-          onPress={taskRemoving}
-        />
-        <ModalLayout
-          visible={editModalVisible}
-          close={closeModal}
-          style={{paddingTop: diviceTopSpace + 35}}
-        >
-          <TaskForm 
-            name="target"
-            type="edit"
-            target={targetContext.state.viewedTarget}
-            close={closeModal}
-            editTarget={targetData => targetContext.editTarget(targetContext.state.viewedTarget.id, targetData)}
-            navigation={navigation}
+        <View style={{paddingHorizontal: 20}}>
+          <MyButton 
+            type="submit"
+            title="Редактировать"
+            onPress={() => setEditModalVisible(true)}
           />
-        </ModalLayout>
+          <MyButton 
+            type="danger"
+            title="Удалить"
+            onPress={taskRemoving}
+          />
+          <ModalLayout
+            visible={editModalVisible}
+            close={closeModal}
+            style={{paddingTop: diviceTopSpace + 35}}
+          >
+            <TaskForm 
+              name="target"
+              type="edit"
+              target={targetContext.state.viewedTarget}
+              close={closeModal}
+              editTarget={targetData => targetContext.editTarget(targetContext.state.viewedTarget.id, targetData)}
+              navigation={navigation}
+            />
+          </ModalLayout>
+        </View>
       </ScrollView>
     </View>
   )
@@ -98,8 +100,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    paddingHorizontal: 20,
-    paddingTop: 30,
     paddingBottom: 90,
   },
   image: {

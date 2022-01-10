@@ -56,12 +56,18 @@ const TaskForm = ({
       : target?.finishTime
   );
 
+  const [titleInvalid, setTitleInvalid] = useState();
+
   const containerPaddingBottom = useSafeAreaInsets().bottom + 20 || 50;
 
   let titleInputPlaceholder = name === "task" ? "Задача" : "Цель";
 
   const onAddHandler = () => {
-    if (title?.trim() && name === 'task') {
+    if (!title?.trim()) {
+      setTitleInvalid('Заполните это поле');
+      return
+    }
+    if (!titleInvalid && name === 'task') {
       addTask({
         title: title.trim(),
         description,
@@ -72,7 +78,7 @@ const TaskForm = ({
         isExpired: isTimeAdded ? new Date() < new Date(finishTime) ? 0 : 1 : 0,
       });
       close();
-    } else if(title?.trim() && name === 'target') {
+    } else if(!titleInvalid && name === 'target') {
       addTarget({
         id: `${targets?.length}_${new Date().toString()}`,
         title: title.trim(),
@@ -82,13 +88,14 @@ const TaskForm = ({
         isExpired: 0,
       });
       close();
-    } else {
-      Alert.alert('Пожалуйста, заполните поле "Задача"')
     }
   }
 
   const onEditHandler = () => {
-    if (title?.trim() && name === 'task') {
+    if (!title?.trim() && !titleInvalid) {
+      setTitleInvalid('Заполните это поле');
+    }
+    if (!titleInvalid && name === 'task') {
       editTask({
         title: title.trim(),
         description,
@@ -99,7 +106,7 @@ const TaskForm = ({
         isExpired: isTimeAdded ? (new Date() < finishTime ? 0 : 1) : 0, 
       })
       close();
-    } else if (title?.trim() && name === 'target') {
+    } else if (!titleInvalid && name === 'target') {
       editTarget({
         title: title.trim(),
         description,
@@ -108,8 +115,15 @@ const TaskForm = ({
         isExpired: 0,
       });
       close();
+    }
+  }
+
+  const onTitleChangeHandler = text => {
+    setTitle(text);
+    if (!text?.trim()) {
+      setTitleInvalid('Заполните это поле');
     } else {
-      Alert.alert(`Пожалуйста, заполните поле "${titleInputPlaceholder}"`)
+      setTitleInvalid(null);
     }
   }
 
@@ -124,6 +138,12 @@ const TaskForm = ({
     formTitle = 'Новая цель';
   }
 
+  let descriptionInputMinHeight = Platform.OS === 'ios' 
+    ? {
+        minHeight: 120,
+      }
+    : {};
+    
   return (
     <ScrollView 
       style={{...styles.container}}
@@ -134,11 +154,13 @@ const TaskForm = ({
         <Input 
           style={styles.input}
           value={title}
-          onChangeText={text => setTitle(text)}
+          onChangeText={onTitleChangeHandler}
           placeholder={titleInputPlaceholder}
+          invalid={titleInvalid}
+          validation={true}
         />
         <Input 
-          style={{ ...styles.input, ...styles.textArea}}
+          style={{ ...styles.input, ...styles.textArea, ...descriptionInputMinHeight}}
           value={description}
           onChangeText={text => setDescription(text)}
           onBlur={() => !description?.trim() ? setDescription('') : null}
@@ -183,6 +205,7 @@ const TaskForm = ({
         title={btnText}
         type="submit"
         onPress={type === 'add' ? onAddHandler : onEditHandler}
+        disabled={titleInvalid}
       />
       <MyButton 
         title="Отмена"
@@ -211,14 +234,14 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
   input: {
+    marginBottom: Platform.OS === 'android' ? 0 : 5,
   },
   textArea: {
     alignItems: "center",
     borderWidth: Platform.OS === 'android' ? 0 : 1,
     borderBottomWidth: 1,
     borderRadius: Platform.OS === 'android' ? 0 : 20,
-    paddingTop: 15,
-    minHeight: Platform.OS === 'android' ? 50 : 120,
+    paddingTop: Platform.OS === 'android' ? 0 : 15,
     marginBottom: 20,
   },
 })

@@ -3,15 +3,16 @@ import { StyleSheet, TouchableOpacity, Text } from "react-native";
 import { colors } from "../../constants/colors";
 import { textStyles } from "../../constants/textStyles";
 
-const MyButton = ({type, title, onPress}) => {
+const MyButton = ({type, title, onPress, disabled}) => {
 
-  const borderColor = type === 'submit' ? colors.BLUE : colors.DANGER;
-  const backgroundColor = type === 'submit' ? colors.LIGHTBLUE : colors.LIGHTDANGER;
+  let borderColor = type === 'submit' ? colors.BLUE : colors.DANGER;
+  let backgroundColor = type === 'submit' ? colors.LIGHTBLUE : colors.LIGHTDANGER;
 
   return (
     <TouchableOpacity
       style={{...styles.container, backgroundColor, borderColor}}
       onPress={onPress}
+      disabled={disabled}
     >
       <Text style={styles.title}>{title}</Text>
     </TouchableOpacity>

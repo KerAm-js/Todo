@@ -14,7 +14,7 @@ const SignUp = ({navigation}) => {
   
   const deviceTopSpace = useSafeAreaInsets().top || 20;
   const profileCntxt = useContext(ProfileContext);
-
+ 
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [confirmedPassword, setConfirmedPassword] = useState();
@@ -26,6 +26,7 @@ const SignUp = ({navigation}) => {
 
   const onSignUpHandler = () => {
     if (password === confirmedPassword) {
+      profileCntxt.showLoader();
       signup(email, password, onSuccessSignUpHandler, onSingUpErrorHandler);
     } else {
       setError('Пароли не совпадают:Пожалуйтса, проверьти пароли и повторите попытку')
@@ -34,7 +35,8 @@ const SignUp = ({navigation}) => {
 
   const onSuccessSignUpHandler = token => {
     if (token) {
-      profileCntxt.createUser(token, email);
+      profileCntxt.createUser(token, email, password);
+      profileCntxt.hideLoader();
       navigation.navigate("Main");
     } 
   }
@@ -67,8 +69,8 @@ const SignUp = ({navigation}) => {
         break;
       }
     }
-    console.log(error.code)
-    setError(errorMessage)
+    profileCntxt.hideLoader();
+    setError(errorMessage);
   }
 
   const validateEmail = (email, setInvalid) => {
@@ -77,7 +79,7 @@ const SignUp = ({navigation}) => {
     if (!email) {
       setInvalid('Заполните это поле');
     } else if (!isValid) {
-      setInvalid('Неверный e-mail');
+      setInvalid('e-mail должен содержать "@" и "."');
     } else {
       setInvalid(null)
     }
@@ -125,7 +127,7 @@ const SignUp = ({navigation}) => {
         {
           error 
           ? <ErrorMessage message={error} />
-          : <Message message="Придумайте email и пароль для своего аккаунта"/>
+          : <Message message="Придумайте email или введите существующий для своего аккаунта"/>
         }
         <View style={styles.inputs}>
           <Input 
@@ -135,6 +137,7 @@ const SignUp = ({navigation}) => {
             onChangeText={onEmailChangeHandler}
             textContentType="emailAddress"
             invalid={emailInvalid}
+            validation={true}
           />
           <Input 
             placeholder="Пароль" 
@@ -142,6 +145,7 @@ const SignUp = ({navigation}) => {
             onChangeText={onPasswordChangeHanlder}
             textContentType="newPassword"
             invalid={passwordInvalid}
+            validation={true}
           />
           <Input 
             placeholder="Подтвердите пароль" 
@@ -149,6 +153,7 @@ const SignUp = ({navigation}) => {
             onChangeText={onConfirmedPasswordChangeHandler}
             textContentType="newPassword"
             invalid={confirmedPassInvalid}
+            validation={true}
           />
         </View>
         <MyButton 
