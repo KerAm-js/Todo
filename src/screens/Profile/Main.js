@@ -9,9 +9,11 @@ import { ProfileContext } from "../../context/profile/ProfileContext";
 import { TargetsContext } from '../../context/targets/TargetsContext';
 import { TasksContext } from '../../context/tasks/TasksContext';
 import { NotesContext } from '../../context/notes/NotesContext';
+import Message from "../../components/Message";
 import ModalLayout from '../../layouts/ModalLayout';
 import EditForm from "../../components/Profile/EditForm";
 import Loader from "../../components/Loader";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 const Main = ({navigation}) => {
 
@@ -21,6 +23,7 @@ const Main = ({navigation}) => {
   const tasksCntxt = useContext(TasksContext);
   const notesCntxt = useContext(NotesContext);
   const [editModalVisible, setEditModalVisible] = useState(false);
+  const tabBarHeight = useBottomTabBarHeight();
   
   const closeEditModal = () => {
     setEditModalVisible(false);
@@ -83,7 +86,11 @@ const Main = ({navigation}) => {
         <ProfileData 
           user={profileCntxt.state.userData}
         />
-       <MyButton 
+        <Message 
+          message='Если вы хотите сменить устройство, сохраните ваши данные, нажав "Сохранить копию". Данные (статистика, цели и т.д.) будут отправлены на сервер. Затем на новом устройстве выполните вход в ваш аккаунт и нажмите "Загрузить данные".'
+          style={{marginBottom: 40}}
+        />
+        <MyButton 
           type="submit"
           title="Сохранить копию"
           onPress={onSaveDataHandler}
@@ -103,6 +110,8 @@ const Main = ({navigation}) => {
           title="Выйти"
           onPress={onSignOut}
         />
+        <View style={{height: tabBarHeight + 10}}>
+        </View>
       </ScrollView>
       <Modal
         animationType="fade"

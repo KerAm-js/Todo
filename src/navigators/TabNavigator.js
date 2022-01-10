@@ -31,7 +31,7 @@ export default function TabNavigator() {
 
   return (
     <Tab.Navigator 
-      initialRouteName="Tasks" 
+      initialRouteName="Home" 
       tabBar={props => <TabBar {...props} />}
     >
       <Tab.Screen 

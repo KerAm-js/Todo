@@ -1,7 +1,7 @@
 import React from "react";
-import { View, ScrollView, StyleSheet, TouchableWithoutFeedback, Image, Text, Platform } from "react-native";
+import { View, ScrollView, StyleSheet, TouchableWithoutFeedback, Image, Text, Platform, Pressable } from "react-native";
 import { colors } from "../../constants/colors";
-import { cardShadow } from "../../constants/shadows";
+import { androidShadow, cardShadow } from "../../constants/shadows";
 import { textStyles } from "../../constants/textStyles";
 
 
@@ -15,24 +15,50 @@ const HomeSlider = ({navigation, slides}) => {
         style={styles.scroll}
       >
         {
-          slides.map(({name, image, title}, index) => (
-            <TouchableWithoutFeedback
-              key={index}
-              onPress={
-                () => navigation.navigate(name)
-              }
-            >
-              <View style={{...cardShadow}}>
-                <View style={{ ...styles.slideContent, marginLeft: index === 0 ? 20 : 0,}}>
-                  <Text style={styles.title}>{title}</Text>
-                  <Image 
-                    source={image}
-                    style={styles.image}
-                  />
+          slides.map(({name, image, title}, index) => {
+            if (Platform.OS === 'ios') {
+              return (
+                <TouchableWithoutFeedback
+                  style={{ ...styles.slideContent, marginLeft: index === 0 ? 20 : 0,}}
+                  key={index}
+                  onPress={
+                    () => navigation.navigate(name)
+                  }
+                >
+                  <View style={{...cardShadow}}>
+                    <View style={{ ...styles.slideContent, marginLeft: index === 0 ? 20 : 0}}>
+                      <Text style={styles.title}>{title}</Text>
+                      <Image 
+                        source={image}
+                        style={styles.image}
+                      />
+                    </View>
+                  </View>
+                </TouchableWithoutFeedback>
+              )
+            } else {
+              return (
+                <View 
+                  key={index} 
+                  style={{...styles.androidWrapper, ...androidShadow, marginLeft: index === 0 ? 20 : 0,}}
+                >
+                  <TouchableWithoutFeedback
+                    onPress={
+                      () => navigation.navigate(name)
+                    }
+                  >
+                    <View style={{ ...styles.slideContentAndroid}}>
+                      <Text style={styles.title}>{title}</Text>
+                      <Image 
+                        source={image}
+                        style={styles.image}
+                      />
+                    </View>
+                  </TouchableWithoutFeedback>
                 </View>
-              </View>
-            </TouchableWithoutFeedback>
-          ))
+              )
+            }
+          })
         }
       </ScrollView>
     </View>
@@ -47,9 +73,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   scroll: {
-    paddingTop: 10,
-    paddingBottom: 45,
-    marginTop: Platform.OS === 'ios' ? -40 : 10,
+    marginTop: Platform.OS === 'ios' ? -40 : 0,
   },
   image :{
     marginTop: 20,
@@ -62,14 +86,28 @@ const styles = StyleSheet.create({
     marginRight: 20,
     alignItems: "center",
   },
-  slideContent: {
-    alignItems: 'center',
-    overflow: 'hidden',
+  androidWrapper: {
+    marginTop: 20,
+    marginBottom: 45,
+    overflow: "hidden",
     height: 200, 
     width: 200,
     marginRight: 20,
     borderRadius: 20,
-    backgroundColor: Platform.OS === 'ios' ? "#fff" : colors.LIGHTBLUE,
+    backgroundColor: "#fff",
+  },
+  slideContent: {
+    marginBottom: 45,
+    alignItems: 'center',
+    overflow: "hidden",
+    height: 200, 
+    width: 200,
+    marginRight: 20,
+    borderRadius: 20,
+    backgroundColor: "#fff",
+  },
+  slideContentAndroid: {
+    alignItems: 'center',
   },
   headingContainer: {
     backgroundColor: 'rgba(41, 53, 89, 0.5)',

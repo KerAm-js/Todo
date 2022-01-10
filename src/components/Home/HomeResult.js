@@ -1,7 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Platform, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { shadow } from "../../constants/shadows";
+import { androidShadow, shadow } from "../../constants/shadows";
 import { colors } from "../../constants/colors";
 import { textStyles } from "../../constants/textStyles";
 
@@ -59,12 +59,23 @@ const HomeResults = ({result}) => {
               borderColor = colors.SUCCESS;
             }
 
+            let cardShadow = {
+              ...shadow
+            }
+
+            if (Platform.OS === 'android') {
+              cardShadow = {
+                ...androidShadow,
+                elevation: 6,
+              }
+            }
+
             return (
               <View 
                 key={index}
                 style={{
                   ...styles.card, 
-                  ...shadow, 
+                  ...cardShadow, 
                   marginLeft: index === 0 ? 20 : 15,
                   marginRight: index === cards.length - 1 ? 20 : 0,
                 }}
@@ -96,17 +107,17 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   scroll: {
-    paddingTop: 15,
-    paddingBottom: 35,
   },
   card: {
+    marginTop: 15,
+    marginBottom: 35,
     paddingVertical: 20,
     justifyContent: "space-between",
     alignItems: "center",
     height: 140,
     width: 140,
     borderRadius: 20,
-    backgroundColor: Platform.OS === 'ios' ? "#fff" : colors.LIGHTBLUE,
+    backgroundColor: "#fff",
   },
   circle: {
     width: 60,

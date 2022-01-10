@@ -3,12 +3,12 @@ import { StyleSheet, View, Text } from "react-native";
 import { colors } from "../constants/colors";
 import { textStyles } from "../constants/textStyles";
 
-const Message = ({message}) => {
+const Message = ({message, style}) => {
   const containerStyle = {
     ...styles.container,
   }
   return (
-    <View style={containerStyle}>
+    <View style={{...containerStyle, ...style}}>
       <Text style={styles.text}>{message}</Text>
     </View>
   )

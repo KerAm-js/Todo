@@ -1,7 +1,7 @@
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, Platform, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { shadow } from "../../constants/shadows";
+import { androidShadow, shadow } from "../../constants/shadows";
 import { colors } from "../../constants/colors";
 import { textStyles } from "../../constants/textStyles";
 
@@ -19,10 +19,21 @@ const HomeTasksCount = ({count, navigation}) => {
     tasksCountString = 'задачи';
   }
 
+  let blockShadow = {
+    ...shadow
+  }
+
+  if (Platform.OS === 'android') {
+    blockShadow = {
+      ...androidShadow,
+      elevation: 5,
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
-      <View style={{...styles.block, ...shadow}}>
+      <View style={{...styles.block, ...blockShadow}}>
         <Text style={styles.text}>{`${count} ${tasksCountString}`}</Text>
         <TouchableOpacity
           style={styles.button}
@@ -53,7 +64,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     borderRadius: 20,
-    backgroundColor: Platform.OS === 'ios' ? "#fff" : colors.LIGHTBLUE,
+    backgroundColor: "#fff",
   },
   title: {
     ...textStyles.title,

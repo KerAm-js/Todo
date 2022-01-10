@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
-import { DB } from "./src/backend/db";
+import * as SplashScreen from 'expo-splash-screen';
 
 import NotesState from "./src/context/notes/NotesState";
 import TargetsState from "./src/context/targets/TargetsState";
 import TasksState from "./src/context/tasks/TasksState";
 import ProfileState from "./src/context/profile/ProfileState";
 import RootNavigator from "./src/navigators/RootNavigator";
+import { DB } from "./src/backend/db";
 
 
 async function loadApplication() {
@@ -40,12 +41,15 @@ export default function App() {
   if (!isLoaded) {
     return (
       <AppLoading 
-        startAsync={() => loadApplication()} 
+        autoHideSplash={true}
+        startAsync={async () => await loadApplication()} 
         onError={err => console.log(err)}
-        onFinish={() => setIsLoaded(true)}
+        onFinish={() => {
+          setIsLoaded(true);
+          SplashScreen.hideAsync();
+        }}
       />
     )
-    
   }
 
   return (

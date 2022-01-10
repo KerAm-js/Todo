@@ -17,3 +17,8 @@ export const cardShadow = {
     height: 5,
   },
 }
+
+export const androidShadow = {
+  elevation: 10,
+  shadowColor: '#52006A',
+}

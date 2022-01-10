@@ -1,7 +1,7 @@
 import React from "react";
-import { TouchableOpacity, Text, StyleSheet, View, Image, TouchableWithoutFeedback, TouchableOpacityBase, Pressable, Platform } from "react-native";
+import { TouchableOpacity, Text, StyleSheet, View, Image, TouchableWithoutFeedback, TouchableOpacityBase, Pressable, Platform, ShadowPropTypesIOS } from "react-native";
 import { colors } from "../../constants/colors";
-import { shadow } from "../../constants/shadows";
+import { androidShadow, shadow } from "../../constants/shadows";
 import { textStyles } from "../../constants/textStyles";
 
 const Task = ({task, showDetails, complete, style}) => {
@@ -39,9 +39,19 @@ const Task = ({task, showDetails, complete, style}) => {
     borderColor = colors.DANGER
   }
 
+  let blockShadow = {
+    ...shadow
+  }
+
+  if (Platform.OS === 'android') {
+    blockShadow = {
+      ...androidShadow,
+      elevation: 5,
+    }
+  }
   return (
     <TouchableOpacity 
-      style={{...styles.container, ...shadow, ...style}}
+      style={{...styles.container, ...blockShadow, ...style}}
       onLongPress={showDetails}
       activeOpacity={0.5}
     >
@@ -77,8 +87,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: "#fff",
-    borderColor: colors.BORDER_COLOR_ANDROID,
-    borderWidth: Platform.OS === "ios" || Platform.OS === "macos" ? 0 : 1,
     borderRadius: 20,
     marginBottom: 10,
   },

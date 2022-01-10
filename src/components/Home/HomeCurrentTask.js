@@ -1,7 +1,7 @@
 import React from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { shadow } from "../../constants/shadows";
+import { androidShadow, shadow } from "../../constants/shadows";
 import { colors } from "../../constants/colors";
 import Task from "../Tasks/Task";
 import { textStyles } from "../../constants/textStyles";
@@ -10,6 +10,17 @@ const HomeCurrentTask = ({currentTasks, completeTask, showTaskDetails, navigatio
   const title = currentTasks.length === 1 || currentTasks.length === 0 
     ? 'Текущая задача' 
     : 'Текущие задачи';
+
+  let blockShadow = {
+    ...shadow
+  }
+
+  if (Platform.OS === 'android') {
+    blockShadow = {
+      ...androidShadow,
+      elevation: 5,
+    }
+  }
     
   return (
     <View style={styles.container}>
@@ -26,7 +37,7 @@ const HomeCurrentTask = ({currentTasks, completeTask, showTaskDetails, navigatio
                 />
               )
             })
-          : <View style={{...styles.block, ...shadow}}>
+          : <View style={{...styles.block, ...blockShadow}}>
               <Text style={styles.noTasks}>Нет задач, назначенных на текущее время</Text>
             </View>
       }
@@ -42,7 +53,7 @@ const styles = StyleSheet.create({
     paddingBottom: 35,
   },
   block: {
-    backgroundColor: Platform.OS === 'ios' ? "#fff" : colors.LIGHTBLUE,
+    backgroundColor: "#fff",
     borderRadius: 20,
     padding: 20,
     minHeight: 70,

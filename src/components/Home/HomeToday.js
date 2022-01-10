@@ -1,7 +1,6 @@
 import React from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
-import { colors } from "../../constants/colors";
-import { shadow } from "../../constants/shadows";
+import { androidShadow, shadow } from "../../constants/shadows";
 import { textStyles } from "../../constants/textStyles";
 
 const HomeToday = () => {
@@ -34,10 +33,21 @@ const HomeToday = () => {
   const date = new Date();
   const dateString = `${date.getDate()} ${months[date.getMonth()]}, ${weekDays[date.getDay()]}`;
 
+  let blockShadow = {
+    ...shadow
+  }
+
+  if (Platform.OS === 'android') {
+    blockShadow = {
+      ...androidShadow,
+      elevation: 5,
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Сегодня</Text>
-      <View style={{...styles.block, ...shadow}}>
+      <View style={{...styles.block, ...blockShadow}}>
         <Text style={styles.text}>{dateString}</Text>
       </View>
     </View>
@@ -60,7 +70,7 @@ const styles = StyleSheet.create({
     ...textStyles.regular,
   },
   block: {
-    backgroundColor: Platform.OS === 'ios' ? "#fff" : colors.LIGHTBLUE,
+    backgroundColor: "#fff",
     borderRadius: 20,
     padding: 20,
     minHeight: 70,

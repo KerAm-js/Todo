@@ -9,8 +9,8 @@ const TimePicker = ({type, time, setTime, minimumDate, mode}) => {
   const [show, setShow] = useState();
 
   const onChange = (event, selectedDate) => {
+    setShow(false);
     setTime(selectedDate || new Date());
-    setShow(Platform === 'ios');
   };
 
   const title = type === 'start' ? 'Начало:' :  'Конец:';
@@ -51,6 +51,7 @@ const TimePicker = ({type, time, setTime, minimumDate, mode}) => {
                 display="default"
                 locale="en_GB"
                 onChange={onChange}
+                minimumDate={minimumDate}
               />
             : null
         }
