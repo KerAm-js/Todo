@@ -13,7 +13,7 @@
           "icon": "./assets/icon.png",
           "color": "#ffffff",
           "sounds": [
-            "./assets/mixkit-message-pop-alert-2354.wav"
+            "./assets/note.mp3"
           ]
         }
       ]
@@ -41,6 +41,10 @@
       "buildNumber": "1.0.0"
     },
     "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
       "userInterfaceStyle": "dark",
       "package": "com.amirkerimov.productive_plus",
       "versionCode": 1,
