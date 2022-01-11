@@ -35,6 +35,7 @@
       "**/*"
     ],
     "ios": {
+      "icon": "./assets/iOS_icon.png",
       "supportsTablet": true,
       "userInterfaceStyle": "light",
       "bundleIdentifier": "com.amirkerimov.productive-plus",
@@ -47,7 +48,7 @@
       },
       "userInterfaceStyle": "dark",
       "package": "com.amirkerimov.productive_plus",
-      "versionCode": 3,
+      "versionCode": 4,
       "permissions": ["WRITE_EXTERNAL_STORAGE", "RECEIVE_BOOT_COMPLETED"]
     },
     "web": {

@@ -157,11 +157,13 @@ export const tasksReducer = (state, action) => {
       if (!!state.tasks.length) {
         let result = [];
         state.tasks.forEach(task => {
-          const currentTime = new Date();
-          const startTime = new Date(task?.startTime);
-          const finishTime = new Date(task?.finishTime);
-          if (startTime <= currentTime && finishTime > currentTime) {
-            result.push(task);
+          if (task.startTime) {
+            const currentTime = new Date();
+            const startTime = new Date(task?.startTime);
+            const finishTime = new Date(task?.finishTime);
+            if (startTime <= currentTime && finishTime > currentTime) {
+              result.push(task);
+            }
           }
         })
         
