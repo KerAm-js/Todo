@@ -11,7 +11,7 @@
         "expo-notifications",
         {
           "icon": "./assets/icon.png",
-          "color": "#ffffff",
+          "color": "#293559",
           "sounds": [
             "./assets/note.mp3"
           ]
@@ -43,11 +43,11 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#293559"
       },
       "userInterfaceStyle": "dark",
       "package": "com.amirkerimov.productive_plus",
-      "versionCode": 2,
+      "versionCode": 3,
       "permissions": ["WRITE_EXTERNAL_STORAGE", "RECEIVE_BOOT_COMPLETED"]
     },
     "web": {

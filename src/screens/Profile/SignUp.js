@@ -127,7 +127,7 @@ const SignUp = ({navigation}) => {
         {
           error 
           ? <ErrorMessage message={error} />
-          : <Message message="Придумайте email или введите существующий для своего аккаунта"/>
+          : <Message message="Введите существующий email или придумайте новый. Существующий email позволит легко восстановить пароль в будущем."/>
         }
         <View style={styles.inputs}>
           <Input 
