@@ -13,8 +13,9 @@ async function requestPermissionsAsync() {
     });
     if (result.status === 'granted') {
       return true;
+    } else {
+      return false;
     }
-    return false;
   } else {
     return true;
   }

@@ -64,7 +64,7 @@ const TasksState = ({children}) => {
 
   const findCurrentTasks = () => dispatch({type: FIND_CURRENT_TASKS});
 
-  const getResult = (tasks) => {
+  const getResult = tasks => {
     const completedTasks = tasks.reduce((prev, task) => task.isCompleted ? prev + 1 : prev, 0);
     const expiredTasks = tasks.reduce((prev, task) => task.isExpired ? prev + 1 : prev, 0);
     const progress = Math.round((completedTasks / state.tasks.length) * 100) || 0;
@@ -307,6 +307,7 @@ const TasksState = ({children}) => {
       }
       if (task.finishTime && !task.isExpired && !task.isCompleted) {
         await setExpiredTaskNotification(task);
+        setTaskExpired(task);
       }
     })
   }

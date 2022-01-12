@@ -20,34 +20,51 @@ const app = initializeApp(firebaseConfig);
 
 const auth = getAuth();
 
-export const signup = (login, password, onSuccessHandler, onErrorHandler) => {
-  createUserWithEmailAndPassword(auth, login, password)
-    .then(userCredential => {
-      const user = userCredential.user;
-      if (onSuccessHandler) {
-        onSuccessHandler(user.stsTokenManager.accessToken);
-      }
-    })
-    .catch((err) => {
-      if (onErrorHandler) {
-        onErrorHandler(err);
-      }
-    });
+export const signup = async (login, password, onSuccessHandler, onErrorHandler) => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, login, password)
+    const user = userCredential.user;
+    await onSuccessHandler(user.stsTokenManager.accessToken);
+  } catch (err) {
+    onErrorHandler(err);
+    console.log(err.code);
+  }
+  // createUserWithEmailAndPassword(auth, login, password)
+  //   .then(userCredential => {
+  //     const user = userCredential.user;
+  //     if (onSuccessHandler) {
+  //       onSuccessHandler(user.stsTokenManager.accessToken);
+  //     }
+  //   })
+  //   .catch((err) => {
+  //     if (onErrorHandler) {
+  //       onErrorHandler(err);
+  //     }
+  //   });
 }
 
-export const signin = (login, password, onSuccessHandler, onErrorHandler) => {
-  signInWithEmailAndPassword(auth, login, password)
-    .then(userCredential => {
-      const user = userCredential.user;
-      if (onSuccessHandler) {
-        onSuccessHandler(user.stsTokenManager.accessToken);
-      }
-    })
-    .catch((err) => {
-      if (onErrorHandler) {
-        onErrorHandler(err);
-      }
-    });
+export const signin = async (login, password, onSuccessHandler, onErrorHandler) => {
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, login, password);
+    const user = userCredential.user;
+    if (onSuccessHandler) {
+      await onSuccessHandler(user.stsTokenManager.accessToken);
+    }
+  } catch (err) {
+    onErrorHandler(err);
+  }
+  // signInWithEmailAndPassword(auth, login, password)
+  //   .then(userCredential => {
+  //     const user = userCredential.user;
+  //     if (onSuccessHandler) {
+  //       onSuccessHandler(user.stsTokenManager.accessToken);
+  //     }
+  //   })
+  //   .catch((err) => {
+  //     if (onErrorHandler) {
+  //       onErrorHandler(err);
+  //     }
+  //   });
 }
 
 export const signout = navigate => {

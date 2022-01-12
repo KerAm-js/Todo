@@ -24,20 +24,29 @@ const SignUp = ({navigation}) => {
   const [passwordInvalid, setPasswordInvalid] = useState(false);
   const [confirmedPassInvalid, setConfirmedPassInvalid] = useState(false);
 
-  const onSignUpHandler = () => {
+  const onSignUpHandler = async () => {
     if (password === confirmedPassword) {
       profileCntxt.showLoader();
-      signup(email, password, onSuccessSignUpHandler, onSingUpErrorHandler);
+      try {
+        await signup(email, password, onSuccessSignUpHandler, onSingUpErrorHandler);
+      } catch (e) {
+        console.log(e);
+      }
+      profileCntxt.hideLoader();
     } else {
       setError('Пароли не совпадают:Пожалуйтса, проверьти пароли и повторите попытку')
     }
   }
 
-  const onSuccessSignUpHandler = token => {
-    if (token) {
-      profileCntxt.createUser(token, email, password);
-      navigation.navigate("Main");
-    } 
+  const onSuccessSignUpHandler = async token => {
+    try {
+      if (token) {
+        await profileCntxt.createUser(token, email, password);
+        navigation.navigate("Main");
+      } 
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   const onSingUpErrorHandler = error => {
@@ -64,11 +73,17 @@ const SignUp = ({navigation}) => {
         break;
       };
 
+      case 'auth/email-already-in-use': {
+        errorMessage = `Email используется:Пользователь с таким email уже зарегистрирован`;
+        break;
+      };
+
       default: {
         break;
       }
     }
     setError(errorMessage);
+    // profileCntxt.hideLoader();
   }
 
   const validateEmail = (email, setInvalid) => {
@@ -162,7 +177,7 @@ const SignUp = ({navigation}) => {
       </ScrollView>
       <Modal
         animationType="fade"
-        visible={profileCntxt.state.isLoading} 
+        visible={!!profileCntxt.state.isLoading} 
         transparent={true} 
       >
         <Loader />

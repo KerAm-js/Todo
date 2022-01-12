@@ -27,15 +27,24 @@ const SignIn = ({navigation}) => {
 
   const onSignInHandler = async () => {
     profileCntxt.showLoader();
-    signin(email, password, onSuccessAuthHanlder, onAuthErrorHanlder);
+    try {
+      await signin(email, password, onSuccessAuthHanlder, onAuthErrorHanlder);
+    } catch (e) {
+      console.log(e);
+    }
+    profileCntxt.hideLoader();
   }
 
-  const onSuccessAuthHanlder = token => {
-    profileCntxt.login(email, token);
-    setEmail('');
-    setPassword('');
-    setError('');
-    navigation.navigate("Main");
+  const onSuccessAuthHanlder = async token => {
+    try {
+      await profileCntxt.login(email, token);
+      setEmail('');
+      setPassword('');
+      setError('');
+      navigation.navigate("Main");
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   const onAuthErrorHanlder = error => {

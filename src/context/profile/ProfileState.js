@@ -23,14 +23,13 @@ const ProfileState = ({children}) => {
   const [state, dispatch] = useReducer(profileReducer, initialState);
 
   const showLoader = () => {
-    dispatch({type: SHOW_LOADER})
+    dispatch({type: SHOW_LOADER});
   };
   const hideLoader = () => {
-    dispatch({type: HIDE_LOADER})
+    dispatch({type: HIDE_LOADER});
   };
 
   const editProfile = async userData => {
-    showLoader();
     try {
       const response = await fetch(`https://productive-plus-default-rtdb.europe-west1.firebasedatabase.app/users/${userData.id}/userData.json`, {
         method: "PATCH",

@@ -113,6 +113,8 @@ const Main = ({navigation}) => {
     )
   };
 
+  console.log(profileCntxt.state.isLoading);
+
   return (
     <View style={{...styles.container, paddingTop: deviceTopSpace + 45}}>
       <Heading title="Профиль" paddingTop={deviceTopSpace}/>
@@ -186,7 +188,11 @@ const Main = ({navigation}) => {
         <EditForm 
           close={closeEditModal} 
           userData={profileCntxt.state.userData}
-          editProfile={(userData) => profileCntxt.editProfile(userData)}
+          editProfile={async (userData) => {
+            profileCntxt.showLoader();
+            await profileCntxt.editProfile(userData);
+            profileCntxt.hideLoader();
+          }}
         />
       </ModalLayout>
     </View>
