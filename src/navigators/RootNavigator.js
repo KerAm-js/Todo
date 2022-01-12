@@ -8,6 +8,7 @@ import { ProfileContext } from '../context/profile/ProfileContext';
 import { TasksContext } from '../context/tasks/TasksContext';
 import { TargetsContext } from '../context/targets/TargetsContext';
 import { NotesContext } from '../context/notes/NotesContext';
+import * as SplashScreen from 'expo-splash-screen';
 
 const Stack = createStackNavigator();
 
@@ -19,10 +20,12 @@ export default function RootNavigator() {
   const notesCntxt = useContext(NotesContext);
 
   const dataUploading = useCallback(async () => {
+    SplashScreen.preventAutoHideAsync();
     await profileCntxt.autoLogin();
     await tasksCntxt.onNewDayHandler();
     await targetsCntxt.getTargetsFromLocalDB();
     await notesCntxt.getNotesFromLocalDB();
+    SplashScreen.hideAsync();
   })
 
   useEffect(() => {

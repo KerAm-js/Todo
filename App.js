@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import * as SplashScreen from 'expo-splash-screen';
@@ -57,7 +57,7 @@ export default function App() {
       <TargetsState>
         <TasksState>
           <NotesState>
-            <RootNavigator />
+            <RootNavigator/>
           </NotesState>
         </TasksState>
       </TargetsState> 

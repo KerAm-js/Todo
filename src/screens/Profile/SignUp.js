@@ -36,7 +36,6 @@ const SignUp = ({navigation}) => {
   const onSuccessSignUpHandler = token => {
     if (token) {
       profileCntxt.createUser(token, email, password);
-      profileCntxt.hideLoader();
       navigation.navigate("Main");
     } 
   }
@@ -69,7 +68,6 @@ const SignUp = ({navigation}) => {
         break;
       }
     }
-    profileCntxt.hideLoader();
     setError(errorMessage);
   }
 

@@ -22,7 +22,7 @@ const HomeResults = ({result}) => {
       value: result.completedTasks,
     },
     {
-      title: "Во время",
+      title: "Вовремя",
       value: result.completedInTime
     },
     {

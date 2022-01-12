@@ -35,7 +35,6 @@ const SignIn = ({navigation}) => {
     setEmail('');
     setPassword('');
     setError('');
-    profileCntxt.hideLoader();
     navigation.navigate("Main");
   }
 
@@ -62,8 +61,8 @@ const SignIn = ({navigation}) => {
         break;
       }
     }
-    profileCntxt.hideLoader();
     setError(errorMessage);
+    profileCntxt.hideLoader();
   }
 
   const validateEmail = (email, setInvalid) => {

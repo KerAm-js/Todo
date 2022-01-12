@@ -1,5 +1,6 @@
 import React, { useReducer } from "react";
 import AsyncStorageLib from "@react-native-async-storage/async-storage";
+
 import { ProfileContext } from "./ProfileContext";
 import { profileReducer } from "./profileReducer";
 import { CREATE_USER, LOG_IN, LOG_OUT, EDIT_USER_DATA, SHOW_LOADER, HIDE_LOADER } from "./types";
@@ -21,10 +22,14 @@ const ProfileState = ({children}) => {
   
   const [state, dispatch] = useReducer(profileReducer, initialState);
 
-  const showLoader = () => dispatch({type: SHOW_LOADER});
-  const hideLoader = () => dispatch({type: HIDE_LOADER});
+  const showLoader = () => {
+    dispatch({type: SHOW_LOADER})
+  };
+  const hideLoader = () => {
+    dispatch({type: HIDE_LOADER})
+  };
 
-  const editProfile = async (userData) => {
+  const editProfile = async userData => {
     showLoader();
     try {
       const response = await fetch(`https://productive-plus-default-rtdb.europe-west1.firebasedatabase.app/users/${userData.id}/userData.json`, {
@@ -76,6 +81,7 @@ const ProfileState = ({children}) => {
       console.log(e);
       Alert.alert("Что-то пошло не так");
     }
+    hideLoader();
   }
 
   const login = async (email, token) => {
@@ -103,6 +109,7 @@ const ProfileState = ({children}) => {
       console.log(e);
       Alert.alert("Что-то пошло не так");
     }
+    hideLoader();
   }
 
   const logout = async () => {
@@ -118,7 +125,6 @@ const ProfileState = ({children}) => {
   }
 
   const autoLogin = async (onAuthErrorHanlder) => {
-    showLoader();
     try {
       const [tokenArr, emailArr] = await AsyncStorageLib.multiGet(['token', 'email']);
       if (emailArr[1] && tokenArr[1]) {
