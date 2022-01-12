@@ -38,7 +38,7 @@ const Notes = ({navigation}) => {
   }
 
   return (
-    <View style={{...styles.container, paddingTop: deviceTopSpace + 35}}>
+    <View style={{...styles.container, paddingTop: deviceTopSpace + 45}}>
       <SlideScreenHeader 
         navigation={navigation}
         title="Заметки"

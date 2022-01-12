@@ -114,7 +114,7 @@ const Main = ({navigation}) => {
   };
 
   return (
-    <View style={{...styles.container, paddingTop: deviceTopSpace + 35}}>
+    <View style={{...styles.container, paddingTop: deviceTopSpace + 45}}>
       <Heading title="Профиль" paddingTop={deviceTopSpace}/>
       <ScrollView
         style={styles.scroll}

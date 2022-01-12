@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import FooterSpace from "../../components/FooterSpace";
 import SlideHeading from "../../components/Home/SlideHeading";
 import TMtechnics from "../../components/Home/TMtechnics";
 import { textStyles } from "../../constants/textStyles";
@@ -58,6 +59,7 @@ const TimeManagement = ({navigation, title, image}) => {
             }
           })
         }
+        <FooterSpace />
       </ScrollView>
     </View>
   )

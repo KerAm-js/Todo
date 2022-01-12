@@ -6,7 +6,7 @@ import { textStyles } from "../../constants/textStyles";
 
 const Heading = ({title, paddingTop}) => {
   return (
-    <View style={{...styles.container, paddingTop,}}>
+    <View style={{...styles.container, paddingTop: paddingTop <= 20 ? paddingTop + 10 : paddingTop + 5}}>
       <Text style={styles.title}>{title}</Text>
     </View>
   )

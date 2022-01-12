@@ -2,6 +2,7 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import React, {useState} from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import FooterSpace from "../../components/FooterSpace";
 import ProductivitySlider from "../../components/Home/ProductivitySlider";
 import SlideHeading from '../../components/Home/SlideHeading';
 import { textStyles } from "../../constants/textStyles";
@@ -72,7 +73,7 @@ const Productivity = ({navigation, image, title}) => {
             }
           })
         }
-        <View style={{height: scrollPaddingBottom}}></View>
+        <FooterSpace />
       </ScrollView>
     </View>
   )

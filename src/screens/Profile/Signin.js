@@ -110,7 +110,7 @@ const SignIn = ({navigation}) => {
   }
 
   return (
-    <View style={{...styles.container, paddingTop: deviceTopSpace + 35}}>
+    <View style={{...styles.container, paddingTop: deviceTopSpace + 45}}>
       <Heading title="Вход" paddingTop={deviceTopSpace}/>
       <ScrollView
         style={styles.scroll}

@@ -114,7 +114,7 @@ const SignUp = ({navigation}) => {
   }
 
   return (
-    <View style={{...styles.container, paddingTop: deviceTopSpace + 35}}>
+    <View style={{...styles.container, paddingTop: deviceTopSpace + 45}}>
       <SlideScreenHeader 
         paddingTop={deviceTopSpace}
         title="Регистрация" 

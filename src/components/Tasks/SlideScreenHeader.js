@@ -6,9 +6,9 @@ import { textStyles } from "../../constants/textStyles";
 const SlideScreenHeader = ({navigation, title, paddingTop}) => {
 
   return (
-    <View style={{...styles.container, paddingTop}}>
+    <View style={{...styles.container, paddingTop: paddingTop <= 20 ? paddingTop + 10 : paddingTop + 5}}>
       <TouchableOpacity
-        style={{...styles.backButton, top: paddingTop}}
+        style={{...styles.backButton, top: paddingTop <= 20 ? paddingTop + 10 : paddingTop + 5}}
         onPress={() => navigation.goBack()}
       >
         <Image 

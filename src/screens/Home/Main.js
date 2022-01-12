@@ -21,6 +21,7 @@ const Main = ({slides, navigation}) => {
   const profileCntxt = useContext(ProfileContext);
   const deviceTopSpace = useSafeAreaInsets().top || 20;
 
+
   return (
     <View style={{...styles.container}}>
       <StatusBar 
