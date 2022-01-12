@@ -13,7 +13,7 @@
           "icon": "./assets/icon.png",
           "color": "#293559",
           "sounds": [
-            "./assets/note.mp3"
+            "./assets/note.wav"
           ]
         }
       ]
