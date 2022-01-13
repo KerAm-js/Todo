@@ -85,11 +85,12 @@ const TasksState = ({children}) => {
     const completedInTimeCount = Number(stats.completedInTimeCount) + result.completedInTime;
     const completedTasksCount = Number(stats.completedTasksCount) + result.completedTasks;
     const workingDaysCount = Number(stats.workingDaysCount);
-    const currentDate = stats.currentDate
+    const currentDate = stats.currentDate;
 
+    //just for looking, this data will not saved in database
     const completedTasksPart = tasksCount ? Math.round((completedTasksCount / tasksCount) * 100) : 0;
     const dailyTaskCreatingAverage = workingDaysCount ? Math.round((tasksCount / workingDaysCount)) : 0;
-    const completedInTime = completedTasksCount ? Math.round((completedInTimeCount/completedTasksCount) * 100 ) : 0;
+    const completedInTime = completedTasksCount ? Math.round((completedInTimeCount/tasksCount) * 100 ) : 0;
 
     return {
       ...stats,
