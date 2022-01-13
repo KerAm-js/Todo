@@ -158,17 +158,23 @@ export const tasksReducer = (state, action) => {
         let result = [];
         state.tasks.forEach(task => {
           if (task.startTime) {
+            result.push(task);
+          }
+        });
+        if (!!result.length) {
+          result = result.filter(task => {
             const currentTime = new Date();
             const startTime = new Date(task?.startTime);
             const finishTime = new Date(task?.finishTime);
             if (startTime <= currentTime && finishTime > currentTime) {
-              result.push(task);
+              return true;
+            } else {
+              return false;
             }
-          }
-        })
-        
-        if (result.length === 0) {
-          const currentTask = state.tasks.find(task => !task.isCompleted && !task.isExpired)
+          });
+        } 
+        if (!result.length) {
+          const currentTask = state.tasks.find(task => !task.isCompleted && !task.isExpired && !task.startTime)
           currentTask ? result.push(currentTask) : null
         }
         return {

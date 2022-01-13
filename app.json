@@ -3,7 +3,7 @@
     "name": "Productive Plus",
     "slug": "rn-productive-plus",
     "owner": "amir_gendargenoevskiy",
-    "version": "1.0.1",
+    "version": "1.1.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "plugins": [
@@ -39,7 +39,7 @@
       "supportsTablet": true,
       "userInterfaceStyle": "light",
       "bundleIdentifier": "com.amirkerimov.productive-plus",
-      "buildNumber": "1.0.1"
+      "buildNumber": "1.1.1"
     },
     "android": {
       "adaptiveIcon": {

@@ -264,7 +264,7 @@ const TasksState = ({children}) => {
     }
   };
 
-  const setTaskExpired = async (id, start, end, callBack = () => {}) => {
+  const setTaskExpired = (id, start, end, callBack = () => {}) => {
     const startTime = new Date(start);
     const finishTime = new Date(end);
     if (startTime && finishTime && new Date() < finishTime) {
@@ -276,14 +276,19 @@ const TasksState = ({children}) => {
 
   const setStartedTaskNotification = async (task, id) => {
     if (task.startTime && !task.isExpired && !task.isCompleted) {
-      const start = new Date(task.startTime);
-      const currentDate = new Date();
-      const notificationTime = Math.round((start - currentDate) / 1000);
-      const notificationId = await setNotification(
-        "Пора приступать к задаче", 
-        `"${task.title}"`, 
-        notificationTime
-      );
+      try {
+        const start = new Date(task.startTime);
+        const currentDate = new Date();
+        const notificationTime = Math.round((start - currentDate) / 1000);
+        const notificationId = await setNotification(
+          "Пора приступать к задаче", 
+          `"${task.title}"`, 
+          notificationTime
+        );
+        setTimeout(findCurrentTasks, start - currentDate);
+      } catch (e) {
+        console.log(e);
+      }
     }
   }
 
@@ -308,7 +313,7 @@ const TasksState = ({children}) => {
       }
       if (task.finishTime && !task.isExpired && !task.isCompleted) {
         await setExpiredTaskNotification(task);
-        setTaskExpired(task);
+        setTaskExpired(task.id, task.startTime, task.finishTime);
       }
     })
   }
