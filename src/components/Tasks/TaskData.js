@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
   },
   title: {
     ...textStyles.title,
+    maxWidth: '80%',
   },
   button: {
     width: 40,
