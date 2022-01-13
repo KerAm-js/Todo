@@ -48,7 +48,6 @@ const TargetsState = ({children}) => {
           }))
           await DB.deleteAllTargets();
           dispatch({type: UPLOAD_TARGETS, targetsList: []});
-          console.log('from firebase', targetsList);
           targetsList.forEach(async target => {
             const result = await DB.addTarget(target);
             const id = await result;

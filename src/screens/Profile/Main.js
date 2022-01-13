@@ -113,8 +113,6 @@ const Main = ({navigation}) => {
     )
   };
 
-  console.log(profileCntxt.state.isLoading);
-
   return (
     <View style={{...styles.container, paddingTop: deviceTopSpace + 45}}>
       <Heading title="Профиль" paddingTop={deviceTopSpace}/>
@@ -194,6 +192,13 @@ const Main = ({navigation}) => {
             profileCntxt.hideLoader();
           }}
         />
+        <Modal
+          animationType="fade"
+          visible={profileCntxt.state.isLoading} 
+          transparent={true} 
+        >
+          <Loader />
+        </Modal>
       </ModalLayout>
     </View>
   )

@@ -9,7 +9,7 @@ const HomeGreeting = ({paddingTop, username}) => {
       {
         username
         ? <>
-            <Text style={styles.username}>Амир,</Text>
+            <Text style={styles.username}>{username},</Text>
             <Text style={styles.greeting}>добро пожаловать!</Text>
           </>
         : <Text style={styles.noUserText}>{`Планируйте свой день\nи повышайте продуктивность`}</Text>
