@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "Productive Plus",
+    "name": "Productive+",
     "slug": "rn-productive-plus",
     "owner": "amir_gendargenoevskiy",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "plugins": [
@@ -39,7 +39,7 @@
       "supportsTablet": true,
       "userInterfaceStyle": "light",
       "bundleIdentifier": "com.amirkerimov.productive-plus",
-      "buildNumber": "1.2.0"
+      "buildNumber": "1.2.1"
     },
     "android": {
       "adaptiveIcon": {
