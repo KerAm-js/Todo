@@ -36,12 +36,6 @@ const Note = ({text, updateNote, removeNote}) => {
     }
   }
 
-  const inputElement = useRef(null);
-
-  useEffect(() => {
-    inputElement.current.blur();
-  }, [])
-
   return (
     <View style={styles.container}>
       <TextInput 
@@ -50,7 +44,6 @@ const Note = ({text, updateNote, removeNote}) => {
         autoFocus={true}
         onChangeText={text => setNoteText(text)}
         multiline={true}
-        ref={inputElement}
         onBlur={onBlurHanlder}
         placeholder="Введите текст"
       />
