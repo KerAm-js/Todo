@@ -150,31 +150,25 @@ const TasksState = ({children}) => {
 
   const uploadTasks = async tasks => {
     try {
-      if (!tasks) {
-        await DB.deleteAllTasks();
-        dispatch({type: UPLOAD_TASKS, taskList: []});
-      } else {
-        if (tasks?.length > 0) {
-          const taskList = tasks.map(task => ({
-            id: task.id,
-            title: task.title,
-            description: task.description || null,
-            startTime: task.startTime || null,
-            finishTime: task.finishTime || null,
-            isCompleted: task.isCompleted,
-            isCompletedInTime: task.isCompletedInTime,
-            isExpired: task.isExpired,
-          }))
-          await DB.deleteAllTasks();
-          dispatch({type: UPLOAD_TASKS, taskList: []});
-          taskList.forEach(async task => {
-            const result = await DB.addTask(task);
-            const id = await result;
-            dispatch({type: ADD_TASK, task: {...task, id}});
-          });
-        }
+      await DB.deleteAllTasks();
+      dispatch({type: UPLOAD_TASKS, taskList: []});
+      if (tasks?.length > 0) {
+        const taskList = tasks.map(task => ({
+          id: task.id,
+          title: task.title,
+          description: task.description || null,
+          startTime: task.startTime || null,
+          finishTime: task.finishTime || null,
+          isCompleted: task.isCompleted,
+          isCompletedInTime: task.isCompletedInTime,
+          isExpired: task.isExpired,
+        }))
+        taskList.forEach(async task => {
+          const result = await DB.addTask(task);
+          const id = await result;
+          dispatch({type: ADD_TASK, task: {...task, id}});
+        });
       }
-      
     } catch (e) {
       console.log(e)
     }

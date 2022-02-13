@@ -19,7 +19,7 @@ import { textStyles } from "../../constants/textStyles";
 
 
 const Main = ({navigation}) => {
-
+  
   const deviceTopSpace = useSafeAreaInsets().top || 20;
   const profileCntxt = useContext(ProfileContext);
   const targetsCntxt = useContext(TargetsContext);

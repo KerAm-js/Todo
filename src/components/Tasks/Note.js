@@ -39,7 +39,7 @@ const Note = ({text, updateNote, removeNote}) => {
   const inputElement = useRef(null);
 
   useEffect(() => {
-    inputElement.current.focus();
+    inputElement.current.blur();
   }, [])
 
   return (

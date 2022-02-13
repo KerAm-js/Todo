@@ -35,27 +35,22 @@ const TargetsState = ({children}) => {
 
   const uploadTargets = async targets => {
     try {
-      if (!targets) {
-        dispatch({type: UPLOAD_TARGETS, targetsList: []});
-      } else {
-        if (targets.length > 0) {
-          const targetsList = targets.map(target => ({
-            title: target.title,
-            description: target.description || null,
-            finishTime: target.finishTime || null,
-            isCompleted: target.isCompleted,
-            isExpired: target.isExpired,
-          }))
-          await DB.deleteAllTargets();
-          dispatch({type: UPLOAD_TARGETS, targetsList: []});
-          targetsList.forEach(async target => {
-            const result = await DB.addTarget(target);
-            const id = await result;
-            dispatch({type: ADD_TARGET, target: {...target, id}});
-          });
-        }
+      await DB.deleteAllTargets();
+      dispatch({type: UPLOAD_TARGETS, targetsList: []});
+      if (targets?.length > 0) {
+        const targetsList = targets.map(target => ({
+          title: target.title,
+          description: target.description || null,
+          finishTime: target.finishTime || null,
+          isCompleted: target.isCompleted,
+          isExpired: target.isExpired,
+        }))
+        targetsList.forEach(async target => {
+          const result = await DB.addTarget(target);
+          const id = await result;
+          dispatch({type: ADD_TARGET, target: {...target, id}});
+        });
       }
-      
     } catch (e) {
       console.log(e);
     }

@@ -16,6 +16,7 @@ const NotesState = ({children}) => {
     try {
       dispatch({type: UPLOAD_NOTES, notes: []});
       const notes = await DB.getNotes();
+      notes.reverse();
       dispatch({type: UPLOAD_NOTES, notes});
     } catch (e) {
       console.log(e);
@@ -48,19 +49,14 @@ const NotesState = ({children}) => {
   };
   const uploadNotes = async notes => {
     try {
-      if (!notes) {
-        dispatch({type: UPLOAD_NOTES, notes: []});
-      } else {
-        if (notes.length > 0) {
-          await DB.deleteAllNotes();
-          dispatch({type: UPLOAD_NOTES, notes: []});
-          notes.forEach(async note => {
-            const result = await DB.addNote(note);
-            const id = await result;
-            dispatch({type: ADD_NOTE, id, text: note.text});
-          });
-        }
-        dispatch({type: UPLOAD_NOTES, notes});
+      await DB.deleteAllNotes();
+      dispatch({type: UPLOAD_NOTES, notes: []});
+      if (notes?.length > 0) {
+        notes.reverse();
+        notes.forEach(async note => {
+          await DB.addNote(note);
+        });
+        await getNotesFromLocalDB();
       }
     } catch (e) {
       console.log(e);

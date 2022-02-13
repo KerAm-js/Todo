@@ -17,11 +17,11 @@ export const notesReducer = (state, action) => {
       return {
         ...state,
         notes: [
-          ...state.notes,
           {
             id: action.id,
             text: action.text || "",
           },
+          ...state.notes,
         ]
       }
     };

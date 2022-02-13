@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { StyleSheet, View, Text, FlatList, Alert } from "react-native";
+import { StyleSheet, View, Text, FlatList, Alert, Dimensions } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -9,6 +9,7 @@ import TasksScreenButtons from "../../components/buttons/TasksScreenButtons";
 import { NotesContext } from "../../context/notes/NotesContext";
 import { textStyles } from "../../constants/textStyles";
 import { colors } from "../../constants/colors";
+import { ScrollView } from "react-native-gesture-handler";
 
 
 const Notes = ({navigation}) => {
@@ -17,6 +18,8 @@ const Notes = ({navigation}) => {
 
   const notesContext = useContext(NotesContext);
   const notes = notesContext.state.notes;
+
+  const deviceHeight = Dimensions.get('window').height;
 
   const deleteAllNotes = () => {
     Alert.alert(
@@ -48,9 +51,8 @@ const Notes = ({navigation}) => {
         {
           notes.length
           ? <FlatList 
-              contentContainerStyle={{...styles.list, paddingBottom: tabBarHeight}}
+              contentContainerStyle={{...styles.list, paddingBottom: deviceHeight}}
               data={notes}
-              showsVerticalScrollIndicator={false}
               keyExtractor={item => item.id}
               renderItem={({item}, index) => (
                 <Note 
