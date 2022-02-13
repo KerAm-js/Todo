@@ -39,7 +39,7 @@ const TargetViewing = ({navigation}) => {
   }
 
   return (
-    <View style={{...styles.container, paddingTop: diviceTopSpace + 35}}>
+    <View style={{...styles.container, paddingTop: diviceTopSpace + 45}}>
       {
         editModalVisible 
         ? <View style={{...styles.backdrop}}></View>
@@ -72,7 +72,7 @@ const TargetViewing = ({navigation}) => {
           <ModalLayout
             visible={editModalVisible}
             close={closeModal}
-            style={{paddingTop: diviceTopSpace + 35}}
+            style={{paddingTop: diviceTopSpace + 45}}
           >
             <TaskForm 
               name="target"

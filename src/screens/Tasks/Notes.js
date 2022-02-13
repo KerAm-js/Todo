@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { StyleSheet, View, Text, FlatList, Alert, Dimensions } from "react-native";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import SlideScreenHeader from "../../components/Tasks/SlideScreenHeader";
@@ -9,16 +8,12 @@ import TasksScreenButtons from "../../components/buttons/TasksScreenButtons";
 import { NotesContext } from "../../context/notes/NotesContext";
 import { textStyles } from "../../constants/textStyles";
 import { colors } from "../../constants/colors";
-import { ScrollView } from "react-native-gesture-handler";
 
 
 const Notes = ({navigation}) => {
   const deviceTopSpace = useSafeAreaInsets().top || 20;
-  const tabBarHeight = useBottomTabBarHeight();
-
   const notesContext = useContext(NotesContext);
   const notes = notesContext.state.notes;
-
   const deviceHeight = Dimensions.get('window').height;
 
   const deleteAllNotes = () => {

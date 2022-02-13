@@ -29,18 +29,6 @@ export const signup = async (login, password, onSuccessHandler, onErrorHandler) 
     onErrorHandler(err);
     console.log(err.code);
   }
-  // createUserWithEmailAndPassword(auth, login, password)
-  //   .then(userCredential => {
-  //     const user = userCredential.user;
-  //     if (onSuccessHandler) {
-  //       onSuccessHandler(user.stsTokenManager.accessToken);
-  //     }
-  //   })
-  //   .catch((err) => {
-  //     if (onErrorHandler) {
-  //       onErrorHandler(err);
-  //     }
-  //   });
 }
 
 export const signin = async (login, password, onSuccessHandler, onErrorHandler) => {
@@ -53,18 +41,6 @@ export const signin = async (login, password, onSuccessHandler, onErrorHandler) 
   } catch (err) {
     onErrorHandler(err);
   }
-  // signInWithEmailAndPassword(auth, login, password)
-  //   .then(userCredential => {
-  //     const user = userCredential.user;
-  //     if (onSuccessHandler) {
-  //       onSuccessHandler(user.stsTokenManager.accessToken);
-  //     }
-  //   })
-  //   .catch((err) => {
-  //     if (onErrorHandler) {
-  //       onErrorHandler(err);
-  //     }
-  //   });
 }
 
 export const signout = navigate => {
