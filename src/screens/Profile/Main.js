@@ -115,6 +115,11 @@ const Main = ({navigation}) => {
 
   return (
     <View style={{...styles.container, paddingTop: deviceTopSpace + 45}}>
+      {
+        editModalVisible
+          ? <View style={styles.backdrop}></View>
+          : null
+      }
       <Heading title="Профиль" paddingTop={deviceTopSpace}/>
       <ScrollView
         style={styles.scroll}
@@ -181,7 +186,7 @@ const Main = ({navigation}) => {
       <ModalLayout
         visible={editModalVisible}
         close={closeEditModal}
-        style={{paddingTop: deviceTopSpace + 35}}
+        style={{paddingTop: deviceTopSpace + 45}}
       >
         <EditForm 
           close={closeEditModal} 
@@ -231,5 +236,12 @@ const styles = StyleSheet.create({
   description: {
     marginTop: 10,
     ...textStyles.regular,
+  },
+  backdrop: {
+    position: "absolute",
+    zIndex: 200,
+    backgroundColor: 'rgba(0, 0, 0, .4)',
+    height: '100%',
+    width: '100%',
   }
 })

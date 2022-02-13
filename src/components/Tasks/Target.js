@@ -62,15 +62,16 @@ const Target = ({target, complete, showDetails, style}) => {
       onLongPress={showDetails}
       activeOpacity={0.5}
     >
-      {
-        target.finishTime 
-          ? <View style={styles.textContent}>
-              <Text style={styles.title}>{target.title}</Text>
-              <Text style={styles.time}>{`${finishTimeString}`}</Text>
-            </View>
-          : <Text style={styles.title}>{target.title}</Text>
-      }
-      
+      <View style={styles.textContent}>
+        {
+          target.finishTime 
+            ? <>
+                <Text numberOfLines={1}  style={styles.title}>{target.title}</Text>
+                <Text style={styles.time}>{`${finishTimeString}`}</Text>
+              </>
+            : <Text numberOfLines={1}  style={styles.title}>{target.title}</Text>
+        }
+      </View>
       <TouchableOpacity
         style={{...styles.button, borderColor}}
         onPress={complete}
@@ -98,7 +99,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   title: {
-    ...textStyles.regular
+    ...textStyles.regular,
+  },
+  textContent: {
+    maxWidth: '80%',
   },
   button: {
     width: 34,
@@ -121,5 +125,5 @@ const styles = StyleSheet.create({
   time: {
     marginTop: 5,
     ...textStyles.extraSmall
-  }
+  },
 })

@@ -84,7 +84,6 @@ export default EditForm;
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 10,
     height: '100%',
   },
   title: {
