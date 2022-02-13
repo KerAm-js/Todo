@@ -36,14 +36,20 @@ const Note = ({text, updateNote, removeNote}) => {
     }
   }
 
+  const inputElement = useRef(null);
+
+  useEffect(() => {
+    inputElement.current.focus();
+  }, [])
+
   return (
     <View style={styles.container}>
       <TextInput 
         style={styles.input}
         value={noteText}
-        autoFocus={true}
         onChangeText={text => setNoteText(text)}
         multiline={true}
+        ref={inputElement}
         onBlur={onBlurHanlder}
         placeholder="Введите текст"
       />
