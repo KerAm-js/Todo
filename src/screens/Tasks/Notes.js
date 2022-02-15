@@ -8,7 +8,6 @@ import TasksScreenButtons from "../../components/buttons/TasksScreenButtons";
 import { NotesContext } from "../../context/notes/NotesContext";
 import { textStyles } from "../../constants/textStyles";
 import { colors } from "../../constants/colors";
-import { ScrollView } from "react-native-gesture-handler";
 
 
 const Notes = ({navigation}) => {
