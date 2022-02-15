@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { StyleSheet, View, Text, FlatList, Alert, Dimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -8,6 +8,7 @@ import TasksScreenButtons from "../../components/buttons/TasksScreenButtons";
 import { NotesContext } from "../../context/notes/NotesContext";
 import { textStyles } from "../../constants/textStyles";
 import { colors } from "../../constants/colors";
+import { ScrollView } from "react-native-gesture-handler";
 
 
 const Notes = ({navigation}) => {
@@ -15,6 +16,7 @@ const Notes = ({navigation}) => {
   const notesContext = useContext(NotesContext);
   const notes = notesContext.state.notes;
   const deviceHeight = Dimensions.get('window').height;
+  const [autoFocus, setAutoFocus] = useState(false);
 
   const deleteAllNotes = () => {
     Alert.alert(
@@ -35,6 +37,16 @@ const Notes = ({navigation}) => {
     )
   }
 
+  const onAddNoteHandler = () => {
+    notesContext.addNote();
+    setAutoFocus(true);
+  }
+
+  const onRemoveNoteHandler = id => {
+    setAutoFocus(false);
+    notesContext.removeNote(id);
+  }
+
   return (
     <View style={{...styles.container, paddingTop: deviceTopSpace + 45}}>
       <SlideScreenHeader 
@@ -46,15 +58,16 @@ const Notes = ({navigation}) => {
         {
           notes.length
           ? <FlatList 
-              contentContainerStyle={{...styles.list, paddingBottom: deviceHeight}}
+              contentContainerStyle={{...styles.list, paddingBottom: deviceHeight / 2}}
               data={notes}
               keyExtractor={item => item.id}
-              renderItem={({item}, index) => (
+              renderItem={({item, index}) => (
                 <Note 
                   key={index} 
                   text={item.text} 
                   updateNote={text => notesContext.updateNote(item.id, text)}
-                  removeNote={() => notesContext.removeNote(item.id)}
+                  removeNote={() => onRemoveNoteHandler(item.id)}
+                  autoFocus={index === 0 ? autoFocus : false}
                 />
               )}
             />
@@ -64,7 +77,7 @@ const Notes = ({navigation}) => {
         }
       </View>
       <TasksScreenButtons 
-        addButton={notesContext.addNote}
+        addButton={onAddNoteHandler}
         deleteButton={deleteAllNotes}
       />
     </View>

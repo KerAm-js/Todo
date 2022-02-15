@@ -3,7 +3,7 @@ import { Image, Alert, StyleSheet, TextInput, TouchableOpacity, View } from "rea
 import { colors } from "../../constants/colors";
 import { textStyles } from "../../constants/textStyles";
 
-const Note = ({text, updateNote, removeNote}) => {
+const Note = ({text, updateNote, removeNote, autoFocus, ref}) => {
   
   const [noteText, setNoteText] = useState(text);
 
@@ -36,20 +36,18 @@ const Note = ({text, updateNote, removeNote}) => {
     }
   }
 
-  const inputElement = useRef(null);
-
-  useEffect(() => {
-    inputElement.current.focus();
-  }, [])
+  // useEffect(() => {
+  //   inputElement.current.focus();
+  // }, [])
 
   return (
     <View style={styles.container}>
       <TextInput 
         style={styles.input}
         value={noteText}
+        autoFocus={autoFocus}
         onChangeText={text => setNoteText(text)}
         multiline={true}
-        ref={inputElement}
         onBlur={onBlurHanlder}
         placeholder="Введите текст"
       />
