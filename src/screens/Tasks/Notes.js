@@ -18,22 +18,24 @@ const Notes = ({navigation}) => {
   const [autoFocus, setAutoFocus] = useState(false);
 
   const deleteAllNotes = () => {
-    Alert.alert(
-      "Удаление заметок",
-      "Вы уверены, что хотите удалить все заметки?",
-      [
-        {
-          text: "Отмена",
-          onPress: () => null,
-          style: "Cancel"
-        },
-        {
-          text: "Удалить",
-          onPress: notesContext.deleteAllNotes,
-          style: "destructive"
-        },
-      ]
-    )
+    if (notes?.length > 0) {
+      Alert.alert(
+        "Удаление заметок",
+        "Вы уверены, что хотите удалить все заметки?",
+        [
+          {
+            text: "Отмена",
+            onPress: () => null,
+            style: "Cancel"
+          },
+          {
+            text: "Удалить",
+            onPress: notesContext.deleteAllNotes,
+            style: "destructive"
+          },
+        ]
+      )
+    }
   }
 
   const onAddNoteHandler = () => {

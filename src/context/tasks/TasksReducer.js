@@ -1,3 +1,4 @@
+import { addTaskWithSorting } from "../../utils/utils";
 import { 
   INIT_TASKS,
   ADD_TASK,
@@ -50,58 +51,11 @@ export const tasksReducer = (state, action) => {
       return state;
     }
     case ADD_TASK: {
-      let tasksCopy = [...state.tasks];
-      const newTask = action.task;
-
-      if (newTask.startTime && state.tasks.length > 0) {
-        let indexOfNewTask;
-        let firstPartOfArray;
-        let secondPartOfArray;
-
-        const newTaskStart = newTask.startTime;
-        const newTaskFinish = newTask.finishTime;
-
-        let firstIndex = tasksCopy.findIndex(task => {
-          return task.startTime?.slice(16,21) === newTaskStart.slice(16,21);
-        })
-
-        if (firstIndex !== -1) {
-
-          const tasksWithSameStart = tasksCopy.filter(task => {
-            return task.startTime?.slice(16,21) === newTaskStart.slice(16,21);
-          });
-
-          indexOfNewTask = tasksWithSameStart.findIndex(task => {
-            return task.finishTime?.slice(16,21) >= newTaskFinish.slice(16,21)
-          });
-
-          if (indexOfNewTask === -1) {
-            indexOfNewTask = tasksWithSameStart.length;
-          }
-
-          indexOfNewTask += firstIndex;
-        } else {
-          indexOfNewTask = tasksCopy.findIndex(task => {
-            return task.startTime?.slice(16,21) > newTaskStart.slice(16,21);
-          });
-          if (indexOfNewTask === -1) {
-            indexOfNewTask = tasksCopy.findIndex(task => !task.startTime);
-          }
-        }
-        if (indexOfNewTask === -1) {
-          tasksCopy.push(newTask);
-        } else {
-          firstPartOfArray = tasksCopy.slice(0, indexOfNewTask );
-          secondPartOfArray = tasksCopy.slice(indexOfNewTask);
-          tasksCopy = [...firstPartOfArray, newTask, ...secondPartOfArray];
-        }
-      } else {
-        tasksCopy.push(newTask);
-      };
+      const tasks = addTaskWithSorting(state.tasks, action.task);
       return {
         ...state,
+        tasks,
         createdTasksCount: state.createdTasksCount + 1,
-        tasks: tasksCopy,
       }
     };
     case REMOVE_TASK: {
@@ -115,11 +69,22 @@ export const tasksReducer = (state, action) => {
     };
     case EDIT_TASK: {
       const editedTask = {id: action.id, ...action.taskData};
+      const beforeEditing = state.tasks.find(task => task.id === action.id);
+      const isTimeEdited = editedTask.startTime === beforeEditing.startTime && editedTask.finishTime === beforeEditing.finishTime;
+      if (isTimeEdited) {
+        return {
+          ...state,
+          tasks: [
+            ...state.tasks.map(task => task.id === action.id ? editedTask : task)
+          ],
+          viewedTask: editedTask,
+        }
+      }
+      const tasksWithoutEditedTask = [...state.tasks.filter(task => task.id !== action.id)];
+      const sortedTasks = addTaskWithSorting(tasksWithoutEditedTask, editedTask);
       return {
         ...state,
-        tasks: [
-          ...state.tasks.map(task => task.id === action.id ? editedTask : task)
-        ],
+        tasks: sortedTasks,
         viewedTask: editedTask,
       }
     };
@@ -133,7 +98,7 @@ export const tasksReducer = (state, action) => {
       if (!!state.tasks.length) {
         let result = [];
         state.tasks.forEach(task => {
-          if (task.finishTime) {
+          if (task.finishTime && !task.isCompleted) {
             const currentTime = new Date();
             const finishTime = new Date(task?.finishTime);
             if ((task?.isExpired || finishTime < currentTime) && !task.isCompleted) {
@@ -190,7 +155,7 @@ export const tasksReducer = (state, action) => {
     case SET_TASK_EXPIRED: {
       const tasksCopy = [...state.tasks];
       const task = tasksCopy.find(task => task.id === action.id);
-      if (task) {
+      if (task && !task.isCompleted) {
         task.isExpired = 1;
         action.callBack();
         return {

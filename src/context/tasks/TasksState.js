@@ -47,7 +47,7 @@ const TasksState = ({children}) => {
   const findExpiredTasks = async () => {
     try {
       state.tasks.forEach(async task => {
-        if (task.finishTime) {
+        if (task.finishTime && !task.isCompleted) {
           const finish = new Date(task.finishTime);
           const currentDate = new Date();
           if (finish < currentDate && !task.isExpired) {
@@ -55,7 +55,7 @@ const TasksState = ({children}) => {
             dispatch({ type: SET_TASK_EXPIRED, id: task.id, callBack: () => {}, });
           }
         }
-      })
+      });
       dispatch({type: FIND_EXPIRED_TASKS});
     } catch (e) {
       console.log(e);
@@ -87,7 +87,7 @@ const TasksState = ({children}) => {
     const workingDaysCount = Number(stats.workingDaysCount);
     const currentDate = stats.currentDate;
 
-    //just for looking, this data will not saved in database
+    //just for frontend, this data will not saved in database
     const completedTasksPart = tasksCount ? Math.round((completedTasksCount / tasksCount) * 100) : 0;
     const dailyTaskCreatingAverage = workingDaysCount ? Math.round((tasksCount / workingDaysCount)) : 0;
     const completedInTime = completedTasksCount ? Math.round((completedInTimeCount/tasksCount) * 100 ) : 0;
@@ -258,13 +258,13 @@ const TasksState = ({children}) => {
     }
   };
 
-  const setTaskExpired = (id, start, end, callBack = () => {}) => {
-    const startTime = new Date(start);
-    const finishTime = new Date(end);
-    if (startTime && finishTime && new Date() < finishTime) {
+  const setTaskExpired = ({id, startTime, finishTime}, callBack = () => {}) => {
+    const start = new Date(startTime);
+    const finish = new Date(finishTime);
+    if (start && finish && new Date() < finish) {
       setTimeout(() => {
         dispatch({type: SET_TASK_EXPIRED, id, callBack});
-      }, finishTime - new Date());
+      }, finish - new Date());
     }
   };
 
@@ -307,7 +307,7 @@ const TasksState = ({children}) => {
       }
       if (task.finishTime && !task.isExpired && !task.isCompleted) {
         await setExpiredTaskNotification(task);
-        setTaskExpired(task.id, task.startTime, task.finishTime);
+        setTaskExpired(task);
       }
     })
   }
@@ -336,7 +336,7 @@ const TasksState = ({children}) => {
     try {
       await DB.editTask(id, taskData);
       dispatch({type: EDIT_TASK, id, taskData});
-      setTaskExpired(id, taskData.startTime, taskData.finishTime);
+      setTaskExpired({id, ...taskData});
     } catch (e) {
       console.log(e);
     }

@@ -25,10 +25,6 @@ export default function TabNavigator() {
     dataUpdating();
   }, [tasksCntxt.state.tasks]);
 
-  // useEffect(async () => {
-  //   await tasksCntxt.onNewDayHandler();
-  // }, [])
-
   return (
     <Tab.Navigator 
       initialRouteName="Home" 
