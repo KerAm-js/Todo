@@ -25,7 +25,7 @@ You can find all instructions of using expo [here](https://docs.expo.dev/get-sta
 
 ### Updating plans
 
-I'm planning to make the following changes in this application:
+There is a plan to make the following changes in this application:
 
 * Change logo
 * Change UI design
