@@ -18,3 +18,7 @@
 * SQLite
 * Firebase
 * Git
+
+### Instructions
+
+You can find all instructions of using expo [here](https://docs.expo.dev/get-started/create-a-new-app/#starting-the-development-server)
